@@ -1,0 +1,4750 @@
+{
+  "type": "FeatureCollection",
+  "generator": "overpass-turbo",
+  "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.",
+  "timestamp": "2026-04-06T09:27:18Z",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/141957171",
+        "addr:city": "서울특별시",
+        "addr:district": "종로구",
+        "addr:housenumber": "198",
+        "addr:postcode": "03141",
+        "addr:street": "세종대로",
+        "addr:subdistrict": "세종로",
+        "building": "yes",
+        "building:levels": "8",
+        "description": "The Museum collects, examines, studies, and displays a wide array of materials related to the tumultuous and exciting history of modern and contemporary history of Korea.",
+        "height": "32",
+        "name": "대한민국역사박물관",
+        "name:en": "National Museum of Korean Contemporary History",
+        "name:ja": "大韓民国歴史博物館",
+        "name:ko": "대한민국역사박물관",
+        "name:zh": "大韩民国历史博物馆",
+        "opening_hours": "Mo-Su 10:00-18:00; We 10:00-21:00; Sa 10:00-21:00",
+        "phone": "+82 2 3703 9200",
+        "source:geometry": "Bing 2012",
+        "start_date": "1961",
+        "tourism": "museum",
+        "website": "https://www.much.go.kr/",
+        "wikidata": "Q12592360"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9776777,
+              37.5736528
+            ],
+            [
+              126.97776,
+              37.5736536
+            ],
+            [
+              126.9777603,
+              37.5736358
+            ],
+            [
+              126.9778628,
+              37.5736368
+            ],
+            [
+              126.9778625,
+              37.5736547
+            ],
+            [
+              126.9779445,
+              37.5736555
+            ],
+            [
+              126.9779379,
+              37.5740729
+            ],
+            [
+              126.9782031,
+              37.5740818
+            ],
+            [
+              126.9781998,
+              37.5742044
+            ],
+            [
+              126.9776692,
+              37.5741907
+            ],
+            [
+              126.9776728,
+              37.5738377
+            ],
+            [
+              126.9776777,
+              37.5736528
+            ]
+          ]
+        ]
+      },
+      "id": "way/141957171"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/141957176",
+        "addr:city": "서울특별시",
+        "addr:district": "종로구",
+        "addr:housenumber": "178",
+        "addr:postcode": "03154",
+        "addr:street": "세종대로",
+        "addr:subdistrict": "세종로",
+        "building": "yes",
+        "building:levels": "15",
+        "height": "59.39",
+        "name": "KT광화문빌딩 West",
+        "name:en": "KT Gwanghwamun Building West",
+        "name:ja": "KT光化門(クァンファムン)ビル ウェスト",
+        "name:ko": "KT광화문빌딩 West",
+        "name:zh": "KT光化门大楼西"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9776598,
+              37.5725257
+            ],
+            [
+              126.9776762,
+              37.5717794
+            ],
+            [
+              126.9777298,
+              37.5717466
+            ],
+            [
+              126.9780535,
+              37.5717511
+            ],
+            [
+              126.9780902,
+              37.5717811
+            ],
+            [
+              126.978074,
+              37.5725213
+            ],
+            [
+              126.9780379,
+              37.5725596
+            ],
+            [
+              126.9777075,
+              37.5725551
+            ],
+            [
+              126.9776598,
+              37.5725257
+            ]
+          ]
+        ]
+      },
+      "id": "way/141957176"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/170199440",
+        "addr:city": "서울특별시",
+        "addr:district": "종로구",
+        "addr:housenumber": "161",
+        "addr:postcode": "03045",
+        "addr:street": "사직로",
+        "addr:subdistrict": "세종로",
+        "building": "yes",
+        "building:architecture": "joseon",
+        "historic": "city_gate",
+        "historic:civilization": "korean",
+        "historic:period": "joseon",
+        "name": "광화문",
+        "name:en": "Gwanghwamun Gate",
+        "name:ja": "光化門",
+        "name:ko": "광화문",
+        "name:zh": "光化门",
+        "ref": "533",
+        "wikidata": "Q485034",
+        "wikipedia": "en:Gwanghwamun"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9766381,
+              37.5758723
+            ],
+            [
+              126.9767331,
+              37.5758703
+            ],
+            [
+              126.9768292,
+              37.5758687
+            ],
+            [
+              126.976927,
+              37.5758662
+            ],
+            [
+              126.97699,
+              37.5758655
+            ],
+            [
+              126.9769913,
+              37.5759079
+            ],
+            [
+              126.9769942,
+              37.5759824
+            ],
+            [
+              126.976931,
+              37.575984
+            ],
+            [
+              126.9768879,
+              37.5759845
+            ],
+            [
+              126.9767865,
+              37.5759861
+            ],
+            [
+              126.9767364,
+              37.575988
+            ],
+            [
+              126.9766414,
+              37.5759911
+            ],
+            [
+              126.9766399,
+              37.5759308
+            ],
+            [
+              126.9766381,
+              37.5758723
+            ]
+          ]
+        ]
+      },
+      "id": "way/170199440"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/196076050",
+        "addr:city": "서울특별시",
+        "addr:district": "종로구",
+        "addr:housenumber": "60",
+        "addr:postcode": "03172",
+        "addr:street": "사직로8길",
+        "addr:subdistrict": "도렴동",
+        "building": "yes",
+        "building:levels": "19",
+        "name": "정부서울청사 별관",
+        "name:en": "Government Complex Seoul Annex",
+        "name:ja": "政府ソウル庁舎 別館",
+        "name:ko": "정부서울청사 별관",
+        "name:zh": "首尔政府综合大楼别馆",
+        "office": "government"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9747506,
+              37.5733252
+            ],
+            [
+              126.9752322,
+              37.5733367
+            ],
+            [
+              126.975231,
+              37.5734847
+            ],
+            [
+              126.9752284,
+              37.57358
+            ],
+            [
+              126.9752262,
+              37.5737171
+            ],
+            [
+              126.9750839,
+              37.5737138
+            ],
+            [
+              126.9748676,
+              37.5737087
+            ],
+            [
+              126.9747357,
+              37.5737056
+            ],
+            [
+              126.9747506,
+              37.5733252
+            ]
+          ]
+        ]
+      },
+      "id": "way/196076050"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/196076051",
+        "addr:city": "서울특별시",
+        "addr:district": "종로구",
+        "addr:housenumber": "209",
+        "addr:postcode": "03171",
+        "addr:street": "세종대로",
+        "addr:subdistrict": "세종로",
+        "building": "office",
+        "building:levels": "19",
+        "government": "administrative",
+        "name": "정부서울청사",
+        "name:en": "Government Complex Seoul",
+        "name:ja": "政府ソウル庁舎",
+        "name:ko": "정부서울청사",
+        "name:zh": "政府首尔厅舍",
+        "office": "government",
+        "source": "도로명수소",
+        "website": "http://www.chungsa.go.kr/chungsa/",
+        "wheelchair": "yes",
+        "wikidata": "Q10938507",
+        "wikipedia": "ko:정부서울청사"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9749729,
+              37.5744257
+            ],
+            [
+              126.9752692,
+              37.5744337
+            ],
+            [
+              126.9753424,
+              37.5744357
+            ],
+            [
+              126.9753023,
+              37.5753662
+            ],
+            [
+              126.9749582,
+              37.5753569
+            ],
+            [
+              126.974778,
+              37.575352
+            ],
+            [
+              126.9747745,
+              37.5754338
+            ],
+            [
+              126.9745398,
+              37.5754274
+            ],
+            [
+              126.9745514,
+              37.5751582
+            ],
+            [
+              126.9746971,
+              37.5751622
+            ],
+            [
+              126.9747218,
+              37.5745907
+            ],
+            [
+              126.9745677,
+              37.5745865
+            ],
+            [
+              126.9745831,
+              37.5742288
+            ],
+            [
+              126.9749809,
+              37.5742396
+            ],
+            [
+              126.9749729,
+              37.5744257
+            ]
+          ]
+        ]
+      },
+      "id": "way/196076051"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/196077509",
+        "aeroway": "helipad",
+        "building": "yes",
+        "layer": "2"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9788688,
+              37.5740092
+            ],
+            [
+              126.9788688,
+              37.5738202
+            ],
+            [
+              126.9790642,
+              37.5738202
+            ],
+            [
+              126.9790642,
+              37.5740092
+            ],
+            [
+              126.9788688,
+              37.5740092
+            ]
+          ]
+        ]
+      },
+      "id": "way/196077509"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/196077510",
+        "addr:city": "서울특별시",
+        "addr:district": "종로구",
+        "addr:housenumber": "42",
+        "addr:postcode": "03152",
+        "addr:street": "종로1길",
+        "addr:subdistrict": "수송동",
+        "building": "yes",
+        "building:levels": "15",
+        "height": "57",
+        "name": "이마빌딩",
+        "name:en": "Ima Building",
+        "name:ko": "이마빌딩",
+        "start_date": "1983"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9787292,
+              37.5737368
+            ],
+            [
+              126.9792202,
+              37.5737373
+            ],
+            [
+              126.9792198,
+              37.5739941
+            ],
+            [
+              126.9792196,
+              37.5740922
+            ],
+            [
+              126.9787286,
+              37.5740916
+            ],
+            [
+              126.9787292,
+              37.5737368
+            ]
+          ]
+        ]
+      },
+      "id": "way/196077510"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/196077511",
+        "addr:city": "서울특별시",
+        "addr:district": "종로구",
+        "addr:housenumber": "36",
+        "addr:postcode": "03152",
+        "addr:street": "종로1길",
+        "addr:subdistrict": "수송동",
+        "building": "yes",
+        "building:levels": "12",
+        "height": "52",
+        "name": "대림빌딩",
+        "name:en": "Daelim Building",
+        "name:ja": "大林ビルディング",
+        "name:ko": "대림빌딩",
+        "start_date": "1976"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.978791,
+              37.5733593
+            ],
+            [
+              126.9792291,
+              37.57336
+            ],
+            [
+              126.9792283,
+              37.5736855
+            ],
+            [
+              126.9787901,
+              37.5736848
+            ],
+            [
+              126.978791,
+              37.5733593
+            ]
+          ]
+        ]
+      },
+      "id": "way/196077511"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/196077512",
+        "aeroway": "helipad",
+        "building": "yes",
+        "layer": "2"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9776923,
+              37.5721974
+            ],
+            [
+              126.977698,
+              37.5720558
+            ],
+            [
+              126.9778595,
+              37.5720599
+            ],
+            [
+              126.9778538,
+              37.5722015
+            ],
+            [
+              126.9776923,
+              37.5721974
+            ]
+          ]
+        ]
+      },
+      "id": "way/196077512"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/196077514",
+        "addr:city": "서울특별시",
+        "addr:district": "종로구",
+        "addr:housenumber": "86",
+        "addr:postcode": "03151",
+        "addr:street": "종로5길",
+        "addr:subdistrict": "수송동",
+        "building": "yes",
+        "building:levels": "13",
+        "government": "tax",
+        "name": "서울지방국세청",
+        "name:en": "Seoul Regional Tax Service",
+        "name:ja": "ソウル地方国税庁",
+        "name:ko": "서울지방국세청",
+        "office": "government",
+        "phone": "+82 02-2114-2200",
+        "website": "s.nts.go.kr",
+        "wikidata": "Q12601335"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9797746,
+              37.573883
+            ],
+            [
+              126.9801884,
+              37.5740602
+            ],
+            [
+              126.9799807,
+              37.5743649
+            ],
+            [
+              126.9796445,
+              37.574221
+            ],
+            [
+              126.9795668,
+              37.5741877
+            ],
+            [
+              126.9797746,
+              37.573883
+            ]
+          ]
+        ]
+      },
+      "id": "way/196077514"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/196079103",
+        "addr:city": "서울특별시",
+        "addr:district": "종로구",
+        "addr:housenumber": "58",
+        "addr:postcode": "03151",
+        "addr:street": "종로5길",
+        "addr:subdistrict": "수송동",
+        "building": "yes",
+        "name": "석탄회관",
+        "name:en": "Seoktan Center(Coal Center)",
+        "name:ja": "石炭会館",
+        "name:ko": "석탄회관"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9802593,
+              37.5727283
+            ],
+            [
+              126.9805885,
+              37.5728455
+            ],
+            [
+              126.9805657,
+              37.5728858
+            ],
+            [
+              126.9804351,
+              37.5731162
+            ],
+            [
+              126.9801059,
+              37.572999
+            ],
+            [
+              126.9802593,
+              37.5727283
+            ]
+          ]
+        ]
+      },
+      "id": "way/196079103"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/196079106",
+        "addr:city": "서울특별시",
+        "addr:district": "종로구",
+        "addr:housenumber": "188",
+        "addr:postcode": "03141",
+        "addr:street": "세종대로",
+        "addr:subdistrict": "세종로",
+        "building": "yes",
+        "building:levels": "6",
+        "country": "US",
+        "diplomatic": "embassy",
+        "diplomatic:services:citizen_services": "yes",
+        "diplomatic:services:immigrant_visas": "yes",
+        "diplomatic:services:non-immigrant_visas": "yes",
+        "embassy": "yes",
+        "facebook": "https://www.facebook.com/usembassyseoul",
+        "height": "27",
+        "name": "주한미국대사관",
+        "name:en": "Embassy of the United States",
+        "name:es": "Embajada de Estados Unidos",
+        "name:fr": "Ambassade des États-Unis",
+        "name:ja": "駐韓アメリカ大使館",
+        "name:ko": "주한미국대사관",
+        "name:ru": "Посольство США",
+        "name:zh": "美国驻韩使馆",
+        "office": "diplomatic",
+        "official_name_1:en": "The U.S. Embassy in Seoul",
+        "official_name_2:en": "The United States Embassy in Seoul",
+        "phone": "+82 2 397 4114",
+        "start_date": "1961",
+        "target": "KR",
+        "twitter": "@USEmbassySeoul",
+        "website": "https://kr.usembassy.gov/",
+        "wikidata": "Q5369969",
+        "wikipedia": "en:Embassy of the United States, Seoul"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9777256,
+              37.5729238
+            ],
+            [
+              126.9779799,
+              37.572928
+            ],
+            [
+              126.9779613,
+              37.5734658
+            ],
+            [
+              126.9777094,
+              37.5734647
+            ],
+            [
+              126.9777256,
+              37.5729238
+            ]
+          ]
+        ]
+      },
+      "id": "way/196079106"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/223158436",
+        "addr:city": "서울특별시",
+        "addr:district": "종로구",
+        "addr:housenumber": "175",
+        "addr:postcode": "03172",
+        "addr:street": "세종대로",
+        "addr:subdistrict": "세종로",
+        "amenity": "theatre",
+        "building": "yes",
+        "building:levels": "5",
+        "name": "세종문화회관 대극장",
+        "name:en": "Sejong Grand Theater",
+        "name:ja": "世宗文化会館 大劇場",
+        "name:ko": "세종문화회관 대극장",
+        "name:zh": "世宗文化会馆 大剧场",
+        "phone": "+82 2 399 1111",
+        "theatre": "concert_hall",
+        "website": "www.sejongpac.or.kr",
+        "wheelchair": "yes",
+        "wikidata": "Q496974",
+        "wikipedia": "ko:세종문화회관"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9763088,
+              37.5722507
+            ],
+            [
+              126.9762992,
+              37.5729097
+            ],
+            [
+              126.9754502,
+              37.572897
+            ],
+            [
+              126.9754515,
+              37.5728444
+            ],
+            [
+              126.9751681,
+              37.5728402
+            ],
+            [
+              126.9751677,
+              37.5728549
+            ],
+            [
+              126.9749071,
+              37.572851
+            ],
+            [
+              126.9749134,
+              37.5725842
+            ],
+            [
+              126.9749922,
+              37.5725853
+            ],
+            [
+              126.9749946,
+              37.5724819
+            ],
+            [
+              126.974932,
+              37.572481
+            ],
+            [
+              126.9749392,
+              37.5721779
+            ],
+            [
+              126.9752474,
+              37.5721825
+            ],
+            [
+              126.9753251,
+              37.5721836
+            ],
+            [
+              126.9754829,
+              37.5721854
+            ],
+            [
+              126.975482,
+              37.5722493
+            ],
+            [
+              126.9758734,
+              37.5722551
+            ],
+            [
+              126.9758737,
+              37.5722418
+            ],
+            [
+              126.9763088,
+              37.5722507
+            ]
+          ]
+        ]
+      },
+      "id": "way/223158436"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/223158439",
+        "addr:city": "서울특별시",
+        "addr:district": "종로구",
+        "addr:housenumber": "175",
+        "addr:postcode": "03172",
+        "addr:street": "세종대로",
+        "addr:subdistrict": "세종로",
+        "amenity": "theatre",
+        "building": "yes",
+        "building:levels": "4",
+        "name": "세종문화회관 체임버홀",
+        "name:en": "Sejong Center Chamber Hall",
+        "name:ja": "世宗文化会館 チェンバーホール",
+        "name:ko": "세종문화회관 체임버홀",
+        "name:zh": "M剧场",
+        "phone": "+82 02-399-1114",
+        "website": "www.sejongpac.or.kr/sejong/installation/sejong03.asp"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9759996,
+              37.5716707
+            ],
+            [
+              126.9759988,
+              37.571939
+            ],
+            [
+              126.9759808,
+              37.571939
+            ],
+            [
+              126.9758755,
+              37.5719393
+            ],
+            [
+              126.9758737,
+              37.5722418
+            ],
+            [
+              126.9758734,
+              37.5722551
+            ],
+            [
+              126.975482,
+              37.5722493
+            ],
+            [
+              126.9754829,
+              37.5721854
+            ],
+            [
+              126.97549,
+              37.5716677
+            ],
+            [
+              126.9759996,
+              37.5716707
+            ]
+          ]
+        ]
+      },
+      "id": "way/223158439"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/223158453",
+        "addr:city": "서울특별시",
+        "addr:district": "종로구",
+        "addr:housenumber": "50",
+        "addr:plot": "19",
+        "addr:postcode": "03142",
+        "addr:street": "종로1길",
+        "addr:subdistrict": "중학동",
+        "building": "office",
+        "building:levels": "16",
+        "height": "63.35",
+        "name": "케이트윈타워",
+        "name:en": "K Twin Tower",
+        "name:ja": "ザ・ケイ ツインタワー A棟",
+        "name:ko": "케이트윈타워",
+        "phone": "+82 02-3701-9110",
+        "start_date": "2012",
+        "website": "www.ktowers.co.kr"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9787082,
+              37.574566
+            ],
+            [
+              126.9790448,
+              37.574424
+            ],
+            [
+              126.9791975,
+              37.5746514
+            ],
+            [
+              126.9791738,
+              37.5746614
+            ],
+            [
+              126.9793138,
+              37.5748699
+            ],
+            [
+              126.979001,
+              37.5750019
+            ],
+            [
+              126.9787082,
+              37.574566
+            ]
+          ]
+        ]
+      },
+      "id": "way/223158453"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/223158455",
+        "building": "commercial",
+        "building:levels": "16",
+        "height": "70",
+        "name": "수송스퀘어",
+        "name:en": "Susong Square",
+        "name:ja": "寿松スクエア",
+        "start_date": "2002"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9806696,
+              37.5745384
+            ],
+            [
+              126.9811203,
+              37.5741584
+            ],
+            [
+              126.9811606,
+              37.5742023
+            ],
+            [
+              126.9812089,
+              37.5741491
+            ],
+            [
+              126.9813068,
+              37.5741491
+            ],
+            [
+              126.9813766,
+              37.5742055
+            ],
+            [
+              126.9814034,
+              37.5742597
+            ],
+            [
+              126.9813752,
+              37.5743319
+            ],
+            [
+              126.9814168,
+              37.5743851
+            ],
+            [
+              126.9814226,
+              37.5744543
+            ],
+            [
+              126.9813095,
+              37.5745073
+            ],
+            [
+              126.9811378,
+              37.5746476
+            ],
+            [
+              126.9811043,
+              37.5746211
+            ],
+            [
+              126.9809425,
+              37.5747451
+            ],
+            [
+              126.9806696,
+              37.5745384
+            ]
+          ]
+        ]
+      },
+      "id": "way/223158455"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/223158457",
+        "addr:city": "서울특별시",
+        "addr:district": "종로구",
+        "addr:housenumber": "68",
+        "addr:postcode": "03151",
+        "addr:street": "종로5길",
+        "addr:subdistrict": "수송동",
+        "building": "yes",
+        "name": "코리안리재보험빌딩",
+        "name:en": "Koriallijaeboheom Building",
+        "name:ko": "코리안리재보험빌딩",
+        "name:zh": "韩国再保险大厦",
+        "phone": "+82 02-3702-6000"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9801879,
+              37.5734874
+            ],
+            [
+              126.9800729,
+              37.5734517
+            ],
+            [
+              126.9802359,
+              37.5731558
+            ],
+            [
+              126.9808832,
+              37.5733875
+            ],
+            [
+              126.9807228,
+              37.5736764
+            ],
+            [
+              126.9805837,
+              37.5736233
+            ],
+            [
+              126.9805733,
+              37.5736391
+            ],
+            [
+              126.980181,
+              37.5734997
+            ],
+            [
+              126.9801879,
+              37.5734874
+            ]
+          ]
+        ]
+      },
+      "id": "way/223158457"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/301276767",
+        "building": "yes",
+        "source": "Bing"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.978153,
+              37.5759595
+            ],
+            [
+              126.9782926,
+              37.5759634
+            ],
+            [
+              126.9783029,
+              37.5761857
+            ],
+            [
+              126.9781559,
+              37.5761874
+            ],
+            [
+              126.978153,
+              37.5759595
+            ]
+          ]
+        ]
+      },
+      "id": "way/301276767"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/301276768",
+        "building": "yes",
+        "name": "초관처소",
+        "name:en": "Chogwanchoso",
+        "source": "Bing"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9776012,
+              37.576
+            ],
+            [
+              126.9776027,
+              37.575964
+            ],
+            [
+              126.9777595,
+              37.5759648
+            ],
+            [
+              126.9777581,
+              37.576002
+            ],
+            [
+              126.9776012,
+              37.576
+            ]
+          ]
+        ]
+      },
+      "id": "way/301276768"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/301276779",
+        "building": "yes",
+        "source": "Bing"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9779539,
+              37.5759599
+            ],
+            [
+              126.9780867,
+              37.5759588
+            ],
+            [
+              126.9780888,
+              37.5761148
+            ],
+            [
+              126.977956,
+              37.576116
+            ],
+            [
+              126.9779539,
+              37.5759599
+            ]
+          ]
+        ]
+      },
+      "id": "way/301276779"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/331801683",
+        "addr:city": "서울특별시",
+        "addr:district": "종로구",
+        "addr:housenumber": "6",
+        "addr:postcode": "03142",
+        "addr:street": "율곡로",
+        "addr:subdistrict": "중학동",
+        "building": "construction",
+        "country": "JP",
+        "embassy": "yes",
+        "landuse": "construction",
+        "level": "8",
+        "name": "주한일본대사관",
+        "name:en": "Embassy of Japan in Korea",
+        "name:fr": "Ambassade du Japon",
+        "name:ja": "在韓日本大使館",
+        "name:ko": "주한일본대사관",
+        "name:zh": "日本驻韩大使馆",
+        "opening_hours": "Mo-Su 09:30-11:30, 13:30-16:00",
+        "phone": "+82 02-2170-5200",
+        "website": "https://www.kr.emb-japan.go.jp/itprtop_ja/index.html",
+        "wikidata": "Q621455"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.980316,
+              37.5751899
+            ],
+            [
+              126.9801605,
+              37.5753221
+            ],
+            [
+              126.9799151,
+              37.5751408
+            ],
+            [
+              126.9800705,
+              37.5750086
+            ],
+            [
+              126.980316,
+              37.5751899
+            ]
+          ]
+        ]
+      },
+      "id": "way/331801683"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/380883714",
+        "building": "yes",
+        "historic": "memorial",
+        "level": "-1",
+        "name": "세종이야기",
+        "name:en": "King Sejong Story",
+        "name:ja": "世宗物語",
+        "name:ko": "세종이야기",
+        "phone": "+82 2-399-1154",
+        "website": "www.sejongstory.or.kr"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9768113,
+              37.5728944
+            ],
+            [
+              126.9768127,
+              37.5727909
+            ],
+            [
+              126.9769432,
+              37.572792
+            ],
+            [
+              126.9769419,
+              37.5728955
+            ],
+            [
+              126.9769093,
+              37.5728952
+            ],
+            [
+              126.9769094,
+              37.5728859
+            ],
+            [
+              126.9769095,
+              37.5728766
+            ],
+            [
+              126.9768769,
+              37.5728763
+            ],
+            [
+              126.9768442,
+              37.572876
+            ],
+            [
+              126.9768441,
+              37.5728854
+            ],
+            [
+              126.976844,
+              37.5728947
+            ],
+            [
+              126.9768113,
+              37.5728944
+            ]
+          ]
+        ]
+      },
+      "id": "way/380883714"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/446597148",
+        "addr:city": "서울특별시",
+        "addr:district": "종로구",
+        "addr:housenumber": "6",
+        "addr:postcode": "03142",
+        "addr:street": "율곡로",
+        "addr:subdistrict": "중학동",
+        "building": "yes",
+        "building:levels": "17",
+        "height": "64",
+        "name": "트윈트리타워 A동",
+        "name:en": "Teuwinteuri Tower #A",
+        "name:ja": "ツインツリータワー A棟",
+        "name:ko": "트윈트리타워 A동",
+        "start_date": "2010"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9799234,
+              37.5756034
+            ],
+            [
+              126.9799088,
+              37.5756191
+            ],
+            [
+              126.9798951,
+              37.5756199
+            ],
+            [
+              126.9798253,
+              37.5755938
+            ],
+            [
+              126.9796573,
+              37.5755136
+            ],
+            [
+              126.9796614,
+              37.5754841
+            ],
+            [
+              126.979654,
+              37.5754769
+            ],
+            [
+              126.9796413,
+              37.5754751
+            ],
+            [
+              126.9796024,
+              37.5754862
+            ],
+            [
+              126.9795023,
+              37.5754121
+            ],
+            [
+              126.9795921,
+              37.5753536
+            ],
+            [
+              126.9797128,
+              37.5752622
+            ],
+            [
+              126.9800481,
+              37.5754907
+            ],
+            [
+              126.9799234,
+              37.5756034
+            ]
+          ]
+        ]
+      },
+      "id": "way/446597148"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/446597149",
+        "addr:city": "서울특별시",
+        "addr:district": "종로구",
+        "addr:housenumber": "6",
+        "addr:postcode": "03142",
+        "addr:street": "율곡로",
+        "addr:subdistrict": "중학동",
+        "building": "yes",
+        "building:levels": "17",
+        "height": "61",
+        "name": "트윈트리타워 B동",
+        "name:en": "Teuwinteuri Tower #B",
+        "name:ja": "ツインツリータワー B棟",
+        "name:ko": "트윈트리타워 B동",
+        "start_date": "2010"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9802861,
+              37.5754003
+            ],
+            [
+              126.980661,
+              37.5753334
+            ],
+            [
+              126.9806999,
+              37.5753504
+            ],
+            [
+              126.9807146,
+              37.5753663
+            ],
+            [
+              126.9808964,
+              37.5755044
+            ],
+            [
+              126.9808823,
+              37.5755481
+            ],
+            [
+              126.9803638,
+              37.575614
+            ],
+            [
+              126.9802387,
+              37.5755874
+            ],
+            [
+              126.9801594,
+              37.5755612
+            ],
+            [
+              126.9801585,
+              37.5755238
+            ],
+            [
+              126.9802861,
+              37.5754003
+            ]
+          ]
+        ]
+      },
+      "id": "way/446597149"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/512604958",
+        "addr:city": "서울특별시",
+        "addr:district": "종로구",
+        "addr:housenumber": "71",
+        "addr:postcode": "03150",
+        "addr:street": "삼봉로",
+        "addr:subdistrict": "수송동",
+        "building": "yes",
+        "building:levels": "18",
+        "check_date": "2023-08-30",
+        "height": "67",
+        "name": "신라스테이 광화문",
+        "name:en": "Shilla Stay Gwanghwamun",
+        "name:ja": "新羅ステイ光化門(クァンファムン)",
+        "name:ko": "신라스테이 광화문",
+        "phone": "+82 02-6060-9000",
+        "rooms": "112",
+        "smoking": "no",
+        "start_date": "2015",
+        "tourism": "hotel",
+        "website": "www.shillastay.com/gwanghwamun"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9809139,
+              37.5724028
+            ],
+            [
+              126.9812499,
+              37.5723549
+            ],
+            [
+              126.9813584,
+              37.5728327
+            ],
+            [
+              126.9810224,
+              37.5728806
+            ],
+            [
+              126.9809139,
+              37.5724028
+            ]
+          ]
+        ]
+      },
+      "id": "way/512604958"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/512604961",
+        "building": "yes",
+        "building:floor": "3",
+        "building:levels": "3",
+        "name": "정부합동민원센터",
+        "name:ja": "政府合同民願センター",
+        "office": "government"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9747692,
+              37.5739698
+            ],
+            [
+              126.9747689,
+              37.5739291
+            ],
+            [
+              126.9747486,
+              37.573913
+            ],
+            [
+              126.9747695,
+              37.5738966
+            ],
+            [
+              126.9747513,
+              37.5738812
+            ],
+            [
+              126.9747689,
+              37.5738688
+            ],
+            [
+              126.9747516,
+              37.5738533
+            ],
+            [
+              126.9747715,
+              37.5738379
+            ],
+            [
+              126.9747537,
+              37.5738238
+            ],
+            [
+              126.9747722,
+              37.5738096
+            ],
+            [
+              126.9747726,
+              37.5737595
+            ],
+            [
+              126.9748344,
+              37.5737608
+            ],
+            [
+              126.9748667,
+              37.5737351
+            ],
+            [
+              126.9748845,
+              37.5737491
+            ],
+            [
+              126.9749011,
+              37.5737358
+            ],
+            [
+              126.9749201,
+              37.57375
+            ],
+            [
+              126.9749369,
+              37.5737365
+            ],
+            [
+              126.9749554,
+              37.5737499
+            ],
+            [
+              126.9749713,
+              37.5737368
+            ],
+            [
+              126.9749912,
+              37.5737517
+            ],
+            [
+              126.9750112,
+              37.5737375
+            ],
+            [
+              126.9750299,
+              37.5737526
+            ],
+            [
+              126.9750471,
+              37.5737386
+            ],
+            [
+              126.975064,
+              37.5737533
+            ],
+            [
+              126.975083,
+              37.5737399
+            ],
+            [
+              126.9751145,
+              37.5737671
+            ],
+            [
+              126.9751826,
+              37.5737686
+            ],
+            [
+              126.9751805,
+              37.5738227
+            ],
+            [
+              126.975198,
+              37.5738347
+            ],
+            [
+              126.9751794,
+              37.5738479
+            ],
+            [
+              126.9751988,
+              37.5738593
+            ],
+            [
+              126.9751775,
+              37.5738743
+            ],
+            [
+              126.9751975,
+              37.5738884
+            ],
+            [
+              126.975176,
+              37.5739055
+            ],
+            [
+              126.975197,
+              37.5739204
+            ],
+            [
+              126.9751749,
+              37.5739383
+            ],
+            [
+              126.975173,
+              37.5739834
+            ],
+            [
+              126.9751083,
+              37.5739823
+            ],
+            [
+              126.9750744,
+              37.5740029
+            ],
+            [
+              126.9750567,
+              37.5739874
+            ],
+            [
+              126.9750376,
+              37.5740016
+            ],
+            [
+              126.9750191,
+              37.5739861
+            ],
+            [
+              126.9750014,
+              37.5740008
+            ],
+            [
+              126.9749829,
+              37.5739854
+            ],
+            [
+              126.9749672,
+              37.5739992
+            ],
+            [
+              126.9749502,
+              37.5739838
+            ],
+            [
+              126.9749286,
+              37.5739982
+            ],
+            [
+              126.9749114,
+              37.5739844
+            ],
+            [
+              126.9748927,
+              37.5739987
+            ],
+            [
+              126.9748784,
+              37.5739866
+            ],
+            [
+              126.9748583,
+              37.5740016
+            ],
+            [
+              126.9748217,
+              37.5739711
+            ],
+            [
+              126.9747692,
+              37.5739698
+            ]
+          ]
+        ]
+      },
+      "id": "way/512604961"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/525629947",
+        "addr:city": "서울특별시",
+        "addr:district": "종로구",
+        "addr:housenumber": "33",
+        "addr:postcode": "03155",
+        "addr:street": "종로3길",
+        "addr:subdistrict": "청진동",
+        "building": "yes",
+        "building:levels": "25",
+        "height": "110",
+        "name": "KT광화문빌딩East",
+        "name:en": "KT Gwanghwamun Building East",
+        "name:ja": "KT光化門(クァンファムン)ビル イースト",
+        "name:ko": "KT광화문빌딩East",
+        "name:zh": "KT 光化门大厦东",
+        "start_date": "2014"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9785427,
+              37.5720555
+            ],
+            [
+              126.9785444,
+              37.5719491
+            ],
+            [
+              126.9786622,
+              37.5719503
+            ],
+            [
+              126.9786651,
+              37.5717667
+            ],
+            [
+              126.9788556,
+              37.5717686
+            ],
+            [
+              126.9788551,
+              37.5718004
+            ],
+            [
+              126.97891,
+              37.5718009
+            ],
+            [
+              126.9789106,
+              37.5717606
+            ],
+            [
+              126.9790616,
+              37.5717621
+            ],
+            [
+              126.9790608,
+              37.5718131
+            ],
+            [
+              126.9790983,
+              37.5718135
+            ],
+            [
+              126.9790923,
+              37.5721905
+            ],
+            [
+              126.9790286,
+              37.5721899
+            ],
+            [
+              126.979028,
+              37.5722295
+            ],
+            [
+              126.9788968,
+              37.5722281
+            ],
+            [
+              126.9788974,
+              37.5721879
+            ],
+            [
+              126.9788334,
+              37.5721872
+            ],
+            [
+              126.9788329,
+              37.5722181
+            ],
+            [
+              126.978657,
+              37.5722163
+            ],
+            [
+              126.9786596,
+              37.5720567
+            ],
+            [
+              126.9785427,
+              37.5720555
+            ]
+          ]
+        ]
+      },
+      "id": "way/525629947"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/543729862",
+        "addr:city": "서울특별시",
+        "addr:district": "종로구",
+        "addr:housenumber": "175",
+        "addr:postcode": "03172",
+        "addr:street": "세종대로",
+        "addr:subdistrict": "세종로",
+        "building": "yes",
+        "building:levels": "4",
+        "name": "세종문화회관 미술관",
+        "name:en": "Sejong Gallery",
+        "name:ja": "世宗文化会館 美術館",
+        "name:ko": "세종문화회관 미술관",
+        "phone": "+82 2 399 1114",
+        "tourism": "gallery",
+        "website": "http://www.sejongpac.or.kr/main/main_real.asp"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9759988,
+              37.571939
+            ],
+            [
+              126.9759996,
+              37.5716707
+            ],
+            [
+              126.9763182,
+              37.5716744
+            ],
+            [
+              126.976308,
+              37.5719422
+            ],
+            [
+              126.9761986,
+              37.5719399
+            ],
+            [
+              126.9761976,
+              37.5720003
+            ],
+            [
+              126.9759803,
+              37.5719999
+            ],
+            [
+              126.9759808,
+              37.571939
+            ],
+            [
+              126.9759988,
+              37.571939
+            ]
+          ]
+        ]
+      },
+      "id": "way/543729862"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/554305273",
+        "addr:city": "서울특별시",
+        "addr:district": "종로구",
+        "addr:housenumber": "48",
+        "addr:postcode": "03156",
+        "addr:street": "삼봉로",
+        "addr:subdistrict": "청진동",
+        "building": "commercial",
+        "building:levels": "23",
+        "height": "104",
+        "name": "시그나타워",
+        "name:en": "Sigeuna Tower",
+        "name:ja": "シグナタワー",
+        "name:ko": "시그나타워",
+        "start_date": "2013"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9799658,
+              37.5722769
+            ],
+            [
+              126.9799631,
+              37.5722955
+            ],
+            [
+              126.9797572,
+              37.5722769
+            ],
+            [
+              126.97978,
+              37.5721504
+            ],
+            [
+              126.9797673,
+              37.5721504
+            ],
+            [
+              126.979774,
+              37.5721206
+            ],
+            [
+              126.9797559,
+              37.5721179
+            ],
+            [
+              126.9797693,
+              37.5720717
+            ],
+            [
+              126.9797874,
+              37.5720744
+            ],
+            [
+              126.9798149,
+              37.5719468
+            ],
+            [
+              126.9797814,
+              37.5719399
+            ],
+            [
+              126.9797928,
+              37.5718931
+            ],
+            [
+              126.9798129,
+              37.5718958
+            ],
+            [
+              126.9798169,
+              37.5718692
+            ],
+            [
+              126.9798263,
+              37.5718724
+            ],
+            [
+              126.9798317,
+              37.5718495
+            ],
+            [
+              126.980179,
+              37.5718894
+            ],
+            [
+              126.9801743,
+              37.5719139
+            ],
+            [
+              126.9801857,
+              37.5719133
+            ],
+            [
+              126.9801267,
+              37.5722391
+            ],
+            [
+              126.9800449,
+              37.5722864
+            ],
+            [
+              126.9799658,
+              37.5722769
+            ]
+          ]
+        ]
+      },
+      "id": "way/554305273"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/554305276",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9796478,
+              37.5720768
+            ],
+            [
+              126.9796566,
+              37.5720321
+            ],
+            [
+              126.9796415,
+              37.5720303
+            ],
+            [
+              126.9796486,
+              37.5719941
+            ],
+            [
+              126.9796595,
+              37.5719954
+            ],
+            [
+              126.9796651,
+              37.5719668
+            ],
+            [
+              126.9797524,
+              37.5719776
+            ],
+            [
+              126.979731,
+              37.5720871
+            ],
+            [
+              126.9796478,
+              37.5720768
+            ]
+          ]
+        ]
+      },
+      "id": "way/554305276"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/554305280",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9793589,
+              37.5719776
+            ],
+            [
+              126.9794293,
+              37.5719803
+            ],
+            [
+              126.9794313,
+              37.5719973
+            ],
+            [
+              126.9795078,
+              37.5720016
+            ],
+            [
+              126.9795158,
+              37.5720148
+            ],
+            [
+              126.979599,
+              37.5720223
+            ],
+            [
+              126.9796084,
+              37.5721631
+            ],
+            [
+              126.9793656,
+              37.5721599
+            ],
+            [
+              126.9793589,
+              37.5719776
+            ]
+          ]
+        ]
+      },
+      "id": "way/554305280"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/554305281",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9796373,
+              37.5722913
+            ],
+            [
+              126.9796424,
+              37.5722332
+            ],
+            [
+              126.9796227,
+              37.5722321
+            ],
+            [
+              126.9796282,
+              37.5721709
+            ],
+            [
+              126.9797236,
+              37.5721762
+            ],
+            [
+              126.9797131,
+              37.5722955
+            ],
+            [
+              126.9796373,
+              37.5722913
+            ]
+          ]
+        ]
+      },
+      "id": "way/554305281"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/554305283",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9794836,
+              37.5723077
+            ],
+            [
+              126.9794917,
+              37.5721753
+            ],
+            [
+              126.9796131,
+              37.5721918
+            ],
+            [
+              126.9796057,
+              37.5722365
+            ],
+            [
+              126.9796291,
+              37.5722423
+            ],
+            [
+              126.9796063,
+              37.572313
+            ],
+            [
+              126.9794836,
+              37.5723077
+            ]
+          ]
+        ]
+      },
+      "id": "way/554305283"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/554305284",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9797089,
+              37.572423
+            ],
+            [
+              126.9796077,
+              37.5724161
+            ],
+            [
+              126.9796117,
+              37.5723603
+            ],
+            [
+              126.9797156,
+              37.5723831
+            ],
+            [
+              126.9797089,
+              37.572423
+            ]
+          ]
+        ]
+      },
+      "id": "way/554305284"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/554305285",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9794917,
+              37.5723449
+            ],
+            [
+              126.9795447,
+              37.5723459
+            ],
+            [
+              126.979601,
+              37.5723582
+            ],
+            [
+              126.9795949,
+              37.5724108
+            ],
+            [
+              126.9794877,
+              37.572406
+            ],
+            [
+              126.9794917,
+              37.5723449
+            ]
+          ]
+        ]
+      },
+      "id": "way/554305285"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/554305286",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9793371,
+              37.5722932
+            ],
+            [
+              126.9793405,
+              37.5721741
+            ],
+            [
+              126.9794743,
+              37.5721765
+            ],
+            [
+              126.9794709,
+              37.5722956
+            ],
+            [
+              126.9793371,
+              37.5722932
+            ]
+          ]
+        ]
+      },
+      "id": "way/554305286"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/554305288",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9793301,
+              37.5723465
+            ],
+            [
+              126.9793368,
+              37.5723013
+            ],
+            [
+              126.9794038,
+              37.5723024
+            ],
+            [
+              126.9794528,
+              37.5723449
+            ],
+            [
+              126.9794521,
+              37.5723773
+            ],
+            [
+              126.979377,
+              37.5723778
+            ],
+            [
+              126.9793301,
+              37.5723465
+            ]
+          ]
+        ]
+      },
+      "id": "way/554305288"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/554305301",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.980645,
+              37.5726897
+            ],
+            [
+              126.9805901,
+              37.572627
+            ],
+            [
+              126.9806491,
+              37.5725914
+            ],
+            [
+              126.9807215,
+              37.5726637
+            ],
+            [
+              126.9806745,
+              37.5726908
+            ],
+            [
+              126.9806611,
+              37.5726791
+            ],
+            [
+              126.980645,
+              37.5726897
+            ]
+          ]
+        ]
+      },
+      "id": "way/554305301"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/554305302",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9806551,
+              37.5728184
+            ],
+            [
+              126.9806169,
+              37.5727721
+            ],
+            [
+              126.9807403,
+              37.5726951
+            ],
+            [
+              126.9808053,
+              37.5727774
+            ],
+            [
+              126.9807329,
+              37.5728045
+            ],
+            [
+              126.9806551,
+              37.5728184
+            ]
+          ]
+        ]
+      },
+      "id": "way/554305302"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/554305303",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9806772,
+              37.5729087
+            ],
+            [
+              126.9806719,
+              37.5728859
+            ],
+            [
+              126.9806437,
+              37.5728896
+            ],
+            [
+              126.9806437,
+              37.5728704
+            ],
+            [
+              126.9806564,
+              37.5728678
+            ],
+            [
+              126.9806457,
+              37.5728338
+            ],
+            [
+              126.9807389,
+              37.5728274
+            ],
+            [
+              126.9807403,
+              37.5728157
+            ],
+            [
+              126.9807577,
+              37.5728189
+            ],
+            [
+              126.9807584,
+              37.5728056
+            ],
+            [
+              126.9807778,
+              37.5728003
+            ],
+            [
+              126.9807872,
+              37.57282
+            ],
+            [
+              126.9807986,
+              37.5728205
+            ],
+            [
+              126.9808133,
+              37.5729023
+            ],
+            [
+              126.9806772,
+              37.5729087
+            ]
+          ]
+        ]
+      },
+      "id": "way/554305303"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/554305304",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9806199,
+              37.5726927
+            ],
+            [
+              126.9805188,
+              37.5727336
+            ],
+            [
+              126.9804981,
+              37.5726814
+            ],
+            [
+              126.9805095,
+              37.572664
+            ],
+            [
+              126.9804958,
+              37.5726494
+            ],
+            [
+              126.9805613,
+              37.572623
+            ],
+            [
+              126.9806199,
+              37.5726927
+            ]
+          ]
+        ]
+      },
+      "id": "way/554305304"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/554305305",
+        "building": "yes",
+        "building:levels": "9",
+        "height": "44",
+        "start_date": "2007"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9803709,
+              37.5726513
+            ],
+            [
+              126.9803551,
+              37.5726079
+            ],
+            [
+              126.9803729,
+              37.5726038
+            ],
+            [
+              126.9803514,
+              37.5725451
+            ],
+            [
+              126.9803264,
+              37.5725508
+            ],
+            [
+              126.9803163,
+              37.5725232
+            ],
+            [
+              126.9805282,
+              37.5724745
+            ],
+            [
+              126.9805711,
+              37.5725918
+            ],
+            [
+              126.9805123,
+              37.5726053
+            ],
+            [
+              126.9805169,
+              37.5726177
+            ],
+            [
+              126.9803709,
+              37.5726513
+            ]
+          ]
+        ]
+      },
+      "id": "way/554305305"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/554305306",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9802789,
+              37.5724809
+            ],
+            [
+              126.9802702,
+              37.5725144
+            ],
+            [
+              126.980293,
+              37.5725282
+            ],
+            [
+              126.9802782,
+              37.5725622
+            ],
+            [
+              126.9803613,
+              37.5725875
+            ],
+            [
+              126.9803313,
+              37.5726275
+            ],
+            [
+              126.9801241,
+              37.5725592
+            ],
+            [
+              126.9802789,
+              37.5724809
+            ]
+          ]
+        ]
+      },
+      "id": "way/554305306"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/554305307",
+        "building": "hotel",
+        "building:levels": "18",
+        "height": "69",
+        "start_date": "2005"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9809183,
+              37.575162
+            ],
+            [
+              126.9808342,
+              37.575093
+            ],
+            [
+              126.9808235,
+              37.5751012
+            ],
+            [
+              126.9807749,
+              37.5750614
+            ],
+            [
+              126.9807863,
+              37.5750526
+            ],
+            [
+              126.9807251,
+              37.5750024
+            ],
+            [
+              126.9809415,
+              37.5748367
+            ],
+            [
+              126.9809496,
+              37.5748433
+            ],
+            [
+              126.9810565,
+              37.5747615
+            ],
+            [
+              126.9812848,
+              37.5749488
+            ],
+            [
+              126.9812658,
+              37.5749633
+            ],
+            [
+              126.9813153,
+              37.5750039
+            ],
+            [
+              126.9813304,
+              37.5749924
+            ],
+            [
+              126.9813105,
+              37.5749761
+            ],
+            [
+              126.9814838,
+              37.5748434
+            ],
+            [
+              126.9816054,
+              37.574943
+            ],
+            [
+              126.9815453,
+              37.574989
+            ],
+            [
+              126.9816307,
+              37.575059
+            ],
+            [
+              126.9814196,
+              37.5752208
+            ],
+            [
+              126.9814051,
+              37.5752089
+            ],
+            [
+              126.9812884,
+              37.5752983
+            ],
+            [
+              126.9810469,
+              37.5751002
+            ],
+            [
+              126.9810749,
+              37.5750788
+            ],
+            [
+              126.9810269,
+              37.5750395
+            ],
+            [
+              126.9810065,
+              37.5750551
+            ],
+            [
+              126.9810169,
+              37.5750637
+            ],
+            [
+              126.981022,
+              37.5750597
+            ],
+            [
+              126.9810364,
+              37.5750715
+            ],
+            [
+              126.9809183,
+              37.575162
+            ]
+          ]
+        ]
+      },
+      "id": "way/554305307"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/554305308",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9808316,
+              37.5739282
+            ],
+            [
+              126.980831,
+              37.5738604
+            ],
+            [
+              126.9809211,
+              37.5738599
+            ],
+            [
+              126.9809217,
+              37.5739277
+            ],
+            [
+              126.9808316,
+              37.5739282
+            ]
+          ]
+        ]
+      },
+      "id": "way/554305308"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/554305309",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9805729,
+              37.5736989
+            ],
+            [
+              126.9806496,
+              37.5737044
+            ],
+            [
+              126.9806484,
+              37.5737157
+            ],
+            [
+              126.9807058,
+              37.5737198
+            ],
+            [
+              126.9807097,
+              37.5736851
+            ],
+            [
+              126.9807932,
+              37.5736911
+            ],
+            [
+              126.9807812,
+              37.5737957
+            ],
+            [
+              126.9805636,
+              37.57378
+            ],
+            [
+              126.9805729,
+              37.5736989
+            ]
+          ]
+        ]
+      },
+      "id": "way/554305309"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/554305310",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9801364,
+              37.574644
+            ],
+            [
+              126.9800662,
+              37.5746043
+            ],
+            [
+              126.9800955,
+              37.5745718
+            ],
+            [
+              126.979993,
+              37.5745138
+            ],
+            [
+              126.9799722,
+              37.5745368
+            ],
+            [
+              126.9799424,
+              37.5745199
+            ],
+            [
+              126.9800216,
+              37.574432
+            ],
+            [
+              126.9802241,
+              37.5745467
+            ],
+            [
+              126.9801364,
+              37.574644
+            ]
+          ]
+        ]
+      },
+      "id": "way/554305310"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/554305311",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9799421,
+              37.5746508
+            ],
+            [
+              126.979896,
+              37.5746185
+            ],
+            [
+              126.9800014,
+              37.5745239
+            ],
+            [
+              126.9800475,
+              37.5745562
+            ],
+            [
+              126.9799421,
+              37.5746508
+            ]
+          ]
+        ]
+      },
+      "id": "way/554305311"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/554305312",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9800374,
+              37.5747158
+            ],
+            [
+              126.9799922,
+              37.5746828
+            ],
+            [
+              126.9800751,
+              37.5746114
+            ],
+            [
+              126.9801203,
+              37.5746444
+            ],
+            [
+              126.9800374,
+              37.5747158
+            ]
+          ]
+        ]
+      },
+      "id": "way/554305312"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/554305313",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9792221,
+              37.5741235
+            ],
+            [
+              126.9792502,
+              37.5741231
+            ],
+            [
+              126.9792489,
+              37.5741391
+            ],
+            [
+              126.9792949,
+              37.5741386
+            ],
+            [
+              126.979273,
+              37.5741849
+            ],
+            [
+              126.9792264,
+              37.5741889
+            ],
+            [
+              126.9792221,
+              37.5741235
+            ]
+          ]
+        ]
+      },
+      "id": "way/554305313"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/554305314",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9791168,
+              37.5741193
+            ],
+            [
+              126.9792077,
+              37.5741142
+            ],
+            [
+              126.9792147,
+              37.5741918
+            ],
+            [
+              126.9791238,
+              37.5741969
+            ],
+            [
+              126.9791168,
+              37.5741193
+            ]
+          ]
+        ]
+      },
+      "id": "way/554305314"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/554305315",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9790248,
+              37.5741259
+            ],
+            [
+              126.9791157,
+              37.5741208
+            ],
+            [
+              126.9791227,
+              37.5741984
+            ],
+            [
+              126.9790318,
+              37.5742036
+            ],
+            [
+              126.9790248,
+              37.5741259
+            ]
+          ]
+        ]
+      },
+      "id": "way/554305315"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/554305316",
+        "amenity": "studio",
+        "building": "yes",
+        "building:levels": "16",
+        "height": "69",
+        "name": "연합뉴스",
+        "name:en": "Yonhap News Agency",
+        "name:ja": "聯合ニュース",
+        "name:ko": "연합뉴스",
+        "start_date": "2013",
+        "studio": "television",
+        "website": "https://www.yna.co.kr/"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9805445,
+              37.5740307
+            ],
+            [
+              126.9808917,
+              37.5742875
+            ],
+            [
+              126.9804759,
+              37.5746407
+            ],
+            [
+              126.9801287,
+              37.5743839
+            ],
+            [
+              126.9805445,
+              37.5740307
+            ]
+          ]
+        ]
+      },
+      "id": "way/554305316"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/554305317",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9787268,
+              37.5742086
+            ],
+            [
+              126.9787577,
+              37.5742076
+            ],
+            [
+              126.9787553,
+              37.5741608
+            ],
+            [
+              126.9787907,
+              37.5741596
+            ],
+            [
+              126.9787946,
+              37.5742362
+            ],
+            [
+              126.9787284,
+              37.5742383
+            ],
+            [
+              126.9787268,
+              37.5742086
+            ]
+          ]
+        ]
+      },
+      "id": "way/554305317"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/554305318",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9786109,
+              37.5742302
+            ],
+            [
+              126.9786064,
+              37.5742012
+            ],
+            [
+              126.9786264,
+              37.5741993
+            ],
+            [
+              126.9786232,
+              37.5741782
+            ],
+            [
+              126.9786918,
+              37.5741716
+            ],
+            [
+              126.9787025,
+              37.5742404
+            ],
+            [
+              126.9786316,
+              37.5742472
+            ],
+            [
+              126.9786287,
+              37.5742285
+            ],
+            [
+              126.9786109,
+              37.5742302
+            ]
+          ]
+        ]
+      },
+      "id": "way/554305318"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/554305319",
+        "addr:city": "서울특별시",
+        "addr:district": "종로구",
+        "addr:housenumber": "45",
+        "addr:postcode": "03141",
+        "addr:street": "종로1길",
+        "addr:subdistrict": "세종로",
+        "amenity": "toilets",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9783174,
+              37.5746119
+            ],
+            [
+              126.9783657,
+              37.5745739
+            ],
+            [
+              126.9784396,
+              37.5746329
+            ],
+            [
+              126.9783913,
+              37.5746709
+            ],
+            [
+              126.9783174,
+              37.5746119
+            ]
+          ]
+        ]
+      },
+      "id": "way/554305319"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/554305320",
+        "building": "yes",
+        "building:levels": "5"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9796445,
+              37.574221
+            ],
+            [
+              126.9799807,
+              37.5743649
+            ],
+            [
+              126.9798864,
+              37.5745006
+            ],
+            [
+              126.9795946,
+              37.5742958
+            ],
+            [
+              126.9796445,
+              37.574221
+            ]
+          ]
+        ]
+      },
+      "id": "way/554305320"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/554305321",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9795987,
+              37.5752109
+            ],
+            [
+              126.9795824,
+              37.5751862
+            ],
+            [
+              126.9795993,
+              37.5751792
+            ],
+            [
+              126.9795875,
+              37.5751613
+            ],
+            [
+              126.9797188,
+              37.5751069
+            ],
+            [
+              126.9797469,
+              37.5751495
+            ],
+            [
+              126.9795987,
+              37.5752109
+            ]
+          ]
+        ]
+      },
+      "id": "way/554305321"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/554305322",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9795846,
+              37.5751472
+            ],
+            [
+              126.9795611,
+              37.5751021
+            ],
+            [
+              126.9796743,
+              37.5750652
+            ],
+            [
+              126.9796977,
+              37.5751102
+            ],
+            [
+              126.9795846,
+              37.5751472
+            ]
+          ]
+        ]
+      },
+      "id": "way/554305322"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/554305323",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9792777,
+              37.5753087
+            ],
+            [
+              126.9793408,
+              37.5752784
+            ],
+            [
+              126.9793593,
+              37.5753026
+            ],
+            [
+              126.9793818,
+              37.5752918
+            ],
+            [
+              126.979398,
+              37.575313
+            ],
+            [
+              126.97944,
+              37.5752928
+            ],
+            [
+              126.9794651,
+              37.5753256
+            ],
+            [
+              126.9793376,
+              37.5753869
+            ],
+            [
+              126.9792777,
+              37.5753087
+            ]
+          ]
+        ]
+      },
+      "id": "way/554305323"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/554305324",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9792999,
+              37.5752041
+            ],
+            [
+              126.9792529,
+              37.57522
+            ],
+            [
+              126.9792717,
+              37.575236
+            ],
+            [
+              126.9792911,
+              37.5752264
+            ],
+            [
+              126.9793166,
+              37.5752525
+            ],
+            [
+              126.9792851,
+              37.5752636
+            ],
+            [
+              126.9793072,
+              37.5752833
+            ],
+            [
+              126.9792616,
+              37.5752976
+            ],
+            [
+              126.9791939,
+              37.5752174
+            ],
+            [
+              126.9794796,
+              37.5750935
+            ],
+            [
+              126.9795506,
+              37.5751749
+            ],
+            [
+              126.9795111,
+              37.5751887
+            ],
+            [
+              126.9794675,
+              37.5751313
+            ],
+            [
+              126.9793334,
+              37.5751876
+            ],
+            [
+              126.9793488,
+              37.5752052
+            ],
+            [
+              126.9793911,
+              37.575185
+            ],
+            [
+              126.9794078,
+              37.5752062
+            ],
+            [
+              126.9794829,
+              37.5751743
+            ],
+            [
+              126.9795325,
+              37.575236
+            ],
+            [
+              126.9794534,
+              37.5752679
+            ],
+            [
+              126.9794521,
+              37.5752785
+            ],
+            [
+              126.9794071,
+              37.5752966
+            ],
+            [
+              126.9792999,
+              37.5752041
+            ]
+          ]
+        ]
+      },
+      "id": "way/554305324"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/554305325",
+        "addr:city": "서울특별시",
+        "addr:district": "종로구",
+        "addr:housenumber": "50",
+        "addr:plot": "19",
+        "addr:postcode": "03142",
+        "addr:street": "종로1길",
+        "addr:subdistrict": "중학동",
+        "building": "yes",
+        "building:levels": "16",
+        "height": "63.35",
+        "name": "더케이 트윈타워 B동",
+        "name:en": "The K Twin Tower #B",
+        "name:ja": "ザ・ケイ ツインタワー B棟",
+        "name:ko": "더케이 트윈타워 B동",
+        "phone": "+82 02-3701-9110",
+        "start_date": "2012",
+        "website": "www.ktowers.co.kr"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9799583,
+              37.5748229
+            ],
+            [
+              126.9796992,
+              37.5750445
+            ],
+            [
+              126.9794608,
+              37.5748695
+            ],
+            [
+              126.979479,
+              37.5748539
+            ],
+            [
+              126.9792604,
+              37.5746934
+            ],
+            [
+              126.9795012,
+              37.5744873
+            ],
+            [
+              126.9799583,
+              37.5748229
+            ]
+          ]
+        ]
+      },
+      "id": "way/554305325"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/554305333",
+        "addr:housenumber": "55",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9787897,
+              37.575347
+            ],
+            [
+              126.9788438,
+              37.5752502
+            ],
+            [
+              126.9788726,
+              37.5752334
+            ],
+            [
+              126.9789721,
+              37.5753456
+            ],
+            [
+              126.9788922,
+              37.5753832
+            ],
+            [
+              126.978815,
+              37.5753789
+            ],
+            [
+              126.9788164,
+              37.5753609
+            ],
+            [
+              126.9787897,
+              37.575347
+            ]
+          ]
+        ]
+      },
+      "id": "way/554305333"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/554305334",
+        "addr:city": "서울특별시",
+        "addr:district": "종로구",
+        "addr:housenumber": "57",
+        "addr:postcode": "03142",
+        "addr:street": "종로1길",
+        "addr:subdistrict": "중학동",
+        "building": "retail",
+        "building:levels": "3"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.978905,
+              37.5754469
+            ],
+            [
+              126.9788914,
+              37.5754086
+            ],
+            [
+              126.9789927,
+              37.5753571
+            ],
+            [
+              126.979055,
+              37.5754263
+            ],
+            [
+              126.9790371,
+              37.5754513
+            ],
+            [
+              126.978905,
+              37.5754469
+            ]
+          ]
+        ]
+      },
+      "id": "way/554305334"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/554305336",
+        "addr:housenumber": "55-1",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9787491,
+              37.5754453
+            ],
+            [
+              126.9787522,
+              37.5753868
+            ],
+            [
+              126.9788843,
+              37.5753912
+            ],
+            [
+              126.9788812,
+              37.5754497
+            ],
+            [
+              126.9787491,
+              37.5754453
+            ]
+          ]
+        ]
+      },
+      "id": "way/554305336"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/555477985",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9808013,
+              37.5718518
+            ],
+            [
+              126.9808744,
+              37.5718763
+            ],
+            [
+              126.980922,
+              37.5719029
+            ],
+            [
+              126.9808824,
+              37.5719916
+            ],
+            [
+              126.9808388,
+              37.5719842
+            ],
+            [
+              126.9808214,
+              37.5720086
+            ],
+            [
+              126.9807249,
+              37.5719767
+            ],
+            [
+              126.9807503,
+              37.5718991
+            ],
+            [
+              126.9807725,
+              37.5718891
+            ],
+            [
+              126.9808013,
+              37.5718518
+            ]
+          ]
+        ]
+      },
+      "id": "way/555477985"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/555477986",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9809099,
+              37.572024
+            ],
+            [
+              126.9809475,
+              37.5719193
+            ],
+            [
+              126.9809951,
+              37.5719523
+            ],
+            [
+              126.9810367,
+              37.5719831
+            ],
+            [
+              126.981042,
+              37.5720097
+            ],
+            [
+              126.9809676,
+              37.5720235
+            ],
+            [
+              126.9809616,
+              37.5720389
+            ],
+            [
+              126.9809099,
+              37.572024
+            ]
+          ]
+        ]
+      },
+      "id": "way/555477986"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/555477988",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9808382,
+              37.5720139
+            ],
+            [
+              126.9809012,
+              37.5720363
+            ],
+            [
+              126.9808777,
+              37.572083
+            ],
+            [
+              126.9809783,
+              37.5721511
+            ],
+            [
+              126.9810038,
+              37.5721925
+            ],
+            [
+              126.9808697,
+              37.5722308
+            ],
+            [
+              126.9807825,
+              37.5721511
+            ],
+            [
+              126.9807872,
+              37.5721048
+            ],
+            [
+              126.9808382,
+              37.5720139
+            ]
+          ]
+        ]
+      },
+      "id": "way/555477988"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/555477991",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9807133,
+              37.5722806
+            ],
+            [
+              126.9807034,
+              37.572253
+            ],
+            [
+              126.9807659,
+              37.5721651
+            ],
+            [
+              126.9808348,
+              37.5722405
+            ],
+            [
+              126.9807133,
+              37.5722806
+            ]
+          ]
+        ]
+      },
+      "id": "way/555477991"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/555477992",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9807737,
+              37.5721041
+            ],
+            [
+              126.9806565,
+              37.5720691
+            ],
+            [
+              126.9806948,
+              37.5719886
+            ],
+            [
+              126.980812,
+              37.5720236
+            ],
+            [
+              126.9807737,
+              37.5721041
+            ]
+          ]
+        ]
+      },
+      "id": "way/555477992"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/555477993",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9806217,
+              37.5720552
+            ],
+            [
+              126.9804398,
+              37.5719922
+            ],
+            [
+              126.9804849,
+              37.5719105
+            ],
+            [
+              126.9805807,
+              37.5719436
+            ],
+            [
+              126.9805674,
+              37.5719678
+            ],
+            [
+              126.9806535,
+              37.5719976
+            ],
+            [
+              126.9806217,
+              37.5720552
+            ]
+          ]
+        ]
+      },
+      "id": "way/555477993"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/555477994",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9807291,
+              37.5721863
+            ],
+            [
+              126.9805369,
+              37.5721225
+            ],
+            [
+              126.9805764,
+              37.5720478
+            ],
+            [
+              126.9807686,
+              37.5721116
+            ],
+            [
+              126.9807291,
+              37.5721863
+            ]
+          ]
+        ]
+      },
+      "id": "way/555477994"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/555477995",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9805342,
+              37.5720667
+            ],
+            [
+              126.9804171,
+              37.5720317
+            ],
+            [
+              126.9804319,
+              37.5720006
+            ],
+            [
+              126.980549,
+              37.5720357
+            ],
+            [
+              126.9805342,
+              37.5720667
+            ]
+          ]
+        ]
+      },
+      "id": "way/555477995"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/555477996",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9806381,
+              37.5722639
+            ],
+            [
+              126.9805866,
+              37.5722625
+            ],
+            [
+              126.9805524,
+              37.5722417
+            ],
+            [
+              126.9805571,
+              37.5722194
+            ],
+            [
+              126.9804989,
+              37.572198
+            ],
+            [
+              126.9805365,
+              37.5721361
+            ],
+            [
+              126.9806832,
+              37.5721776
+            ],
+            [
+              126.9806859,
+              37.5722098
+            ],
+            [
+              126.9806381,
+              37.5722639
+            ]
+          ]
+        ]
+      },
+      "id": "way/555477996"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/555477997",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9804981,
+              37.5721809
+            ],
+            [
+              126.9803809,
+              37.5721459
+            ],
+            [
+              126.9804192,
+              37.5720654
+            ],
+            [
+              126.9805364,
+              37.5721004
+            ],
+            [
+              126.9804981,
+              37.5721809
+            ]
+          ]
+        ]
+      },
+      "id": "way/555477997"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/555477998",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9805519,
+              37.5722413
+            ],
+            [
+              126.9805438,
+              37.5722653
+            ],
+            [
+              126.9805965,
+              37.5723033
+            ],
+            [
+              126.9805096,
+              37.5723223
+            ],
+            [
+              126.9804529,
+              37.5722815
+            ],
+            [
+              126.9805016,
+              37.5722265
+            ],
+            [
+              126.9805519,
+              37.5722413
+            ]
+          ]
+        ]
+      },
+      "id": "way/555477998"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/555477999",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9803567,
+              37.5721849
+            ],
+            [
+              126.9804658,
+              37.5722183
+            ],
+            [
+              126.9804425,
+              37.572266
+            ],
+            [
+              126.9803335,
+              37.5722326
+            ],
+            [
+              126.9803567,
+              37.5721849
+            ]
+          ]
+        ]
+      },
+      "id": "way/555477999"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/555478000",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9805013,
+              37.5723253
+            ],
+            [
+              126.9803999,
+              37.5723526
+            ],
+            [
+              126.9803436,
+              37.5723277
+            ],
+            [
+              126.9803846,
+              37.5722695
+            ],
+            [
+              126.9805013,
+              37.5723253
+            ]
+          ]
+        ]
+      },
+      "id": "way/555478000"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/555478001",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9803816,
+              37.5722673
+            ],
+            [
+              126.9803406,
+              37.5723255
+            ],
+            [
+              126.9802842,
+              37.5723005
+            ],
+            [
+              126.9803252,
+              37.5722424
+            ],
+            [
+              126.9803816,
+              37.5722673
+            ]
+          ]
+        ]
+      },
+      "id": "way/555478001"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/555478004",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9793766,
+              37.5723885
+            ],
+            [
+              126.9794604,
+              37.572389
+            ],
+            [
+              126.9794597,
+              37.5724214
+            ],
+            [
+              126.9794235,
+              37.5724198
+            ],
+            [
+              126.9793766,
+              37.5723885
+            ]
+          ]
+        ]
+      },
+      "id": "way/555478004"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/892361563",
+        "building": "yes",
+        "name": "영군직소"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9777581,
+              37.576002
+            ],
+            [
+              126.9777595,
+              37.5759648
+            ],
+            [
+              126.9779125,
+              37.5759643
+            ],
+            [
+              126.9779071,
+              37.5760026
+            ],
+            [
+              126.9777581,
+              37.576002
+            ]
+          ]
+        ]
+      },
+      "id": "way/892361563"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/945718193",
+        "addr:city": "서울특별시",
+        "addr:district": "종로구",
+        "addr:housenumber": "77-6",
+        "addr:postcode": "03171",
+        "addr:street": "세종대로",
+        "addr:subdistrict": "세종로",
+        "building": "yes",
+        "building:levels": "2"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9759601,
+              37.5743791
+            ],
+            [
+              126.9759621,
+              37.5743195
+            ],
+            [
+              126.9762182,
+              37.57433
+            ],
+            [
+              126.9762142,
+              37.574388
+            ],
+            [
+              126.9759601,
+              37.5743791
+            ]
+          ]
+        ]
+      },
+      "id": "way/945718193"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/945718197",
+        "addr:city": "서울특별시",
+        "addr:district": "종로구",
+        "addr:housenumber": "지하189",
+        "addr:postcode": "03172",
+        "addr:street": "세종대로",
+        "addr:subdistrict": "세종로",
+        "building": "yes",
+        "building:levels": "1"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9760521,
+              37.5732786
+            ],
+            [
+              126.9760521,
+              37.5731299
+            ],
+            [
+              126.9761795,
+              37.5731299
+            ],
+            [
+              126.9761724,
+              37.57328
+            ],
+            [
+              126.9760521,
+              37.5732786
+            ]
+          ]
+        ]
+      },
+      "id": "way/945718197"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1186296525",
+        "amenity": "toilets",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9806306,
+              37.5760749
+            ],
+            [
+              126.9806194,
+              37.5760146
+            ],
+            [
+              126.9808693,
+              37.5759854
+            ],
+            [
+              126.9808805,
+              37.5760456
+            ],
+            [
+              126.9806306,
+              37.5760749
+            ]
+          ]
+        ]
+      },
+      "id": "way/1186296525"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1215689835",
+        "addr:city": "서울특별시",
+        "addr:district": "종로구",
+        "addr:housenumber": "188",
+        "addr:postcode": "03141",
+        "addr:street": "세종대로",
+        "addr:subdistrict": "세종로",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9780021,
+              37.5733139
+            ],
+            [
+              126.9780117,
+              37.5729252
+            ],
+            [
+              126.978025,
+              37.5729259
+            ],
+            [
+              126.9780259,
+              37.5728908
+            ],
+            [
+              126.9781268,
+              37.5728894
+            ],
+            [
+              126.9781265,
+              37.57285
+            ],
+            [
+              126.9781744,
+              37.5728494
+            ],
+            [
+              126.9781562,
+              37.5732824
+            ],
+            [
+              126.978057,
+              37.5732824
+            ],
+            [
+              126.9780546,
+              37.5733158
+            ],
+            [
+              126.9780021,
+              37.5733139
+            ]
+          ]
+        ]
+      },
+      "id": "way/1215689835"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1215689839",
+        "addr:city": "서울특별시",
+        "addr:district": "종로구",
+        "addr:housenumber": "198",
+        "addr:postcode": "03141",
+        "addr:street": "세종대로",
+        "addr:subdistrict": "세종로",
+        "building": "yes"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9779445,
+              37.5736555
+            ],
+            [
+              126.9782021,
+              37.5736601
+            ],
+            [
+              126.9782031,
+              37.5740818
+            ],
+            [
+              126.9779379,
+              37.5740729
+            ],
+            [
+              126.9779445,
+              37.5736555
+            ]
+          ]
+        ]
+      },
+      "id": "way/1215689839"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1215689840",
+        "building": "roof",
+        "layer": "1"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.9752284,
+              37.57358
+            ],
+            [
+              126.975231,
+              37.5734847
+            ],
+            [
+              126.9754114,
+              37.5734866
+            ],
+            [
+              126.9754102,
+              37.5735846
+            ],
+            [
+              126.9752284,
+              37.57358
+            ]
+          ]
+        ]
+      },
+      "id": "way/1215689840"
+    }
+  ]
+}
