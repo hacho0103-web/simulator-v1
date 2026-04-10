@@ -13,6 +13,7 @@ export default function App() {
   const [params, setParams] = useState({ ...RULE_SETS.seoul.params });
   const [compareMode, setCompareMode] = useState(false);
   const [geoJSONMode, setGeoJSONMode] = useState(false);
+  const [showPedestrians, setShowPedestrians] = useState(false);
   const canvasRef = useRef(null);
   const sceneRef = useRef(null);
 
@@ -39,6 +40,18 @@ export default function App() {
               <span className="text-white font-mono ml-2 text-base font-bold">{scores.dIndex}</span>
             </div>
           </div>
+
+          {/* 보행자 시뮬레이션 토글 */}
+          <button
+            onClick={() => setShowPedestrians(!showPedestrians)}
+            className={`px-3 py-1.5 rounded text-xs font-medium transition-all ${
+              showPedestrians
+                ? 'bg-yellow-500 text-slate-900'
+                : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
+            }`}
+          >
+            {showPedestrians ? '✓ 보행자 ON' : '보행자'}
+          </button>
 
           {/* 광화문 실제 지도 토글 */}
           <button
@@ -90,6 +103,7 @@ export default function App() {
               canvasRef={canvasRef}
               sceneRef={sceneRef}
               geoJSONMode={geoJSONMode}
+              showPedestrians={showPedestrians}
             />
           </div>
 

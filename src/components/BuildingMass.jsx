@@ -4,6 +4,7 @@ import { OrbitControls, Grid, Text } from '@react-three/drei';
 import * as THREE from 'three';
 import { calculateMass } from '../utils/scoring';
 import { DEFAULT_LOT, RULE_SETS } from '../data/rulesets';
+import PedestrianLayer from './PedestrianLayer';
 
 // ─────────────────────────────────────────
 // 직사각형 시뮬레이션 모드 컴포넌트들
@@ -124,7 +125,7 @@ function UpperFloors({ width, depth, height, posY, posZ, floorCount }) {
   );
 }
 
-function Scene({ params, activeRuleSet }) {
+function Scene({ params, activeRuleSet, showPedestrians }) {
   const lot = DEFAULT_LOT;
   const mass = calculateMass(params, lot);
   const color = RULE_SETS[activeRuleSet]?.color ?? '#3B82F6';
@@ -160,6 +161,9 @@ function Scene({ params, activeRuleSet }) {
       <Text position={[0, mass.totalHeight + 3, buildingZ]} fontSize={2} color="white" anchorX="center" anchorY="bottom">
         {`${mass.floorCount}F / ${Math.round(mass.totalHeight)}m`}
       </Text>
+      {showPedestrians && (
+        <PedestrianLayer params={params} mass={mass} lot={lot} />
+      )}
     </>
   );
 }
@@ -523,7 +527,7 @@ function SceneExporter({ sceneRef }) {
 // 메인 컴포넌트
 // ─────────────────────────────────────────
 
-export default function BuildingMass({ params, activeRuleSet, canvasRef, geoJSONMode, sceneRef }) {
+export default function BuildingMass({ params, activeRuleSet, canvasRef, geoJSONMode, sceneRef, showPedestrians }) {
   const mass = calculateMass(params, DEFAULT_LOT);
   const { buildings, roads, sceneSize, loading } = useGeoJSONScene('/gwanghwamun.geojson', geoJSONMode);
 
@@ -609,7 +613,7 @@ export default function BuildingMass({ params, activeRuleSet, canvasRef, geoJSON
       >
         {geoJSONMode
           ? <GeoJSONScene params={params} activeRuleSet={activeRuleSet} buildings={buildings} roads={roads} sceneSize={sceneSize} />
-          : <Scene params={params} activeRuleSet={activeRuleSet} />
+          : <Scene params={params} activeRuleSet={activeRuleSet} showPedestrians={showPedestrians} />
         }
         <SceneExporter sceneRef={sceneRef} />
         <OrbitControls enablePan={true} enableZoom={true} target={[0, 20, 0]} maxPolarAngle={Math.PI / 2.1} />
