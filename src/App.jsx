@@ -19,6 +19,10 @@ export default function App() {
 
   const scores = calculateScores(params);
 
+  const handleZoneLoaded = (limits) => {
+    setParams(prev => ({ ...prev, ...limits }));
+  };
+
   return (
     <div className="flex flex-col h-screen overflow-hidden">
       {/* 헤더 */}
@@ -104,6 +108,7 @@ export default function App() {
               sceneRef={sceneRef}
               geoJSONMode={geoJSONMode}
               showPedestrians={showPedestrians}
+              onZoneLoaded={handleZoneLoaded}
             />
           </div>
 

@@ -42,37 +42,104 @@ function GroundFloor({
   width, depth, height, posY, posZ,
   transparency, retailContinuity, color,
   canopyDepth = 0, canopyContinuity = 0, pilotisRatio = 0, entranceFrequency = 3,
+  pilotisDepth = 0, passageWidth = 0,
 }) {
-  // 캐노피: 전면 상단 돌출
   const canopyW = width * (canopyContinuity / 100);
 
-  // 필로티: 전면 하단 기둥 (4m 간격)
-  const pilotisW = width * (pilotisRatio / 100);
-  const numCols = pilotisRatio > 0 ? Math.max(Math.floor(pilotisW / 4), 1) : 0;
-  const colSpacing = numCols > 0 ? pilotisW / numCols : 0;
-  const colStartX = -(pilotisW / 2) + colSpacing / 2;
+  // 필로티 깊이: 전면을 실제로 열어 공간 확보
+  const hasPilotis = pilotisDepth > 0.1 && pilotisDepth < depth - 2;
+  const solidDepth = hasPilotis ? depth - pilotisDepth : depth;
+  const solidBlockZ = hasPilotis ? -pilotisDepth / 2 : 0;
+  const pilotisZoneZ = hasPilotis ? depth / 2 - pilotisDepth / 2 : 0;
 
-  // 출입구: 전면 입면에 어두운 세로 슬릿
+  // 공용통로: 중앙을 관통하는 보행 통로
+  const hasPassage = passageWidth > 0.1 && passageWidth < width - 4;
+  const wingW = hasPassage ? (width - passageWidth) / 2 : width;
+  const leftX = hasPassage ? -(passageWidth / 2 + wingW / 2) : 0;
+  const rightX = hasPassage ? passageWidth / 2 + wingW / 2 : 0;
+
+  // 파사드 Z: 솔리드 블록의 전면
+  const facadeZ = solidDepth / 2 + solidBlockZ;
+
+  // 출입구 수
   const numEntrances = Math.max(Math.round((width / 100) * entranceFrequency), 1);
   const entrSpacing = width / (numEntrances + 1);
 
+  // 필로티 존 기둥 개수 (4m 간격)
+  const numPilotisCols = hasPilotis
+    ? Math.max(Math.round(width / 4), 2)
+    : 0;
+
   return (
     <group position={[0, posY, posZ]}>
-      {/* 메인 매스 */}
-      <mesh>
-        <boxGeometry args={[width, height, depth]} />
-        <meshStandardMaterial color={color} transparent opacity={0.55} />
-      </mesh>
 
-      {/* 파사드 투명도 레이어 */}
-      <mesh position={[0, 0, depth / 2 + 0.05]}>
+      {/* ── 솔리드 매스 ── */}
+      {hasPassage ? (
+        <>
+          {/* 좌측 날개 */}
+          <mesh position={[leftX, 0, solidBlockZ]}>
+            <boxGeometry args={[wingW, height, solidDepth]} />
+            <meshStandardMaterial color={color} transparent opacity={0.55} />
+          </mesh>
+          {/* 우측 날개 */}
+          <mesh position={[rightX, 0, solidBlockZ]}>
+            <boxGeometry args={[wingW, height, solidDepth]} />
+            <meshStandardMaterial color={color} transparent opacity={0.55} />
+          </mesh>
+          {/* 통로 상부 브릿지 슬래브 */}
+          <mesh position={[0, height / 2 - 0.2, solidBlockZ]}>
+            <boxGeometry args={[passageWidth, 0.4, solidDepth]} />
+            <meshStandardMaterial color={color} transparent opacity={0.8} />
+          </mesh>
+          {/* 통로 바닥 (녹색 표시) */}
+          <mesh position={[0, -height / 2 + 0.05, solidBlockZ]} rotation={[-Math.PI / 2, 0, 0]}>
+            <planeGeometry args={[passageWidth, solidDepth]} />
+            <meshStandardMaterial color="#86EFAC" transparent opacity={0.5} />
+          </mesh>
+        </>
+      ) : (
+        <mesh position={[0, 0, solidBlockZ]}>
+          <boxGeometry args={[width, height, solidDepth]} />
+          <meshStandardMaterial color={color} transparent opacity={0.55} />
+        </mesh>
+      )}
+
+      {/* ── 필로티 존 (전면 개방 공간) ── */}
+      {hasPilotis && (
+        <>
+          {/* 천장 슬래브 (2F 바닥) */}
+          <mesh position={[0, height / 2 - 0.15, pilotisZoneZ]}>
+            <boxGeometry args={[width, 0.3, pilotisDepth]} />
+            <meshStandardMaterial color={color} transparent opacity={0.85} />
+          </mesh>
+          {/* 기둥들 */}
+          {Array.from({ length: numPilotisCols }).map((_, i) => {
+            const spacing = width / (numPilotisCols + 1);
+            const x = -width / 2 + spacing * (i + 1);
+            return (
+              <mesh key={i} position={[x, 0, pilotisZoneZ]}>
+                <boxGeometry args={[0.5, height, 0.5]} />
+                <meshStandardMaterial color="#334155" transparent opacity={0.95} />
+              </mesh>
+            );
+          })}
+          {/* 필로티 바닥 표시 */}
+          <mesh position={[0, -height / 2 + 0.05, pilotisZoneZ]} rotation={[-Math.PI / 2, 0, 0]}>
+            <planeGeometry args={[width, pilotisDepth]} />
+            <meshStandardMaterial color="#7DD3FC" transparent opacity={0.2} />
+          </mesh>
+        </>
+      )}
+
+      {/* ── 파사드 투명도 레이어 ── */}
+      <mesh position={[0, 0, facadeZ + 0.05]}>
         <planeGeometry args={[width, height]} />
         <meshStandardMaterial color="#93C5FD" transparent opacity={transparency / 100 * 0.6 + 0.1} />
       </mesh>
 
       {/* 상업 연속성 */}
       {retailContinuity > 0 && (
-        <mesh position={[(-width / 2) + (width * retailContinuity / 100 / 2), 0, depth / 2 + 0.1]}>
+        <mesh position={[(-width / 2) + (width * retailContinuity / 100 / 2), 0, facadeZ + 0.1]}>
           <planeGeometry args={[width * retailContinuity / 100, height * 0.6]} />
           <meshStandardMaterial color="#F97316" transparent opacity={0.7} />
         </mesh>
@@ -80,23 +147,15 @@ function GroundFloor({
 
       {/* 캐노피 */}
       {canopyDepth > 0 && canopyContinuity > 0 && (
-        <mesh position={[0, height / 2 - 0.15, depth / 2 + canopyDepth / 2]}>
+        <mesh position={[0, height / 2 - 0.15, facadeZ + canopyDepth / 2]}>
           <boxGeometry args={[canopyW, 0.3, canopyDepth]} />
           <meshStandardMaterial color="#CBD5E1" transparent opacity={0.9} />
         </mesh>
       )}
 
-      {/* 필로티 기둥 */}
-      {numCols > 0 && Array.from({ length: numCols }).map((_, i) => (
-        <mesh key={i} position={[colStartX + colSpacing * i, 0, depth / 2 + 0.25]}>
-          <boxGeometry args={[0.5, height, 0.5]} />
-          <meshStandardMaterial color="#475569" transparent opacity={0.95} />
-        </mesh>
-      ))}
-
       {/* 출입구 */}
       {Array.from({ length: numEntrances }).map((_, i) => (
-        <mesh key={i} position={[-width / 2 + entrSpacing * (i + 1), -height / 2 + 1.5, depth / 2 + 0.12]}>
+        <mesh key={i} position={[-width / 2 + entrSpacing * (i + 1), -height / 2 + 1.5, facadeZ + 0.12]}>
           <boxGeometry args={[1.5, 2.8, 0.08]} />
           <meshStandardMaterial color="#0F172A" transparent opacity={0.8} />
         </mesh>
@@ -154,6 +213,8 @@ function Scene({ params, activeRuleSet, showPedestrians }) {
         canopyContinuity={params.canopy_continuity ?? 0}
         pilotisRatio={params.pilotis_ratio ?? 0}
         entranceFrequency={params.entrance_frequency ?? 3}
+        pilotisDepth={params.pilotis_depth ?? 0}
+        passageWidth={params.passage_width ?? 0}
       />
       {upperHeight > 0 && (
         <UpperFloors width={mass.buildingWidth} depth={mass.buildingDepth} height={upperHeight} posY={upperFloorPosY} posZ={buildingZ} floorCount={mass.floorCount} />
@@ -230,33 +291,104 @@ function parseGeoJSONFeatures(data, centerLon, centerLat) {
   return { buildings, roads };
 }
 
+const VWORLD_KEY = import.meta.env.VITE_VWORLD_KEY;
+
+// 서울시 도시계획 조례 기준 법정 한도
+const SEOUL_ZONING_LIMITS = {
+  '제1종전용주거지역': { lot_coverage_ratio: 50, floor_area_ratio: 100,  height_limit: 15 },
+  '제2종전용주거지역': { lot_coverage_ratio: 40, floor_area_ratio: 120,  height_limit: 20 },
+  '제1종일반주거지역': { lot_coverage_ratio: 60, floor_area_ratio: 200,  height_limit: 20 },
+  '제2종일반주거지역': { lot_coverage_ratio: 60, floor_area_ratio: 250,  height_limit: 35 },
+  '제3종일반주거지역': { lot_coverage_ratio: 50, floor_area_ratio: 300,  height_limit: 50 },
+  '준주거지역':        { lot_coverage_ratio: 60, floor_area_ratio: 400,  height_limit: 80 },
+  '중심상업지역':      { lot_coverage_ratio: 60, floor_area_ratio: 800,  height_limit: 200 },
+  '일반상업지역':      { lot_coverage_ratio: 60, floor_area_ratio: 600,  height_limit: 150 },
+  '근린상업지역':      { lot_coverage_ratio: 60, floor_area_ratio: 600,  height_limit: 100 },
+  '유통상업지역':      { lot_coverage_ratio: 60, floor_area_ratio: 600,  height_limit: 100 },
+  '전용공업지역':      { lot_coverage_ratio: 70, floor_area_ratio: 300,  height_limit: 80 },
+  '일반공업지역':      { lot_coverage_ratio: 70, floor_area_ratio: 350,  height_limit: 80 },
+  '준공업지역':        { lot_coverage_ratio: 60, floor_area_ratio: 400,  height_limit: 80 },
+  '보전녹지지역':      { lot_coverage_ratio: 20, floor_area_ratio: 80,   height_limit: 20 },
+  '생산녹지지역':      { lot_coverage_ratio: 20, floor_area_ratio: 100,  height_limit: 20 },
+  '자연녹지지역':      { lot_coverage_ratio: 20, floor_area_ratio: 100,  height_limit: 20 },
+};
+
 function useGeoJSONScene(buildingUrl, enabled) {
   const [buildings, setBuildings] = useState([]);
   const [roads, setRoads] = useState([]);
   const [sceneSize, setSceneSize] = useState(200);
   const [loading, setLoading] = useState(false);
-  const [status, setStatus] = useState('');
+  const [dataSource, setDataSource] = useState('');
 
   useEffect(() => {
     if (!enabled) return;
     setLoading(true);
 
     const { centerLon, centerLat, bbox } = GWANGHWAMUN;
-
-    // 건물: 기존 로컬 GeoJSON
-    const buildingPromise = fetch(buildingUrl)
-      .then(r => r.json())
-      .then(data => {
-        const { buildings } = parseGeoJSONFeatures(data, centerLon, centerLat);
-        return buildings;
-      });
-
-    // 도로: Overpass API (다중 서버 + 로컬 캐시)
     const cosLat = Math.cos(centerLat * Math.PI / 180);
     const toLocal = ([lon, lat]) => [
       (lon - centerLon) * 111000 * cosLat,
       (lat - centerLat) * 111000,
     ];
+
+    // ── 건물: VWorld WFS 우선, 실패 시 로컬 GeoJSON 폴백 ──
+    const [s, w, n, e] = bbox.split(',').map(Number); // s,w,n,e
+
+    const parseVWorldBuildings = (data) =>
+      (data.features || [])
+        .filter(f => f.geometry?.type === 'Polygon' || f.geometry?.type === 'MultiPolygon')
+        .map(f => {
+          const getRings = () => f.geometry.type === 'Polygon'
+            ? [f.geometry.coordinates[0]]
+            : f.geometry.coordinates.map(p => p[0]);
+          return {
+            rings: getRings().map(ring => ring.map(toLocal)),
+            name: f.properties?.bld_nm || '',
+            floors: parseInt(f.properties?.grnd_flr) || null,
+            heightM: parseFloat(f.properties?.bld_hgt) || null,
+          };
+        });
+
+    const parseLocalBuildings = (data) =>
+      data.features
+        .filter(f => f.properties?.building &&
+          (f.geometry?.type === 'Polygon' || f.geometry?.type === 'MultiPolygon'))
+        .map(f => {
+          const getRings = () => f.geometry.type === 'Polygon'
+            ? [f.geometry.coordinates[0]]
+            : f.geometry.coordinates.map(p => p[0]);
+          return {
+            rings: getRings().map(ring => ring.map(toLocal)),
+            name: f.properties?.name || '',
+            floors: parseInt(f.properties?.['building:levels']) || null,
+            heightM: parseFloat(f.properties?.height) || null,
+          };
+        });
+
+    const buildingPromise = (async () => {
+      if (VWORLD_KEY) {
+        try {
+          const vworldUrl = `https://api.vworld.kr/req/wfs?SERVICE=WFS&VERSION=2.0.0&REQUEST=GetFeature&TYPENAMES=lt_c_uq011&BBOX=${w},${s},${e},${n},EPSG:4326&SRSNAME=EPSG:4326&OUTPUTFORMAT=application/json&KEY=${VWORLD_KEY}&COUNT=500`;
+          const r = await fetch(vworldUrl);
+          if (r.ok) {
+            const data = await r.json();
+            const parsed = parseVWorldBuildings(data);
+            if (parsed.length > 0) {
+              setDataSource('vworld');
+              return parsed;
+            }
+          }
+        } catch (e) {
+          console.warn('VWorld WFS 실패, 로컬 GeoJSON 폴백:', e);
+        }
+      }
+      const r = await fetch(buildingUrl);
+      const data = await r.json();
+      setDataSource('local');
+      return parseLocalBuildings(data);
+    })();
+
+    // ── 도로: Overpass API (다중 서버 + 로컬 캐시) ──
     const query = `[out:json][timeout:30];way["highway"](${bbox});out geom;`;
     const CACHE_KEY = `roads_cache_${bbox}`;
     const OVERPASS_SERVERS = [
@@ -278,13 +410,11 @@ function useGeoJSONScene(buildingUrl, enabled) {
         });
 
     const roadPromise = (async () => {
-      // 캐시 확인
       try {
         const cached = localStorage.getItem(CACHE_KEY);
         if (cached) return JSON.parse(cached);
       } catch (e) {}
 
-      // 다중 서버 순차 시도
       for (const server of OVERPASS_SERVERS) {
         try {
           const r = await fetch(`${server}?data=${encodeURIComponent(query)}`);
@@ -303,9 +433,6 @@ function useGeoJSONScene(buildingUrl, enabled) {
 
     Promise.all([buildingPromise, roadPromise])
       .then(([buildings, roads]) => {
-        // 씬 크기: 건물 기준
-        const cosLat = Math.cos(centerLat * Math.PI / 180);
-        const [s, w, n, e] = bbox.split(',').map(Number); // south,west,north,east
         const width = (e - w) * 111000 * cosLat;
         const height = (n - s) * 111000;
         setBuildings(buildings);
@@ -319,7 +446,7 @@ function useGeoJSONScene(buildingUrl, enabled) {
       });
   }, [buildingUrl, enabled]);
 
-  return { buildings, roads, sceneSize, loading };
+  return { buildings, roads, sceneSize, loading, dataSource };
 }
 
 // GeoJSON local coords: [x(동서), y(남북)]
@@ -386,28 +513,52 @@ function buildingVariance(coords) {
   return v - Math.floor(v);
 }
 
-function GeoJSONBuilding({ lotCoords, params, color }) {
+function GeoJSONBuilding({ lotCoords, params, color, actualFloors = null, actualHeightM = null, onParcelClick }) {
   const groundFloorH = params.ground_floor_height;
 
-  // 필지별 개발 단계 (0=저개발 ~ 1=고개발), 현실적 분포로 낮은 쪽 가중
   const v = buildingVariance(lotCoords);
-  const devStage = Math.pow(v, 0.65); // 0~1, 저개발 필지가 더 많도록
+  const devStage = Math.pow(v, 0.65);
 
-  // 파라미터 = 정책 기준값, devStage에 따라 20~100% 범위에서 실현
-  const effectiveFAR = params.floor_area_ratio * (0.2 + devStage * 0.8);
-  const effectiveLCR = Math.min(params.lot_coverage_ratio * (0.4 + devStage * 0.6), 90);
+  // VWorld 실제 데이터 우선, 없으면 파라미터 기반 추정
+  const hasRealData = actualFloors || actualHeightM;
 
-  const footprintScale = Math.sqrt(Math.min(effectiveLCR, 100) / 100);
+  let floorCount, totalHeight, footprintScale;
+  if (hasRealData) {
+    floorCount = actualFloors || Math.max(Math.round((actualHeightM - groundFloorH) / 4 + 1), 1);
+    totalHeight = Math.min(
+      actualHeightM || (groundFloorH + (floorCount - 1) * 4),
+      params.height_limit
+    );
+    footprintScale = 1.0; // VWorld footprint은 실제 건물 외곽 → 스케일 불필요
+  } else {
+    const effectiveFAR = params.floor_area_ratio * (0.2 + devStage * 0.8);
+    const effectiveLCR = Math.min(params.lot_coverage_ratio * (0.4 + devStage * 0.6), 90);
+    floorCount = Math.max(Math.round(effectiveFAR / Math.max(effectiveLCR, 1)), 1);
+    const heightCap = params.height_limit * (0.25 + devStage * 0.75);
+    totalHeight = Math.min(groundFloorH + (floorCount - 1) * 4, heightCap);
+    footprintScale = Math.sqrt(Math.min(effectiveLCR, 100) / 100);
+  }
+
+  const upperH = Math.max(totalHeight - groundFloorH, 0);
+
   const buildingCoords = useMemo(
-    () => scaleCoordsFromCentroid(lotCoords, footprintScale),
+    () => footprintScale === 1.0 ? lotCoords : scaleCoordsFromCentroid(lotCoords, footprintScale),
     [lotCoords, footprintScale]
   );
 
-  // 층수 = 유효 용적률 / 유효 건폐율, 높이제한도 개발단계에 비례
-  const floorCount = Math.max(Math.round(effectiveFAR / Math.max(effectiveLCR, 1)), 1);
-  const heightCap = params.height_limit * (0.25 + devStage * 0.75);
-  const totalHeight = Math.min(groundFloorH + (floorCount - 1) * 4, heightCap);
-  const upperH = Math.max(totalHeight - groundFloorH, 0);
+  // 클릭 시 lon/lat 역산 → 용도지역 조회
+  const [cLon, cLat] = useMemo(() => {
+    const { centerLon, centerLat } = GWANGHWAMUN;
+    const cosLat = Math.cos(centerLat * Math.PI / 180);
+    const cx = lotCoords.reduce((s, [x]) => s + x, 0) / lotCoords.length;
+    const cy = lotCoords.reduce((s, [, y]) => s + y, 0) / lotCoords.length;
+    return [centerLon + cx / (111000 * cosLat), centerLat + cy / 111000];
+  }, [lotCoords]);
+
+  const handleClick = (e) => {
+    e.stopPropagation();
+    onParcelClick?.(cLon, cLat);
+  };
 
   const lotFloorGeo = useMemo(() => {
     return new THREE.ShapeGeometry(makeShape(lotCoords));
@@ -433,13 +584,21 @@ function GeoJSONBuilding({ lotCoords, params, color }) {
       </mesh>
       {/* 대지 경계선 */}
       <LotOutline coords={lotCoords} />
-      {/* 저층부 — 개발단계 낮을수록 연한 회색, 높을수록 규칙셋 색상 */}
-      <mesh geometry={groundGeo} rotation={[-Math.PI / 2, 0, 0]}>
+      {/* 저층부 */}
+      <mesh geometry={groundGeo} rotation={[-Math.PI / 2, 0, 0]}
+        onClick={handleClick}
+        onPointerOver={() => { document.body.style.cursor = 'pointer'; }}
+        onPointerOut={() => { document.body.style.cursor = 'auto'; }}
+      >
         <meshStandardMaterial color={devStage > 0.5 ? color : '#94A3B8'} transparent opacity={0.55 + devStage * 0.3} />
       </mesh>
       {/* 상층부 */}
       {upperH > 0 && (
-        <mesh geometry={upperGeo} rotation={[-Math.PI / 2, 0, 0]} position={[0, groundFloorH, 0]}>
+        <mesh geometry={upperGeo} rotation={[-Math.PI / 2, 0, 0]} position={[0, groundFloorH, 0]}
+          onClick={handleClick}
+          onPointerOver={() => { document.body.style.cursor = 'pointer'; }}
+          onPointerOut={() => { document.body.style.cursor = 'auto'; }}
+        >
           <meshStandardMaterial color="#94A3B8" transparent opacity={0.7 + devStage * 0.2} />
         </mesh>
       )}
@@ -480,7 +639,7 @@ function GeoJSONRoad({ lines, color, width }) {
   );
 }
 
-function GeoJSONScene({ params, activeRuleSet, buildings, roads, sceneSize }) {
+function GeoJSONScene({ params, activeRuleSet, buildings, roads, sceneSize, onParcelClick }) {
   const color = RULE_SETS[activeRuleSet]?.color ?? '#3B82F6';
   const gridSize = Math.ceil(sceneSize / 100) * 200 + 200;
 
@@ -504,6 +663,9 @@ function GeoJSONScene({ params, activeRuleSet, buildings, roads, sceneSize }) {
             lotCoords={lotCoords}
             params={params}
             color={color}
+            actualFloors={building.floors}
+            actualHeightM={building.heightM}
+            onParcelClick={onParcelClick}
           />
         ))
       )}
@@ -527,9 +689,61 @@ function SceneExporter({ sceneRef }) {
 // 메인 컴포넌트
 // ─────────────────────────────────────────
 
-export default function BuildingMass({ params, activeRuleSet, canvasRef, geoJSONMode, sceneRef, showPedestrians }) {
+export default function BuildingMass({ params, activeRuleSet, canvasRef, geoJSONMode, sceneRef, showPedestrians, onZoneLoaded }) {
   const mass = calculateMass(params, DEFAULT_LOT);
-  const { buildings, roads, sceneSize, loading } = useGeoJSONScene('/gwanghwamun.geojson', geoJSONMode);
+  const { buildings, roads, sceneSize, loading, dataSource } = useGeoJSONScene('/gwanghwamun.geojson', geoJSONMode);
+
+  const [zoningInfo, setZoningInfo] = useState(null);
+  const [zoneFetching, setZoneFetching] = useState(false);
+
+  const handleParcelClick = async (lon, lat) => {
+    if (!VWORLD_KEY || zoneFetching) return;
+    setZoneFetching(true);
+    setZoningInfo(null);
+    try {
+      // VWorld data API — POINT 필터 방식 (WFS보다 용도지역 조회에 안정적)
+      const url = `https://api.vworld.kr/req/data?service=data&request=GetFeature&data=LT_C_UD001&key=${VWORLD_KEY}&geomFilter=POINT(${lon}%20${lat})&geometry=false&attribute=true&format=json&crs=EPSG:4326&size=5`;
+      const r = await fetch(url);
+      const text = await r.text();
+      let data;
+      try { data = JSON.parse(text); } catch {
+        // XML 에러 응답인 경우 — WFS 폴백 시도
+        const d = 0.0005;
+        const wfsUrl = `https://api.vworld.kr/req/wfs?SERVICE=WFS&VERSION=2.0.0&REQUEST=GetFeature&TYPENAMES=LT_C_UD001&BBOX=${lon - d},${lat - d},${lon + d},${lat + d},EPSG:4326&SRSNAME=EPSG:4326&OUTPUTFORMAT=application/json&KEY=${VWORLD_KEY}&COUNT=5`;
+        const r2 = await fetch(wfsUrl);
+        data = await r2.json();
+      }
+
+      // data API 응답 구조: data.response.result.featureCollection.features
+      const features =
+        data?.response?.result?.featureCollection?.features ||
+        data?.features ||
+        [];
+
+      if (features.length === 0) {
+        setZoningInfo({ error: '용도지역 정보 없음' });
+        return;
+      }
+
+      const props = features[0]?.properties ?? {};
+      const zoneName =
+        props.uq_nm || props.UQ_NM ||
+        Object.values(props).find(v => typeof v === 'string' && v.includes('지역')) ||
+        '알 수 없음';
+
+      const limits = SEOUL_ZONING_LIMITS[zoneName];
+      const isSeoulBase = activeRuleSet === 'seoul';
+      setZoningInfo({ zoneName, limits, applied: isSeoulBase && !!limits });
+
+      // 서울 현행 규칙셋일 때만 슬라이더에 법적 한도 반영
+      if (isSeoulBase && limits) onZoneLoaded?.(limits, zoneName);
+    } catch (e) {
+      console.error('용도지역 조회 실패:', e);
+      setZoningInfo({ error: '조회 실패: ' + e.message });
+    } finally {
+      setZoneFetching(false);
+    }
+  };
 
   const camDist = geoJSONMode ? sceneSize * 0.9 : 120;
   const camPos = geoJSONMode ? [camDist * 0.6, camDist * 0.8, camDist] : [80, 90, 120];
@@ -561,7 +775,43 @@ export default function BuildingMass({ params, activeRuleSet, canvasRef, geoJSON
           <div className="text-emerald-400 font-medium">광화문 실제 대지 모드</div>
           <div className="text-slate-300">건물 수: <span className="font-mono text-white">{buildings.length}동</span></div>
           <div className="text-slate-300">범위: <span className="font-mono text-white">~{Math.round(sceneSize)}m</span></div>
-          <div className="text-slate-400 mt-1">저층부 파라미터 적용 중</div>
+          <div className={`text-xs mt-1 font-medium ${dataSource === 'vworld' ? 'text-emerald-400' : 'text-amber-400'}`}>
+            {dataSource === 'vworld' ? '브이월드 실측 데이터' : '로컬 GeoJSON (추정 높이)'}
+          </div>
+          <div className="text-slate-500 mt-1">건물 클릭 → 용도지역 조회</div>
+        </div>
+      )}
+
+      {/* 용도지역 조회 결과 */}
+      {geoJSONMode && (zoneFetching || zoningInfo) && (
+        <div className="absolute top-3 right-3 z-10 bg-slate-900/90 rounded-lg px-3 py-2 text-xs backdrop-blur min-w-40">
+          {zoneFetching && (
+            <div className="text-slate-400 animate-pulse">용도지역 조회 중...</div>
+          )}
+          {!zoneFetching && zoningInfo?.error && (
+            <div className="text-amber-400">{zoningInfo.error}</div>
+          )}
+          {!zoneFetching && zoningInfo?.zoneName && (
+            <>
+              <div className="text-emerald-400 font-semibold mb-1">{zoningInfo.zoneName}</div>
+              {zoningInfo.limits ? (
+                <div className="text-slate-300 space-y-0.5">
+                  <div>건폐율 <span className="text-white font-mono">{zoningInfo.limits.lot_coverage_ratio}%</span></div>
+                  <div>용적률 <span className="text-white font-mono">{zoningInfo.limits.floor_area_ratio}%</span></div>
+                  <div>높이제한 <span className="text-white font-mono">{zoningInfo.limits.height_limit}m</span></div>
+                  {zoningInfo.applied ? (
+                    <div className="text-emerald-500 pt-1">→ 법적 한도 슬라이더 반영</div>
+                  ) : (
+                    <div className="text-amber-400 pt-1">
+                      → {RULE_SETS[activeRuleSet]?.name} 규칙 우선
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="text-slate-500">매핑 데이터 없음</div>
+              )}
+            </>
+          )}
         </div>
       )}
 
@@ -612,7 +862,7 @@ export default function BuildingMass({ params, activeRuleSet, canvasRef, geoJSON
         gl={{ preserveDrawingBuffer: true }}
       >
         {geoJSONMode
-          ? <GeoJSONScene params={params} activeRuleSet={activeRuleSet} buildings={buildings} roads={roads} sceneSize={sceneSize} />
+          ? <GeoJSONScene params={params} activeRuleSet={activeRuleSet} buildings={buildings} roads={roads} sceneSize={sceneSize} onParcelClick={handleParcelClick} />
           : <Scene params={params} activeRuleSet={activeRuleSet} showPedestrians={showPedestrians} />
         }
         <SceneExporter sceneRef={sceneRef} />
