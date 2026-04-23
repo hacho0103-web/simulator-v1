@@ -6,14 +6,24 @@ import ScatterPlot from './components/ScatterPlot';
 import ExportButtons from './components/ExportButtons';
 import { calculateScores } from './utils/scoring';
 import { RULE_SETS } from './data/rulesets';
+import { DISTRICTS } from './data/districts';
 import './index.css';
 
 export default function App() {
   const [activeRuleSet, setActiveRuleSet] = useState('seoul');
   const [params, setParams] = useState({ ...RULE_SETS.seoul.params });
   const [compareMode, setCompareMode] = useState(false);
-  const [geoJSONMode, setGeoJSONMode] = useState(false);
+  const [activeDistrict, setActiveDistrict] = useState(null); // null = 단일 건물 모드
   const [showPedestrians, setShowPedestrians] = useState(false);
+
+  const handleDistrictChange = (districtId) => {
+    setActiveDistrict(districtId);
+    if (districtId && DISTRICTS[districtId]) {
+      const rs = DISTRICTS[districtId].defaultRuleSet;
+      setActiveRuleSet(rs);
+      setParams({ ...RULE_SETS[rs].params });
+    }
+  };
   const canvasRef = useRef(null);
   const sceneRef = useRef(null);
 
@@ -57,17 +67,27 @@ export default function App() {
             {showPedestrians ? '✓ 보행자 ON' : '보행자'}
           </button>
 
-          {/* 광화문 실제 지도 토글 */}
-          <button
-            onClick={() => setGeoJSONMode(!geoJSONMode)}
-            className={`px-3 py-1.5 rounded text-xs font-medium transition-all ${
-              geoJSONMode
-                ? 'bg-emerald-600 text-white'
-                : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
-            }`}
-          >
-            {geoJSONMode ? '✓ 광화문 지도' : '광화문 지도'}
-          </button>
+          {/* 구역 선택 */}
+          <div className="flex rounded overflow-hidden border border-slate-600 text-xs">
+            {[
+              { id: null,           label: '단일 건물' },
+              { id: 'gwanghwamun',  label: '광화문' },
+              { id: 'marunouchi',   label: '마루노우치' },
+              { id: 'hafencity',    label: '하펜시티' },
+            ].map(({ id, label }) => (
+              <button
+                key={id ?? 'simple'}
+                onClick={() => handleDistrictChange(id)}
+                className={`px-3 py-1.5 font-medium transition-all ${
+                  activeDistrict === id
+                    ? 'bg-emerald-600 text-white'
+                    : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
 
           {/* 비교 모드 토글 */}
           <button
@@ -106,7 +126,7 @@ export default function App() {
               activeRuleSet={activeRuleSet}
               canvasRef={canvasRef}
               sceneRef={sceneRef}
-              geoJSONMode={geoJSONMode}
+              activeDistrict={activeDistrict}
               showPedestrians={showPedestrians}
               onZoneLoaded={handleZoneLoaded}
             />

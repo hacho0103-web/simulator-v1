@@ -4,6 +4,7 @@ import { OrbitControls, Grid, Text } from '@react-three/drei';
 import * as THREE from 'three';
 import { calculateMass } from '../utils/scoring';
 import { DEFAULT_LOT, RULE_SETS } from '../data/rulesets';
+import { DISTRICTS } from '../data/districts';
 import PedestrianLayer from './PedestrianLayer';
 
 // ─────────────────────────────────────────
@@ -246,50 +247,6 @@ const ROAD_COLOR = {
   footway: '#86EFAC', path: '#86EFAC', cycleway: '#6EE7B7', steps: '#86EFAC',
 };
 
-// 광화문 일대 중심좌표 및 범위 (좁은 범위로 고정)
-const GWANGHWAMUN = {
-  centerLon: 126.9769,
-  centerLat: 37.5740,
-  bbox: '37.572,126.974,37.577,126.981', // 남위,서경,북위,동경
-};
-
-function parseGeoJSONFeatures(data, centerLon, centerLat) {
-  const cosLat = Math.cos(centerLat * Math.PI / 180);
-  const toLocal = ([lon, lat]) => [
-    (lon - centerLon) * 111000 * cosLat,
-    (lat - centerLat) * 111000,
-  ];
-
-  const getRings = f =>
-    f.geometry.type === 'Polygon'
-      ? [f.geometry.coordinates[0]]
-      : f.geometry.coordinates.map(p => p[0]);
-
-  const buildings = data.features
-    .filter(f => f.properties?.building &&
-      (f.geometry?.type === 'Polygon' || f.geometry?.type === 'MultiPolygon'))
-    .map(f => ({
-      rings: getRings(f).map(ring => ring.map(toLocal)),
-      name: f.properties?.name || '',
-    }));
-
-  const roads = data.features
-    .filter(f => f.properties?.highway &&
-      (f.geometry?.type === 'LineString' || f.geometry?.type === 'MultiLineString'))
-    .map(f => {
-      const hw = f.properties.highway;
-      const lines = f.geometry.type === 'LineString'
-        ? [f.geometry.coordinates]
-        : f.geometry.coordinates;
-      return {
-        lines: lines.map(line => line.map(toLocal)),
-        width: ROAD_WIDTH[hw] ?? 2,
-        color: ROAD_COLOR[hw] ?? '#94A3B8',
-      };
-    });
-
-  return { buildings, roads };
-}
 
 const VWORLD_KEY = import.meta.env.VITE_VWORLD_KEY;
 
@@ -313,7 +270,8 @@ const SEOUL_ZONING_LIMITS = {
   '자연녹지지역':      { lot_coverage_ratio: 20, floor_area_ratio: 100,  height_limit: 20 },
 };
 
-function useGeoJSONScene(buildingUrl, enabled) {
+// district 객체를 받아 건물+도로 데이터 로드
+function useGeoJSONScene(district) {
   const [buildings, setBuildings] = useState([]);
   const [roads, setRoads] = useState([]);
   const [sceneSize, setSceneSize] = useState(200);
@@ -321,18 +279,19 @@ function useGeoJSONScene(buildingUrl, enabled) {
   const [dataSource, setDataSource] = useState('');
 
   useEffect(() => {
-    if (!enabled) return;
+    if (!district) { setBuildings([]); setRoads([]); return; }
     setLoading(true);
+    setBuildings([]);
+    setRoads([]);
 
-    const { centerLon, centerLat, bbox } = GWANGHWAMUN;
+    const { center, bbox, geojson: geojsonUrl, useVWorld } = district;
+    const { lon: centerLon, lat: centerLat } = center;
     const cosLat = Math.cos(centerLat * Math.PI / 180);
     const toLocal = ([lon, lat]) => [
       (lon - centerLon) * 111000 * cosLat,
       (lat - centerLat) * 111000,
     ];
-
-    // ── 건물: VWorld WFS 우선, 실패 시 로컬 GeoJSON 폴백 ──
-    const [s, w, n, e] = bbox.split(',').map(Number); // s,w,n,e
+    const [s, w, n, e] = bbox.split(',').map(Number);
 
     const parseVWorldBuildings = (data) =>
       (data.features || [])
@@ -366,29 +325,23 @@ function useGeoJSONScene(buildingUrl, enabled) {
         });
 
     const buildingPromise = (async () => {
-      if (VWORLD_KEY) {
+      if (useVWorld && VWORLD_KEY) {
         try {
-          const vworldUrl = `https://api.vworld.kr/req/wfs?SERVICE=WFS&VERSION=2.0.0&REQUEST=GetFeature&TYPENAMES=lt_c_uq011&BBOX=${w},${s},${e},${n},EPSG:4326&SRSNAME=EPSG:4326&OUTPUTFORMAT=application/json&KEY=${VWORLD_KEY}&COUNT=500`;
-          const r = await fetch(vworldUrl);
+          const url = `https://api.vworld.kr/req/wfs?SERVICE=WFS&VERSION=2.0.0&REQUEST=GetFeature&TYPENAMES=lt_c_uq011&BBOX=${w},${s},${e},${n},EPSG:4326&SRSNAME=EPSG:4326&OUTPUTFORMAT=application/json&KEY=${VWORLD_KEY}&COUNT=500`;
+          const r = await fetch(url);
           if (r.ok) {
             const data = await r.json();
             const parsed = parseVWorldBuildings(data);
-            if (parsed.length > 0) {
-              setDataSource('vworld');
-              return parsed;
-            }
+            if (parsed.length > 0) { setDataSource('vworld'); return parsed; }
           }
-        } catch (e) {
-          console.warn('VWorld WFS 실패, 로컬 GeoJSON 폴백:', e);
-        }
+        } catch (e) { console.warn('VWorld 실패, 로컬 폴백:', e); }
       }
-      const r = await fetch(buildingUrl);
+      const r = await fetch(geojsonUrl);
       const data = await r.json();
-      setDataSource('local');
+      setDataSource('osm');
       return parseLocalBuildings(data);
     })();
 
-    // ── 도로: Overpass API (다중 서버 + 로컬 캐시) ──
     const query = `[out:json][timeout:30];way["highway"](${bbox});out geom;`;
     const CACHE_KEY = `roads_cache_${bbox}`;
     const OVERPASS_SERVERS = [
@@ -396,25 +349,18 @@ function useGeoJSONScene(buildingUrl, enabled) {
       'https://overpass.kumi.systems/api/interpreter',
       'https://overpass.openstreetmap.ru/api/interpreter',
     ];
-
     const parseRoads = (data) =>
-      data.elements
-        .filter(el => el.type === 'way' && el.geometry)
-        .map(el => {
-          const hw = el.tags?.highway ?? 'residential';
-          return {
-            lines: [el.geometry.map(pt => toLocal([pt.lon, pt.lat]))],
-            width: ROAD_WIDTH[hw] ?? 2,
-            color: ROAD_COLOR[hw] ?? '#94A3B8',
-          };
-        });
+      data.elements.filter(el => el.type === 'way' && el.geometry).map(el => {
+        const hw = el.tags?.highway ?? 'residential';
+        return {
+          lines: [el.geometry.map(pt => toLocal([pt.lon, pt.lat]))],
+          width: ROAD_WIDTH[hw] ?? 2,
+          color: ROAD_COLOR[hw] ?? '#94A3B8',
+        };
+      });
 
     const roadPromise = (async () => {
-      try {
-        const cached = localStorage.getItem(CACHE_KEY);
-        if (cached) return JSON.parse(cached);
-      } catch (e) {}
-
+      try { const c = localStorage.getItem(CACHE_KEY); if (c) return JSON.parse(c); } catch (e) {}
       for (const server of OVERPASS_SERVERS) {
         try {
           const r = await fetch(`${server}?data=${encodeURIComponent(query)}`);
@@ -423,28 +369,20 @@ function useGeoJSONScene(buildingUrl, enabled) {
           const roads = parseRoads(data);
           try { localStorage.setItem(CACHE_KEY, JSON.stringify(roads)); } catch (e) {}
           return roads;
-        } catch (e) {
-          continue;
-        }
+        } catch (e) { continue; }
       }
-      console.warn('모든 Overpass 서버 실패 — 도로 데이터 없음');
       return [];
     })();
 
     Promise.all([buildingPromise, roadPromise])
       .then(([buildings, roads]) => {
-        const width = (e - w) * 111000 * cosLat;
-        const height = (n - s) * 111000;
         setBuildings(buildings);
         setRoads(roads);
-        setSceneSize(Math.max(width, height, 200));
+        setSceneSize(Math.max((e - w) * 111000 * cosLat, (n - s) * 111000, 200));
         setLoading(false);
       })
-      .catch(err => {
-        console.error('씬 로드 오류:', err);
-        setLoading(false);
-      });
-  }, [buildingUrl, enabled]);
+      .catch(err => { console.error('씬 로드 오류:', err); setLoading(false); });
+  }, [district?.id]);
 
   return { buildings, roads, sceneSize, loading, dataSource };
 }
@@ -513,7 +451,7 @@ function buildingVariance(coords) {
   return v - Math.floor(v);
 }
 
-function GeoJSONBuilding({ lotCoords, params, color, actualFloors = null, actualHeightM = null, onParcelClick }) {
+function GeoJSONBuilding({ lotCoords, params, color, actualFloors = null, actualHeightM = null, onParcelClick, districtCenter }) {
   const groundFloorH = params.ground_floor_height;
 
   const v = buildingVariance(lotCoords);
@@ -546,14 +484,15 @@ function GeoJSONBuilding({ lotCoords, params, color, actualFloors = null, actual
     [lotCoords, footprintScale]
   );
 
-  // 클릭 시 lon/lat 역산 → 용도지역 조회
+  // 클릭 시 lon/lat 역산 → 용도지역 조회 (KR 구역만 사용)
   const [cLon, cLat] = useMemo(() => {
-    const { centerLon, centerLat } = GWANGHWAMUN;
+    if (!districtCenter) return [0, 0];
+    const { lon: centerLon, lat: centerLat } = districtCenter;
     const cosLat = Math.cos(centerLat * Math.PI / 180);
     const cx = lotCoords.reduce((s, [x]) => s + x, 0) / lotCoords.length;
     const cy = lotCoords.reduce((s, [, y]) => s + y, 0) / lotCoords.length;
     return [centerLon + cx / (111000 * cosLat), centerLat + cy / 111000];
-  }, [lotCoords]);
+  }, [lotCoords, districtCenter]);
 
   const handleClick = (e) => {
     e.stopPropagation();
@@ -639,7 +578,7 @@ function GeoJSONRoad({ lines, color, width }) {
   );
 }
 
-function GeoJSONScene({ params, activeRuleSet, buildings, roads, sceneSize, onParcelClick }) {
+function GeoJSONScene({ params, activeRuleSet, buildings, roads, sceneSize, onParcelClick, districtCenter }) {
   const color = RULE_SETS[activeRuleSet]?.color ?? '#3B82F6';
   const gridSize = Math.ceil(sceneSize / 100) * 200 + 200;
 
@@ -666,6 +605,7 @@ function GeoJSONScene({ params, activeRuleSet, buildings, roads, sceneSize, onPa
             actualFloors={building.floors}
             actualHeightM={building.heightM}
             onParcelClick={onParcelClick}
+            districtCenter={districtCenter}
           />
         ))
       )}
@@ -689,15 +629,17 @@ function SceneExporter({ sceneRef }) {
 // 메인 컴포넌트
 // ─────────────────────────────────────────
 
-export default function BuildingMass({ params, activeRuleSet, canvasRef, geoJSONMode, sceneRef, showPedestrians, onZoneLoaded }) {
+export default function BuildingMass({ params, activeRuleSet, canvasRef, activeDistrict, sceneRef, showPedestrians, onZoneLoaded }) {
   const mass = calculateMass(params, DEFAULT_LOT);
-  const { buildings, roads, sceneSize, loading, dataSource } = useGeoJSONScene('/gwanghwamun.geojson', geoJSONMode);
+  const district = activeDistrict ? DISTRICTS[activeDistrict] : null;
+  const isMapMode = !!district;
+  const { buildings, roads, sceneSize, loading, dataSource } = useGeoJSONScene(district);
 
   const [zoningInfo, setZoningInfo] = useState(null);
   const [zoneFetching, setZoneFetching] = useState(false);
 
   const handleParcelClick = async (lon, lat) => {
-    if (!VWORLD_KEY || zoneFetching) return;
+    if (!VWORLD_KEY || zoneFetching || district?.country !== 'KR') return;
     setZoneFetching(true);
     setZoningInfo(null);
     try {
@@ -745,15 +687,15 @@ export default function BuildingMass({ params, activeRuleSet, canvasRef, geoJSON
     }
   };
 
-  const camDist = geoJSONMode ? sceneSize * 0.9 : 120;
-  const camPos = geoJSONMode ? [camDist * 0.6, camDist * 0.8, camDist] : [80, 90, 120];
-  const camFov = geoJSONMode ? 50 : 40;
+  const camDist = isMapMode ? sceneSize * 0.9 : 120;
+  const camPos = isMapMode ? [camDist * 0.6, camDist * 0.8, camDist] : [80, 90, 120];
+  const camFov = isMapMode ? 50 : 40;
 
   return (
     <div className="relative w-full h-full bg-slate-950">
 
       {/* 직사각형 모드: 건물 정보 오버레이 */}
-      {!geoJSONMode && (
+      {!isMapMode && (
         <div className="absolute top-3 left-3 z-10 bg-slate-900/80 rounded-lg px-3 py-2 text-xs space-y-1 backdrop-blur">
           <div className="text-slate-400">건물 규모</div>
           <div className="text-white font-mono">{Math.round(mass.buildingWidth)}m × {Math.round(mass.buildingDepth)}m</div>
@@ -763,27 +705,29 @@ export default function BuildingMass({ params, activeRuleSet, canvasRef, geoJSON
       )}
 
       {/* GeoJSON 모드: 로딩 표시 */}
-      {geoJSONMode && loading && (
+      {isMapMode && loading && (
         <div className="absolute inset-0 z-10 flex items-center justify-center bg-slate-950/60">
           <span className="text-slate-300 text-sm animate-pulse">광화문 지도 불러오는 중...</span>
         </div>
       )}
 
-      {/* GeoJSON 모드: 정보 오버레이 */}
-      {geoJSONMode && !loading && (
+      {/* 구역 모드: 정보 오버레이 */}
+      {isMapMode && !loading && (
         <div className="absolute top-3 left-3 z-10 bg-slate-900/80 rounded-lg px-3 py-2 text-xs space-y-1 backdrop-blur">
-          <div className="text-emerald-400 font-medium">광화문 실제 대지 모드</div>
+          <div className="text-emerald-400 font-medium">{district?.name} ({district?.nameEn})</div>
           <div className="text-slate-300">건물 수: <span className="font-mono text-white">{buildings.length}동</span></div>
           <div className="text-slate-300">범위: <span className="font-mono text-white">~{Math.round(sceneSize)}m</span></div>
           <div className={`text-xs mt-1 font-medium ${dataSource === 'vworld' ? 'text-emerald-400' : 'text-amber-400'}`}>
-            {dataSource === 'vworld' ? '브이월드 실측 데이터' : '로컬 GeoJSON (추정 높이)'}
+            {dataSource === 'vworld' ? '브이월드 실측 데이터' : 'OSM 데이터'}
           </div>
-          <div className="text-slate-500 mt-1">건물 클릭 → 용도지역 조회</div>
+          {district?.country === 'KR' && (
+            <div className="text-slate-500 mt-1">건물 클릭 → 용도지역 조회</div>
+          )}
         </div>
       )}
 
       {/* 용도지역 조회 결과 */}
-      {geoJSONMode && (zoneFetching || zoningInfo) && (
+      {isMapMode && (zoneFetching || zoningInfo) && (
         <div className="absolute top-3 right-3 z-10 bg-slate-900/90 rounded-lg px-3 py-2 text-xs backdrop-blur min-w-40">
           {zoneFetching && (
             <div className="text-slate-400 animate-pulse">용도지역 조회 중...</div>
@@ -825,7 +769,7 @@ export default function BuildingMass({ params, activeRuleSet, canvasRef, geoJSON
           <div className="w-3 h-3 rounded bg-slate-400" />
           <span className="text-slate-300">상층부</span>
         </div>
-        {geoJSONMode ? (
+        {isMapMode ? (
           <>
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded bg-amber-400 opacity-50" />
@@ -855,14 +799,14 @@ export default function BuildingMass({ params, activeRuleSet, canvasRef, geoJSON
       </div>
 
       <Canvas
-        key={geoJSONMode ? 'geojson' : 'rect'}
+        key={isMapMode ? 'geojson' : 'rect'}
         ref={canvasRef}
         camera={{ position: camPos, fov: camFov }}
         shadows
         gl={{ preserveDrawingBuffer: true }}
       >
-        {geoJSONMode
-          ? <GeoJSONScene params={params} activeRuleSet={activeRuleSet} buildings={buildings} roads={roads} sceneSize={sceneSize} onParcelClick={handleParcelClick} />
+        {isMapMode
+          ? <GeoJSONScene params={params} activeRuleSet={activeRuleSet} buildings={buildings} roads={roads} sceneSize={sceneSize} onParcelClick={handleParcelClick} districtCenter={district?.center} />
           : <Scene params={params} activeRuleSet={activeRuleSet} showPedestrians={showPedestrians} />
         }
         <SceneExporter sceneRef={sceneRef} />
