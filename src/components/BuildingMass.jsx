@@ -359,11 +359,17 @@ function useGeoJSONScene(district) {
         };
       });
 
+    const fetchWithTimeout = (url, ms = 8000) => {
+      const ctrl = new AbortController();
+      const id = setTimeout(() => ctrl.abort(), ms);
+      return fetch(url, { signal: ctrl.signal }).finally(() => clearTimeout(id));
+    };
+
     const roadPromise = (async () => {
       try { const c = localStorage.getItem(CACHE_KEY); if (c) return JSON.parse(c); } catch (e) {}
       for (const server of OVERPASS_SERVERS) {
         try {
-          const r = await fetch(`${server}?data=${encodeURIComponent(query)}`);
+          const r = await fetchWithTimeout(`${server}?data=${encodeURIComponent(query)}`);
           if (!r.ok) continue;
           const data = await r.json();
           const roads = parseRoads(data);
