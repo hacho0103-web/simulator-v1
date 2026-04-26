@@ -1,10 +1,11 @@
 import { PARAM_META, RULE_SETS } from '../data/rulesets';
 
-const GROUP_ORDER = ['법적 규제', '전면공간', '저층부 형태', '가로 활성도'];
+const GROUP_ORDER = ['법정 한도', '이격 / 공지', '일조사선', '저층부 형태', '가로 활성도'];
 
 const GROUP_COLORS = {
-  '법적 규제': 'text-slate-400',
-  '전면공간': 'text-teal-400',
+  '법정 한도':   'text-slate-400',
+  '이격 / 공지': 'text-teal-400',
+  '일조사선':    'text-yellow-400',
   '저층부 형태': 'text-violet-400',
   '가로 활성도': 'text-amber-400',
 };

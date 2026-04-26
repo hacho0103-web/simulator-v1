@@ -1,161 +1,275 @@
 /**
- * 도시별 저층부 가이드라인 파라미터 집합 (논문 3단계: 규칙 파라미터화)
+ * 도시별 저층부 가이드라인 파라미터 집합
  *
- * ⚠️ 중요: 아래 수치는 사례 조사(논문 3장)에서 가이드라인 원문을 확인한 후
- * 실제 값으로 업데이트해야 합니다.
- * 현재 값은 참고용 추정치입니다.
+ * 구조:
+ *   PARAM_META  — 파라미터 정의 (label, unit, min, max, step, group, layer, source, phase)
+ *   RULE_SETS   — 도시별 파라미터 세트 (params + layers 메타데이터)
+ *   DEFAULT_LOT — 기준 대지 크기
+ *
+ * layer 값: 'planning_base' | 'building_code_base' | 'seoul_arch_ordinance' | 'district_overlay'
+ * phase  값: 1 (1차 구현) | 2 (2차 예정 — 현재 값은 placeholder)
  */
 
 export const PARAM_META = {
-  // ── 법적 규제 ────────────────────────────────
+
+  // ── 법정 한도 (Layer 1: 도시계획 baseline) ──────────────────────
   lot_coverage_ratio: {
     label: '건폐율',
     unit: '%',
     min: 10, max: 100, step: 1,
-    group: '법적 규제',
+    group: '법정 한도',
+    layer: 'planning_base',
+    source: '서울시 도시계획 조례 제44~47조',
+    phase: 1,
     description: '대지면적 대비 건물 바닥면적 비율',
   },
   floor_area_ratio: {
     label: '용적률',
     unit: '%',
     min: 100, max: 1500, step: 50,
-    group: '법적 규제',
+    group: '법정 한도',
+    layer: 'planning_base',
+    source: '서울시 도시계획 조례 제48~51조',
+    phase: 1,
     description: '대지면적 대비 건물 연면적 비율',
   },
   height_limit: {
     label: '높이 제한',
     unit: 'm',
-    min: 15, max: 300, step: 5,
-    group: '법적 규제',
-    description: '건물 최고 높이 제한',
+    min: 9, max: 300, step: 1,
+    group: '법정 한도',
+    layer: 'planning_base',
+    source: '건축법 제60조, 서울시 건축 조례 제33조',
+    phase: 1,
+    description: '건물 최고 높이 제한 (가로구역별 지정)',
   },
 
-  // ── 전면공간 ─────────────────────────────────
+  // ── 이격 / 공지 (Layer 2-3: 건축법 + 서울시 건축 조례) ──────────
   front_setback: {
-    label: '전면 후퇴',
+    label: '건축선 전면 후퇴',
     unit: 'm',
     min: 0, max: 15, step: 0.5,
-    group: '전면공간',
-    description: '도로 경계선으로부터 건물까지의 후퇴 거리',
+    group: '이격 / 공지',
+    layer: 'building_code_base',
+    source: '건축법 제46·47조',
+    phase: 1,
+    description: '도로 경계선(건축선)으로부터 건물까지 후퇴 거리',
   },
   side_setback: {
-    label: '측면 후퇴',
+    label: '측면 이격',
     unit: 'm',
     min: 0, max: 10, step: 0.5,
-    group: '전면공간',
-    description: '인접 대지 경계선으로부터의 후퇴 거리',
+    group: '이격 / 공지',
+    layer: 'building_code_base',
+    source: '건축법 제58조, 서울시 건축 조례 제30조 별표4',
+    phase: 1,
+    description: '인접 대지 경계선으로부터 측면 이격 (대지 안의 공지)',
+  },
+  rear_setback: {
+    label: '후면 이격',
+    unit: 'm',
+    min: 0, max: 10, step: 0.5,
+    group: '이격 / 공지',
+    layer: 'building_code_base',
+    source: '건축법 제58조, 시행령 제80조의2',
+    phase: 1,
+    description: '후면 대지 경계선으로부터 후퇴 거리 (대지 안의 공지)',
   },
   public_open_space_ratio: {
-    label: '공개공지',
+    label: '공개공지 비율',
     unit: '%',
     min: 0, max: 30, step: 1,
-    group: '전면공간',
-    description: '대지면적 대비 공개공지 최소 비율',
+    group: '이격 / 공지',
+    layer: 'seoul_arch_ordinance',
+    source: '건축법 제43조, 시행령 제27조의2, 서울시 건축 조례 제26조',
+    phase: 1,
+    description: '대지면적 대비 공개공지 확보 비율',
   },
-  pedestrian_path_width: {
-    label: '보행통로 폭',
+  public_open_space_min_width: {
+    label: '공개공지 최소폭',
     unit: 'm',
-    min: 1, max: 10, step: 0.5,
-    group: '전면공간',
-    description: '저층부 전면 보행통로 최소 폭',
+    min: 0, max: 20, step: 0.5,
+    group: '이격 / 공지',
+    layer: 'seoul_arch_ordinance',
+    source: '서울시 건축 조례 제26조 (너비 3m 이상)',
+    phase: 1,
+    description: '공개공지 유효 폭 최솟값 (서울 조례: 3m 이상, 필로티형 유효높이 4m 이상)',
   },
 
-  // ── 저층부 형태 ───────────────────────────────
+  // ── 일조사선 (Layer 2: 건축법 제61조, 시행령 제86조) ─────────────
+  solar_slant_base_height: {
+    label: '일조사선 기준 높이',
+    unit: 'm',
+    min: 0, max: 20, step: 1,
+    group: '일조사선',
+    layer: 'building_code_base',
+    source: '건축법 제61조, 시행령 제86조',
+    phase: 1,
+    description: '이 높이까지는 최소 이격(1.5m)만 충족하면 됨. 0 = 비활성 (상업지역 등). 주거지역: 9m',
+  },
+  solar_slant_ratio: {
+    label: '일조사선 비율',
+    unit: ':1',
+    min: 1, max: 4, step: 0.5,
+    group: '일조사선',
+    layer: 'building_code_base',
+    source: '건축법 시행령 제86조 (9m 초과분은 높이의 1/2 이상 이격)',
+    phase: 1,
+    description: '기준 높이 초과분 1m당 허용 추가 높이. 법정값: 2 (이격 1m → 높이 2m 추가 허용)',
+  },
+
+  // ── 저층부 형태 (Layer 4: 지구단위계획 overlay / 2차 예정) ────────
   ground_floor_height: {
     label: '저층부 층고',
     unit: 'm',
     min: 3, max: 10, step: 0.5,
     group: '저층부 형태',
-    description: '1층 바닥에서 2층 바닥까지의 높이',
+    layer: 'district_overlay',
+    phase: 2,
+    description: '⚠️ 2차 — 1층 바닥~2층 바닥 높이 (3D 매스 계산에 사용)',
   },
   facade_transparency: {
     label: '입면 투명도',
     unit: '%',
     min: 0, max: 100, step: 5,
     group: '저층부 형태',
-    description: '저층부 전면 입면 중 투명 재료 비율',
+    layer: 'district_overlay',
+    phase: 2,
+    description: '⚠️ 2차 — 저층부 전면 입면 중 투명 재료 비율',
   },
   retail_continuity: {
-    label: '상업 연속성',
+    label: '1층 전면 활성 비율',
     unit: '%',
     min: 0, max: 100, step: 5,
     group: '저층부 형태',
-    description: '저층부 전면 입면 중 상업 활성 구간 비율',
+    layer: 'district_overlay',
+    phase: 2,
+    description: '⚠️ 2차 — 저층부 전면 입면 중 1층 권장용도(상업·서비스 등) 구간 비율',
   },
   canopy_depth: {
     label: '캐노피 깊이',
     unit: 'm',
     min: 0, max: 4, step: 0.5,
     group: '저층부 형태',
-    description: '저층부 전면에서 돌출된 캐노피/처마 깊이',
+    layer: 'district_overlay',
+    phase: 2,
+    description: '⚠️ 2차 — 저층부 전면 돌출 캐노피 깊이',
   },
   canopy_continuity: {
     label: '캐노피 연속성',
     unit: '%',
     min: 0, max: 100, step: 5,
     group: '저층부 형태',
-    description: '전면 폭 대비 캐노피가 연속되는 비율',
+    layer: 'district_overlay',
+    phase: 2,
+    description: '⚠️ 2차 — 전면 폭 대비 캐노피가 연속되는 비율',
   },
   pilotis_ratio: {
     label: '필로티 기둥 밀도',
     unit: '%',
     min: 0, max: 100, step: 5,
     group: '저층부 형태',
-    description: '저층부 필로티 구간 내 기둥 점유 비율',
+    layer: 'district_overlay',
+    phase: 2,
+    description: '⚠️ 2차 — 필로티 구간 내 기둥 점유 비율 (pilotis_depth > 0 시 유효)',
   },
   pilotis_depth: {
     label: '필로티 깊이',
     unit: 'm',
     min: 0, max: 8, step: 0.5,
     group: '저층부 형태',
-    description: '저층부 전면을 개방하는 필로티 구간 깊이 (0=없음)',
+    layer: 'district_overlay',
+    phase: 2,
+    description: '⚠️ 2차 — 저층부 전면 개방 필로티 구간 깊이 (0 = 없음)',
   },
   passage_width: {
-    label: '공용통로 폭',
+    label: '공공보행통로 폭',
     unit: 'm',
     min: 0, max: 8, step: 0.5,
     group: '저층부 형태',
-    description: '건물을 관통하는 공용 보행통로 폭 (0=없음)',
+    layer: 'district_overlay',
+    phase: 2,
+    description: '⚠️ 2차 — 건물 관통 공공보행통로 폭 (0 = 없음, 지구단위계획 지정 시)',
   },
 
-  // ── 가로 활성도 ───────────────────────────────
+  // ── 가로 활성도 (Layer 4: 지구단위계획 overlay / 2차 예정) ─────────
+  pedestrian_path_width: {
+    label: '보행통로 유효폭',
+    unit: 'm',
+    min: 1, max: 10, step: 0.5,
+    group: '가로 활성도',
+    layer: 'district_overlay',
+    phase: 2,
+    description: '⚠️ 2차 — 저층부 전면 보행통로 최소 유효폭',
+  },
   entrance_frequency: {
     label: '출입구 빈도',
     unit: '개/100m',
     min: 1, max: 20, step: 1,
     group: '가로 활성도',
-    description: '전면 가로 100m당 건물 출입구 수',
+    layer: 'district_overlay',
+    phase: 2,
+    description: '⚠️ 2차 — 전면 가로 100m당 건물 출입구 수',
   },
   inactive_frontage_ratio: {
     label: '비활성 전면 비율',
     unit: '%',
     min: 0, max: 100, step: 5,
     group: '가로 활성도',
-    description: '전면 입면 중 블라인드 월·주차장·설비 등 비활성 구간 비율 (낮을수록 좋음)',
+    layer: 'district_overlay',
+    phase: 2,
+    description: '⚠️ 2차 — 전면 입면 중 블라인드 월·주차·설비 등 비활성 구간 비율 (낮을수록 좋음)',
   },
   night_activity: {
     label: '야간 활성화 지수',
     unit: '%',
     min: 0, max: 100, step: 5,
     group: '가로 활성도',
-    description: '야간(18시 이후) 저층부 용도 운영 비율',
+    layer: 'district_overlay',
+    phase: 2,
+    description: '⚠️ 2차 — 야간(18시 이후) 저층부 용도 운영 비율 (추정치)',
   },
 };
 
 export const RULE_SETS = {
+
+  /**
+   * 서울 현행 규칙셋 v1.1
+   *
+   * 4개 레이어 구조:
+   *   planning_base      국토계획법 + 서울시 도시계획 조례
+   *   building_code_base 건축법 (건축선·공지·공개공지·일조사선)
+   *   seoul_arch_ordinance 서울특별시 건축 조례 세부화
+   *   district_overlay   지구단위계획 overlay (2차 예정)
+   *
+   * ⚠️ 수치 기준: 일반상업지역 기본값 기준.
+   *    실제 적용 시 해당 용도지역·가로구역·지구단위계획 확인 필요.
+   */
   seoul: {
     id: 'seoul',
     name: '서울 (현행)',
     nameEn: 'Seoul',
     color: '#3B82F6',
+
     params: {
-      lot_coverage_ratio: 60,
-      floor_area_ratio: 800,
-      height_limit: 100,
-      front_setback: 1,
-      side_setback: 0,
-      public_open_space_ratio: 10,
-      pedestrian_path_width: 1.5,
+      // Layer 1: 도시계획 baseline — 일반상업지역 기준
+      lot_coverage_ratio: 60,        // 조례 상한 80%, 실용 기준 60%
+      floor_area_ratio: 800,         // 조례 상한 1,300%, 실용 기준 800%
+      height_limit: 100,             // 가로구역별 지정 (예시값)
+
+      // Layer 2-3: 건축법 + 서울시 건축 조례 — 상업지역 기준
+      front_setback: 1,              // 건축선 전면 후퇴 최소 (도로폭에 따라 다름)
+      side_setback: 0,               // 상업지역: 0m 가능
+      rear_setback: 0,               // 상업지역: 0m 가능
+      public_open_space_ratio: 10,   // 대지면적의 10% 이상 (연면적 5,000㎡ 이상)
+      public_open_space_min_width: 3, // 3m 이상 (서울 조례 제26조)
+
+      // 일조사선 — 상업지역 기본: 비활성 (0 = 적용 안 함)
+      // 주거지역 시뮬레이션: solar_slant_base_height: 9, solar_slant_ratio: 2
+      solar_slant_base_height: 0,
+      solar_slant_ratio: 2,
+
+      // Layer 4: 지구단위계획 overlay — 2차 placeholder (추정치)
       ground_floor_height: 4,
       facade_transparency: 30,
       retail_continuity: 40,
@@ -164,12 +278,58 @@ export const RULE_SETS = {
       pilotis_ratio: 5,
       pilotis_depth: 0,
       passage_width: 0,
+      pedestrian_path_width: 1.5,
       entrance_frequency: 3,
       inactive_frontage_ratio: 45,
       night_activity: 35,
     },
-    notes: '⚠️ 실제 수치는 서울특별시 건축 조례, 공개공지 설치 기준, 지구단위계획 지침 원문 확인 필요',
+
+    // 4개 레이어 구조 메타데이터
+    layers: {
+      planning_base: {
+        label: '도시계획 baseline',
+        ref: '국토계획법 제52조 / 서울시 도시계획 조례',
+        params: ['lot_coverage_ratio', 'floor_area_ratio', 'height_limit'],
+      },
+      building_code_base: {
+        label: '건축법 baseline',
+        ref: '건축법 제43·44·46·47·58·60·61조',
+        params: ['front_setback', 'side_setback', 'rear_setback', 'public_open_space_ratio', 'solar_slant_base_height', 'solar_slant_ratio'],
+      },
+      seoul_arch_ordinance: {
+        label: '서울특별시 건축 조례',
+        ref: '서울시 건축 조례 제26·30·33조',
+        params: ['public_open_space_ratio', 'public_open_space_min_width'],
+      },
+      district_overlay: {
+        label: '지구단위계획 overlay',
+        ref: '구역별 지구단위계획 지침',
+        params: ['ground_floor_height', 'facade_transparency', 'retail_continuity', 'canopy_depth', 'canopy_continuity', 'pilotis_ratio', 'pilotis_depth', 'passage_width', 'pedestrian_path_width', 'entrance_frequency', 'inactive_frontage_ratio', 'night_activity'],
+        status: '⚠️ 2차 구현 예정 — 현재 값은 추정치',
+      },
+    },
+
+    // 조항별 법적 근거 (참고용)
+    legalRef: {
+      lot_coverage_ratio: '서울시 도시계획 조례 제45조 (일반상업지역: 80% 이하)',
+      floor_area_ratio: '서울시 도시계획 조례 제49조 (일반상업지역: 1,300% 이하)',
+      height_limit: '건축법 제60조, 서울시 건축 조례 제33조 (가로구역별 지정)',
+      front_setback: '건축법 제46·47조 (건축선 후퇴)',
+      side_setback: '건축법 제58조, 서울시 건축 조례 제30조 별표4 (대지 안의 공지)',
+      rear_setback: '건축법 제58조, 시행령 제80조의2 (대지 안의 공지)',
+      public_open_space_ratio: '건축법 제43조, 시행령 제27조의2, 서울시 건축 조례 제26조',
+      public_open_space_min_width: '서울시 건축 조례 제26조 (너비 3m 이상, 필로티형 유효높이 4m 이상)',
+      solar_slant_base_height: '건축법 제61조, 시행령 제86조 (주거지역 정북방향 9m 기준)',
+      solar_slant_ratio: '건축법 시행령 제86조 (9m 초과분 높이의 1/2 이상 이격 → 비율 2)',
+    },
+
+    notes: '⚠️ 일반상업지역 기준값. 실제 적용 시 해당 용도지역·가로구역·지구단위계획 확인 필요.',
   },
+
+  /**
+   * 도쿄 마루노우치 — 현재 추정치 유지 (2차에서 본격 업데이트 예정)
+   * ⚠️ 마루노우치 규칙 추출은 다음 단계 작업
+   */
   tokyo: {
     id: 'tokyo',
     name: '도쿄 마루노우치',
@@ -181,8 +341,11 @@ export const RULE_SETS = {
       height_limit: 200,
       front_setback: 5,
       side_setback: 0,
+      rear_setback: 0,
       public_open_space_ratio: 18,
-      pedestrian_path_width: 5,
+      public_open_space_min_width: 5,
+      solar_slant_base_height: 0,
+      solar_slant_ratio: 2,
       ground_floor_height: 6,
       facade_transparency: 60,
       retail_continuity: 80,
@@ -191,12 +354,14 @@ export const RULE_SETS = {
       pilotis_ratio: 15,
       pilotis_depth: 2,
       passage_width: 0,
+      pedestrian_path_width: 5,
       entrance_frequency: 8,
       inactive_frontage_ratio: 10,
       night_activity: 65,
     },
-    notes: '⚠️ 실제 수치는 도쿄 도시재생특별지구 지침, 마루노우치 도시정비 가이드라인 원문 확인 필요',
+    notes: '⚠️ 추정치 — 마루노우치 도시정비 가이드라인 원문 기반 업데이트 예정 (2차)',
   },
+
   hafencity: {
     id: 'hafencity',
     name: '함부르크 하펜시티',
@@ -208,8 +373,11 @@ export const RULE_SETS = {
       height_limit: 40,
       front_setback: 4,
       side_setback: 2,
+      rear_setback: 1,
       public_open_space_ratio: 20,
-      pedestrian_path_width: 4,
+      public_open_space_min_width: 4,
+      solar_slant_base_height: 0,
+      solar_slant_ratio: 2,
       ground_floor_height: 5,
       facade_transparency: 70,
       retail_continuity: 75,
@@ -218,12 +386,14 @@ export const RULE_SETS = {
       pilotis_ratio: 20,
       pilotis_depth: 3,
       passage_width: 0,
+      pedestrian_path_width: 4,
       entrance_frequency: 10,
       inactive_frontage_ratio: 8,
       night_activity: 70,
     },
-    notes: '⚠️ 실제 수치는 HafenCity Hamburg Development Guidelines 원문 확인 필요',
+    notes: '⚠️ 추정치 — HafenCity Hamburg Development Guidelines 원문 확인 필요',
   },
+
   hybrid: {
     id: 'hybrid',
     name: '혼합 (서울+해외)',
@@ -235,8 +405,11 @@ export const RULE_SETS = {
       height_limit: 120,
       front_setback: 3,
       side_setback: 1,
+      rear_setback: 0,
       public_open_space_ratio: 15,
-      pedestrian_path_width: 3,
+      public_open_space_min_width: 3,
+      solar_slant_base_height: 9,    // 주거지역 접면 시나리오 포함
+      solar_slant_ratio: 2,
       ground_floor_height: 5,
       facade_transparency: 50,
       retail_continuity: 60,
@@ -245,11 +418,12 @@ export const RULE_SETS = {
       pilotis_ratio: 10,
       pilotis_depth: 2,
       passage_width: 3,
+      pedestrian_path_width: 3,
       entrance_frequency: 6,
       inactive_frontage_ratio: 25,
       night_activity: 50,
     },
-    notes: '서울 법·제도 기반에 마루노우치·하펜시티 저층부 가이드라인 일부 적용한 실험 세트',
+    notes: '서울 법·제도 기반에 마루노우치·하펜시티 저층부 가이드라인 일부 적용 (일조사선 활성 포함)',
   },
 };
 

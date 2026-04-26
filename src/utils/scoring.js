@@ -80,10 +80,12 @@ export function calculateMass(params, lot) {
   const openSpaceDepth = Math.min(openSpaceArea / lot.width, lot.depth * 0.3);
   const effectiveDepth = lot.depth - openSpaceDepth;
 
-  const buildingWidth = lot.width - params.side_setback * 2;
+  const sideSetback = params.side_setback ?? 0;
+  const rearSetback = params.rear_setback ?? 0;   // 건축법 제58조 대지 안의 공지
+  const buildingWidth = lot.width - sideSetback * 2;
   const buildingDepth = Math.min(
     footprintArea / buildingWidth,
-    effectiveDepth - params.front_setback
+    effectiveDepth - (params.front_setback ?? 0) - rearSetback
   );
 
   const actualFootprint = buildingWidth * buildingDepth;
@@ -91,10 +93,25 @@ export function calculateMass(params, lot) {
   const floorCount = Math.max(Math.round(totalFloorArea / actualFootprint), 2);
 
   const upperFloorHeight = 4;
-  const totalHeight = Math.min(
+  let totalHeight = Math.min(
     params.ground_floor_height + (floorCount - 1) * upperFloorHeight,
     params.height_limit
   );
+
+  // 일조사선 높이 제한 (건축법 제61조, 시행령 제86조 — 간략화)
+  // solar_slant_base_height: 0 이면 비활성 (상업지역 기본)
+  // 주거지역 기준: base=9m, ratio=2 → 측면이격 1m 추가당 높이 2m 추가 허용
+  const solarBase = params.solar_slant_base_height ?? 0;
+  if (solarBase > 0) {
+    const solarRatio = params.solar_slant_ratio ?? 2;
+    // 측면이격 < 1.5m: 기준 높이 이상 불가
+    // 측면이격 >= 1.5m: max(기준높이, 측면이격 × ratio)
+    const solarCap = sideSetback < 1.5
+      ? solarBase
+      : Math.max(solarBase, sideSetback * solarRatio);
+    totalHeight = Math.min(totalHeight, solarCap);
+  }
+
   const actualFloorCount = Math.floor(
     (totalHeight - params.ground_floor_height) / upperFloorHeight + 1
   );
@@ -106,7 +123,7 @@ export function calculateMass(params, lot) {
     totalHeight: Math.max(totalHeight, params.ground_floor_height + upperFloorHeight),
     groundFloorHeight: params.ground_floor_height,
     openSpaceDepth: Math.max(openSpaceDepth, 0),
-    frontSetback: params.front_setback,
-    sideSetback: params.side_setback,
+    frontSetback: params.front_setback ?? 0,
+    sideSetback,
   };
 }
