@@ -4,9 +4,11 @@ import BuildingMass from './components/BuildingMass';
 import AnalysisRadar from './components/AnalysisRadar';
 import ScatterPlot from './components/ScatterPlot';
 import ExportButtons from './components/ExportButtons';
+import SiteMapPanel from './components/SiteMapPanel';
 import { calculateScores } from './utils/scoring';
 import { RULE_SETS } from './data/rulesets';
 import { DISTRICTS } from './data/districts';
+import { ARCH_STYLES } from './data/architectStyles';
 import './index.css';
 
 export default function App() {
@@ -15,14 +17,34 @@ export default function App() {
   const [compareMode, setCompareMode] = useState(false);
   const [activeDistrict, setActiveDistrict] = useState(null); // null = 단일 건물 모드
   const [showPedestrians, setShowPedestrians] = useState(false);
+  const [baselineMode, setBaselineMode] = useState(false); // true = 현황, false = 시뮬레이션
+  const [showMapPanel, setShowMapPanel] = useState(false);
+  const [customParcels, setCustomParcels] = useState([]);
+  const [architectStyleId, setArchitectStyleId] = useState(null); // null = 기본
 
   const handleDistrictChange = (districtId) => {
     setActiveDistrict(districtId);
+    setCustomParcels([]); // 지구 모드로 전환 시 커스텀 필지 초기화
     if (districtId && DISTRICTS[districtId]) {
       const rs = DISTRICTS[districtId].defaultRuleSet;
       setActiveRuleSet(rs);
       setParams({ ...RULE_SETS[rs].params });
+      setBaselineMode(true); // 지도 첫 진입 = 현황 모드
+    } else {
+      setBaselineMode(false);
     }
+  };
+
+  const handleParamsChange = (newParams) => {
+    setBaselineMode(false); // 파라미터 조작 = 시뮬레이션 모드로 전환
+    setParams(newParams);
+  };
+
+  const handleParcelsApply = (parcels) => {
+    setCustomParcels(parcels);
+    setActiveDistrict(null);
+    setShowMapPanel(false);
+    setBaselineMode(false);
   };
   const canvasRef = useRef(null);
   const sceneRef = useRef(null);
@@ -55,6 +77,18 @@ export default function App() {
             </div>
           </div>
 
+          {/* 내 대지 선택 */}
+          <button
+            onClick={() => setShowMapPanel(true)}
+            className={`px-3 py-1.5 rounded text-xs font-medium transition-all ${
+              customParcels.length > 0
+                ? 'bg-emerald-600 text-white'
+                : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
+            }`}
+          >
+            {customParcels.length > 0 ? `✓ 대지 ${customParcels.length}필지` : '내 대지 선택'}
+          </button>
+
           {/* 보행자 시뮬레이션 토글 */}
           <button
             onClick={() => setShowPedestrians(!showPedestrians)}
@@ -66,6 +100,28 @@ export default function App() {
           >
             {showPedestrians ? '✓ 보행자 ON' : '보행자'}
           </button>
+
+          {/* 건축가 스타일 탭 */}
+          <div className="flex rounded overflow-hidden border border-slate-600 text-xs">
+            {[
+              { id: null,   label: '기본' },
+              { id: 'ando', label: '안도' },
+              { id: 'zaha', label: '자하' },
+            ].map(({ id, label }) => (
+              <button
+                key={id ?? 'default'}
+                onClick={() => setArchitectStyleId(id)}
+                title={id ? ARCH_STYLES[id]?.nameEn : '기본 스타일'}
+                className={`px-3 py-1.5 font-medium transition-all ${
+                  architectStyleId === id
+                    ? 'bg-indigo-600 text-white'
+                    : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
 
           {/* 구역 선택 */}
           <div className="flex rounded overflow-hidden border border-slate-600 text-xs">
@@ -111,7 +167,7 @@ export default function App() {
         <div className="w-72 shrink-0 overflow-hidden flex flex-col">
           <ParameterPanel
             params={params}
-            onParamsChange={setParams}
+            onParamsChange={handleParamsChange}
             activeRuleSet={activeRuleSet}
             onRuleSetChange={setActiveRuleSet}
           />
@@ -129,6 +185,9 @@ export default function App() {
               activeDistrict={activeDistrict}
               showPedestrians={showPedestrians}
               onZoneLoaded={handleZoneLoaded}
+              baselineMode={baselineMode}
+              customParcels={customParcels}
+              architectStyle={architectStyleId ? ARCH_STYLES[architectStyleId] : null}
             />
           </div>
 
@@ -173,6 +232,13 @@ export default function App() {
           </div>
         </div>
       </div>
+
+      {showMapPanel && (
+        <SiteMapPanel
+          onApply={handleParcelsApply}
+          onClose={() => setShowMapPanel(false)}
+        />
+      )}
     </div>
   );
 }

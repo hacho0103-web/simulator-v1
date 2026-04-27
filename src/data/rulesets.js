@@ -233,43 +233,22 @@ export const PARAM_META = {
 
 export const RULE_SETS = {
 
-  /**
-   * 서울 현행 규칙셋 v1.1
-   *
-   * 4개 레이어 구조:
-   *   planning_base      국토계획법 + 서울시 도시계획 조례
-   *   building_code_base 건축법 (건축선·공지·공개공지·일조사선)
-   *   seoul_arch_ordinance 서울특별시 건축 조례 세부화
-   *   district_overlay   지구단위계획 overlay (2차 예정)
-   *
-   * ⚠️ 수치 기준: 일반상업지역 기본값 기준.
-   *    실제 적용 시 해당 용도지역·가로구역·지구단위계획 확인 필요.
-   */
   seoul: {
     id: 'seoul',
     name: '서울 (현행)',
     nameEn: 'Seoul',
     color: '#3B82F6',
-
     params: {
-      // Layer 1: 도시계획 baseline — 일반상업지역 기준
-      lot_coverage_ratio: 60,        // 조례 상한 80%, 실용 기준 60%
-      floor_area_ratio: 800,         // 조례 상한 1,300%, 실용 기준 800%
-      height_limit: 100,             // 가로구역별 지정 (예시값)
-
-      // Layer 2-3: 건축법 + 서울시 건축 조례 — 상업지역 기준
-      front_setback: 1,              // 건축선 전면 후퇴 최소 (도로폭에 따라 다름)
-      side_setback: 0,               // 상업지역: 0m 가능
-      rear_setback: 0,               // 상업지역: 0m 가능
-      public_open_space_ratio: 10,   // 대지면적의 10% 이상 (연면적 5,000㎡ 이상)
-      public_open_space_min_width: 3, // 3m 이상 (서울 조례 제26조)
-
-      // 일조사선 — 상업지역 기본: 비활성 (0 = 적용 안 함)
-      // 주거지역 시뮬레이션: solar_slant_base_height: 9, solar_slant_ratio: 2
+      lot_coverage_ratio: 60,
+      floor_area_ratio: 800,
+      height_limit: 100,
+      front_setback: 1,
+      side_setback: 0,
+      rear_setback: 0,
+      public_open_space_ratio: 10,
+      public_open_space_min_width: 3,
       solar_slant_base_height: 0,
       solar_slant_ratio: 2,
-
-      // Layer 4: 지구단위계획 overlay — 2차 placeholder (추정치)
       ground_floor_height: 4,
       facade_transparency: 30,
       retail_continuity: 40,
@@ -283,46 +262,6 @@ export const RULE_SETS = {
       inactive_frontage_ratio: 45,
       night_activity: 35,
     },
-
-    // 4개 레이어 구조 메타데이터
-    layers: {
-      planning_base: {
-        label: '도시계획 baseline',
-        ref: '국토계획법 제52조 / 서울시 도시계획 조례',
-        params: ['lot_coverage_ratio', 'floor_area_ratio', 'height_limit'],
-      },
-      building_code_base: {
-        label: '건축법 baseline',
-        ref: '건축법 제43·44·46·47·58·60·61조',
-        params: ['front_setback', 'side_setback', 'rear_setback', 'public_open_space_ratio', 'solar_slant_base_height', 'solar_slant_ratio'],
-      },
-      seoul_arch_ordinance: {
-        label: '서울특별시 건축 조례',
-        ref: '서울시 건축 조례 제26·30·33조',
-        params: ['public_open_space_ratio', 'public_open_space_min_width'],
-      },
-      district_overlay: {
-        label: '지구단위계획 overlay',
-        ref: '구역별 지구단위계획 지침',
-        params: ['ground_floor_height', 'facade_transparency', 'retail_continuity', 'canopy_depth', 'canopy_continuity', 'pilotis_ratio', 'pilotis_depth', 'passage_width', 'pedestrian_path_width', 'entrance_frequency', 'inactive_frontage_ratio', 'night_activity'],
-        status: '⚠️ 2차 구현 예정 — 현재 값은 추정치',
-      },
-    },
-
-    // 조항별 법적 근거 (참고용)
-    legalRef: {
-      lot_coverage_ratio: '서울시 도시계획 조례 제45조 (일반상업지역: 80% 이하)',
-      floor_area_ratio: '서울시 도시계획 조례 제49조 (일반상업지역: 1,300% 이하)',
-      height_limit: '건축법 제60조, 서울시 건축 조례 제33조 (가로구역별 지정)',
-      front_setback: '건축법 제46·47조 (건축선 후퇴)',
-      side_setback: '건축법 제58조, 서울시 건축 조례 제30조 별표4 (대지 안의 공지)',
-      rear_setback: '건축법 제58조, 시행령 제80조의2 (대지 안의 공지)',
-      public_open_space_ratio: '건축법 제43조, 시행령 제27조의2, 서울시 건축 조례 제26조',
-      public_open_space_min_width: '서울시 건축 조례 제26조 (너비 3m 이상, 필로티형 유효높이 4m 이상)',
-      solar_slant_base_height: '건축법 제61조, 시행령 제86조 (주거지역 정북방향 9m 기준)',
-      solar_slant_ratio: '건축법 시행령 제86조 (9m 초과분 높이의 1/2 이상 이격 → 비율 2)',
-    },
-
     notes: '⚠️ 일반상업지역 기준값. 실제 적용 시 해당 용도지역·가로구역·지구단위계획 확인 필요.',
   },
 
@@ -394,37 +333,6 @@ export const RULE_SETS = {
     notes: '⚠️ 추정치 — HafenCity Hamburg Development Guidelines 원문 확인 필요',
   },
 
-  hybrid: {
-    id: 'hybrid',
-    name: '혼합 (서울+해외)',
-    nameEn: 'Hybrid',
-    color: '#F59E0B',
-    params: {
-      lot_coverage_ratio: 65,
-      floor_area_ratio: 900,
-      height_limit: 120,
-      front_setback: 3,
-      side_setback: 1,
-      rear_setback: 0,
-      public_open_space_ratio: 15,
-      public_open_space_min_width: 3,
-      solar_slant_base_height: 9,    // 주거지역 접면 시나리오 포함
-      solar_slant_ratio: 2,
-      ground_floor_height: 5,
-      facade_transparency: 50,
-      retail_continuity: 60,
-      canopy_depth: 1,
-      canopy_continuity: 50,
-      pilotis_ratio: 10,
-      pilotis_depth: 2,
-      passage_width: 3,
-      pedestrian_path_width: 3,
-      entrance_frequency: 6,
-      inactive_frontage_ratio: 25,
-      night_activity: 50,
-    },
-    notes: '서울 법·제도 기반에 마루노우치·하펜시티 저층부 가이드라인 일부 적용 (일조사선 활성 포함)',
-  },
 };
 
 export const DEFAULT_LOT = {
