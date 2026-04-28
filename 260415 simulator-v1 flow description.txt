@@ -1,0 +1,100 @@
+저층부 형태 시뮬레이터 v1 — 코드 요약                                                                                                                                      
+                                                                                                                                                                             
+  한 줄 설명                                                                                                                                                                 
+                                                                                                                                                                             
+  도시 설계 가이드라인 파라미터(건폐율, 후퇴거리, 입면투명도 등)를 슬라이더로 조작하면, 3D 건물 매스가 실시간 반영되고 공개성·보행성 등 6개 축으로 평가 점수를 내는 도시 
+  저층부 형태 시뮬레이션 프로토타입.
+
+  ---
+  기술 스택
+
+  - React 19 + Vite, Three.js / @react-three/fiber, Recharts, Tailwind CSS v4
+
+  ---
+  파라미터 구조 (16개, rulesets.js)
+
+  ┌─────────────┬──────────────────────────────────────────────────────────────────────────┐
+  │    그룹     │                                 파라미터                                 │
+  ├─────────────┼──────────────────────────────────────────────────────────────────────────┤
+  │ 법적 규제   │ 건폐율, 용적률, 높이제한                                                 │
+  ├─────────────┼──────────────────────────────────────────────────────────────────────────┤
+  │ 전면공간    │ 전면후퇴, 측면후퇴, 공개공지, 보행통로폭                                 │
+  ├─────────────┼──────────────────────────────────────────────────────────────────────────┤
+  │ 저층부 형태 │ 저층부층고, 입면투명도, 상업연속성, 캐노피깊이, 캐노피연속성, 필로티비율 │
+  ├─────────────┼──────────────────────────────────────────────────────────────────────────┤
+  │ 가로 활성도 │ 출입구빈도, 비활성전면비율, 야간활성화지수                               │
+  └─────────────┴──────────────────────────────────────────────────────────────────────────┘
+
+  도시 프리셋 4개: 서울(현행) / 도쿄 마루노우치 / 함부르크 하펜시티 / 혼합
+
+  ---
+  점수 계산 (scoring.js)
+
+  파라미터 → 6개 축 점수(0~100):
+  - publicness = 공개공지 × 0.45 + 캐노피연속성 × 0.30 + 필로티 × 0.25
+  - walkability = 보행통로폭 × 0.35 + 출입구빈도 × 0.40 + 캐노피깊이 × 0.25
+  - setback = 전면후퇴 정규화
+  - dwellability = 공개성 × 0.30 + 전면공간 × 0.30 + 야간활성 × 0.40
+  - facadeOpenness = 투명도 × 0.35 + 상업연속성 × 0.35 + (100-비활성전면) × 0.30
+  - developability = 용적률 정규화
+  - P-index = 상위 5개 축 평균, D-index = 사업성
+
+  건물 매스 치수 계산 (calculateMass): 파라미터 → buildingWidth, buildingDepth, floorCount, totalHeight, openSpaceDepth
+
+  ---
+  화면 구성 (App.jsx)
+
+  헤더: P-index / D-index 뱃지 | 보행자 토글 | 광화문 지도 토글 | 비교모드 | CSV/PNG 내보내기
+  ├─ 왼쪽 패널 (ParameterPanel): 도시 프리셋 버튼 4개 + 그룹별 슬라이더 16개
+  └─ 오른쪽
+     ├─ 3D 뷰어 (BuildingMass): 두 가지 모드 전환
+     │   ├─ 직사각형 모드: 50×80m 가상 대지, 저층부+상층부+공개공지+캐노피+필로티 렌더
+     │   └─ 광화문 지도 모드: gwanghwamun.geojson(로컬) 건물 footprint + Overpass API 도로
+     └─ 하단 차트 (높이 320px)
+         ├─ AnalysisRadar: 6축 레이더 차트 (비교모드 시 4개 도시 동시 표시)
+         ├─ ScatterPlot: P-index vs D-index 산점도
+         └─ 점수요약: 6개 축 바 차트
+
+  ---
+  주요 컴포넌트 역할
+
+  BuildingMass.jsx
+  - 직사각형 모드: LotBoundary(대지경계), OpenSpace(공개공지), GroundFloor(저층부 — 캐노피/필로티/출입구/투명도 파사드 표현), UpperFloors(상층부 슬라브선)
+  - GeoJSON 모드: useGeoJSONScene 훅으로 건물 footprint 로드 → 필지별 의사난수로 개발 단계(devStage) 부여 → 각 필지에 파라미터 적용
+  - SceneExporter: Three.js scene ref 외부 노출(OBJ 내보내기용)
+
+  PedestrianLayer.jsx
+  - 50명 상한 인스턴싱 에이전트, useFrame으로 매 프레임 업데이트
+  - 활성 에이전트 수 ← publicness, 이동속도 ← walkability, 정지확률/시간 ← dwellability, 건물 입면 쪽 이동 경향 ← facadeOpenness
+
+  GeminiRender.jsx
+  - pollinations.ai API로 AI 건물 이미지 생성(현재 Gemini가 아닌 Pollinations)
+
+  ---
+  알려진 문제점
+
+  - rulesets.js 수치는 추정치 — 실제 조례 원문 확인 미완
+  - Overpass API 504 타임아웃 빈번 (localStorage 캐시로 임시 대응)
+  - DEFAULT_LOT 50×80m 고정 — 대지 크기 변경 시 scoring 정규화 범위도 재검토 필요
+  - GeminiRender는 실제로 Gemini가 아닌 Pollinations.ai 사용
+
+  ---
+  이벤트 스토밍 설계 시 참고할 주요 흐름
+
+  사용자 슬라이더 조작
+    → params 상태 변경 (App.jsx)
+    → calculateScores(params) 재계산
+    → calculateMass(params, lot) 재계산
+    → 3D 매스 즉시 갱신 (BuildingMass)
+    → 레이더/산점도/점수바 갱신 (AnalysisRadar, ScatterPlot)
+    → 보행자 에이전트 행동 변화 (PedestrianLayer, 실시간)
+
+  도시 프리셋 선택
+    → params 전체 교체
+    → 위와 동일한 연쇄
+
+  광화문 지도 모드 ON
+    → gwanghwamun.geojson fetch
+    → Overpass API 도로 fetch (캐시 우선)
+    → GeoJSON Scene 렌더링
+    → 슬라이더 조작 → 모든 필지에 파라미터 즉시 적용

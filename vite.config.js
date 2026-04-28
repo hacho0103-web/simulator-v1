@@ -12,6 +12,11 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/vworld/, ''),
       },
+      '/carto-tiles': {
+        target: 'https://basemaps.cartocdn.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/carto-tiles/, ''),
+      },
     },
   },
 })

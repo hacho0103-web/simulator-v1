@@ -15,10 +15,10 @@ export const ARCH_STYLES = {
       '단일 직교 매스에 좁은 슬릿으로 빛을 유입시켜 극적 공간감을 창출한다.',
 
     // 씬 환경
-    bgColor: '#D4CDC6',
+    bgColor: '#EEF2F7',
     fogNear: 180,
     fogFar: 480,
-    groundColor: '#B8B0A8',
+    groundColor: '#EAECEF',
     ambientIntensity: 0.28,
     dirColor: '#FFE8C0',
     dirIntensity: 1.8,
@@ -51,10 +51,10 @@ export const ARCH_STYLES = {
       '캔틸레버로 연장되고 예각과 곡면이 역동적으로 교차한다.',
 
     // 씬 환경
-    bgColor: '#E2EAF4',
+    bgColor: '#EEF2F7',
     fogNear: 320,
     fogFar: 750,
-    groundColor: '#EEF2F8',
+    groundColor: '#EAECEF',
     ambientIntensity: 0.95,
     dirColor: '#D8EEFF',
     dirIntensity: 0.65,
