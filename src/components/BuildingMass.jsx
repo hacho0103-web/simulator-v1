@@ -216,20 +216,25 @@ function AndoBuilding({ width, depth, totalHeight, posZ, style }) {
   const jointInterval = style.formworkInterval ?? 0.9;
   const jointH        = style.formworkJointH   ?? 0.10;
   const jointCount    = Math.floor(totalHeight / jointInterval);
-  // 전면 파사드는 +Z 방향 (카메라 쪽)
   const frontZ = posZ + depth / 2;
+  const lowerH = Math.min(12, totalHeight);
+  const upperH = totalHeight - lowerH;
+  const groundFloorColor = style.groundFloorColor ?? '#2563EB';
 
   return (
     <group>
-      {/* ── 콘크리트 모놀리식 매스 — 완전 불투명 ── */}
-      <mesh position={[0, totalHeight / 2, posZ]} castShadow receiveShadow>
-        <boxGeometry args={[width, totalHeight, depth]} />
-        <meshStandardMaterial
-          color={style.upperFloorColor}
-          roughness={style.roughness}
-          metalness={style.metalness}
-        />
+      {/* ── 저층부 (1-3F) ── */}
+      <mesh position={[0, lowerH / 2, posZ]} castShadow receiveShadow>
+        <boxGeometry args={[width, lowerH, depth]} />
+        <meshStandardMaterial color={groundFloorColor} roughness={style.roughness} metalness={style.metalness} />
       </mesh>
+      {/* ── 상층부 콘크리트 매스 ── */}
+      {upperH > 0 && (
+        <mesh position={[0, lowerH + upperH / 2, posZ]} castShadow receiveShadow>
+          <boxGeometry args={[width, upperH, depth]} />
+          <meshStandardMaterial color={style.upperFloorColor} roughness={style.roughness} metalness={style.metalness} />
+        </mesh>
+      )}
 
       {/* ── 거푸집 줄눈 (수평 그루브) ── */}
       {Array.from({ length: jointCount }).map((_, i) => (
@@ -270,6 +275,7 @@ function AndoBuilding({ width, depth, totalHeight, posZ, style }) {
 
 // ─── 자하 하디드: 파라메트릭 전단(shear) 매스 ──────────────────────────────
 function ZahaBuilding({ width, depth, totalHeight, posZ, style }) {
+  const LOWER_H  = 12;
   const SLICES   = 28;  // 부드러운 전단을 위한 슬라이스 수
   const sliceH   = totalHeight / SLICES;
   const maxShearX = width  * (style.shearRatio  ?? 0.40);
@@ -293,11 +299,13 @@ function ZahaBuilding({ width, depth, totalHeight, posZ, style }) {
         const xOff = shearX(t);
         const zOff = shearZ(t);
         const scaleX = 1 + t * 0.06; // 상부로 갈수록 약간 넓어짐
+        const sliceCenterY = sliceH * (i + 0.5);
+        const sliceColor = sliceCenterY < LOWER_H ? (style.groundFloorColor ?? '#2563EB') : style.upperFloorColor;
         return (
-          <mesh key={i} position={[xOff, sliceH * (i + 0.5), posZ + zOff]} castShadow receiveShadow>
+          <mesh key={i} position={[xOff, sliceCenterY, posZ + zOff]} castShadow receiveShadow>
             <boxGeometry args={[width * scaleX, sliceH + 0.02, depth]} />
             <meshStandardMaterial
-              color={style.upperFloorColor}
+              color={sliceColor}
               roughness={style.roughness}
               metalness={style.metalness}
             />
@@ -354,7 +362,7 @@ function Scene({ params, activeRuleSet, showPedestrians, architectStyle = null }
   const s = architectStyle;
   const bgColor         = s?.bgColor         ?? '#EEF2F7';
   const groundColor     = s?.groundColor      ?? '#EAECEF';
-  const groundFloorColor = s?.groundFloorColor ?? ruleColor;
+  const groundFloorColor = s?.groundFloorColor ?? '#2563EB';
   const upperFloorColor  = s?.upperFloorColor  ?? '#A8B8C8';
   const roughness        = s?.roughness        ?? 0.4;
   const metalness        = s?.metalness        ?? 0.05;
@@ -1013,7 +1021,7 @@ function GeoJSONBuilding({ lotCoords, params, color, actualFloors = null, actual
         >
           <meshStandardMaterial
             key={`ground_${architectStyle?.id ?? 'default'}`}
-            color={architectStyle ? (architectStyle.groundFloorColor ?? architectStyle.upperFloorColor) : (baselineMode ? '#94A3B8' : color)}
+            color={architectStyle ? (architectStyle.groundFloorColor ?? architectStyle.upperFloorColor) : (baselineMode ? '#94A3B8' : '#2563EB')}
             roughness={architectStyle?.roughness ?? 0.3}
             metalness={architectStyle?.metalness ?? 0.05}
             transparent={!architectStyle}
@@ -1180,6 +1188,9 @@ function TileGroundPlane({ centerLat, centerLon }) {
     const done = () => {
       if (cancelled) return;
       const tex = new THREE.CanvasTexture(canvas);
+      tex.generateMipmaps = false;
+      tex.minFilter = THREE.LinearFilter;
+      tex.magFilter = THREE.LinearFilter;
       tex.needsUpdate = true;
       createdTex = tex;
       setState({ tex, worldW, worldD, planeCX, planeCZ });
@@ -1191,7 +1202,7 @@ function TileGroundPlane({ centerLat, centerLon }) {
         img.crossOrigin = 'anonymous';
         const px = (tx - tileX0) * TILE_PX;
         const py = (ty - tileY0) * TILE_PX;
-        img.onload  = () => { ctx.drawImage(img, px, py); if (++loaded === total) done(); };
+        img.onload  = () => { ctx.filter = 'saturate(160%) contrast(120%)'; ctx.drawImage(img, px, py); ctx.filter = 'none'; if (++loaded === total) done(); };
         img.onerror = () => {                              if (++loaded === total) done(); };
         img.src = `/carto-tiles/rastertiles/voyager/${zoom}/${tx}/${ty}.png`;
       }
@@ -1210,9 +1221,9 @@ function TileGroundPlane({ centerLat, centerLon }) {
   return (
     <>
       <GroundPlane color="#EAECEF" />
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[planeCX, -0.1, planeCZ]} receiveShadow>
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[planeCX, -0.1, planeCZ]}>
         <planeGeometry args={[worldW, worldD]} />
-        <meshStandardMaterial map={tex} />
+        <meshBasicMaterial map={tex} />
       </mesh>
     </>
   );
@@ -1315,7 +1326,7 @@ function CustomParcelBuilding({ lotCoords, params, color }) {
       <LotOutline coords={lotCoords} />
       {/* 저층부 */}
       <mesh geometry={groundGeo} rotation={[-Math.PI / 2, 0, 0]} castShadow>
-        <meshStandardMaterial color={color} transparent opacity={0.88} roughness={0.3} metalness={0.05} />
+        <meshStandardMaterial color="#2563EB" transparent opacity={0.88} roughness={0.3} metalness={0.05} />
       </mesh>
       {/* 상층부 */}
       {upperH > 0 && (
