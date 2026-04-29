@@ -6,35 +6,38 @@ import { calculateScores } from '../utils/scoring';
 import { RULE_SETS } from '../data/rulesets';
 
 const CustomDot = (props) => {
-  const { cx, cy, fill, name } = props;
+  const { cx, cy, name } = props;
   if (name === '현재 설정값') {
     return (
       <polygon
-        points={`${cx},${cy - 10} ${cx + 9},${cy + 6} ${cx - 9},${cy + 6}`}
-        fill="#F59E0B"
-        stroke="#FDE68A"
+        points={`${cx},${cy - 9} ${cx + 8},${cy + 5} ${cx - 8},${cy + 5}`}
+        fill="#1a1a1a"
+        stroke="#ffffff"
         strokeWidth={1.5}
       />
     );
   }
-  return <circle cx={cx} cy={cy} r={8} fill={fill} stroke="white" strokeWidth={1.5} />;
+  return <circle cx={cx} cy={cy} r={7} fill={props.fill} stroke="#ffffff" strokeWidth={1.5} />;
 };
 
 const CustomTooltip = ({ active, payload }) => {
   if (!active || !payload?.length) return null;
   const d = payload[0]?.payload;
   return (
-    <div className="bg-slate-800 border border-slate-600 rounded-lg p-3 text-xs">
-      <p className="font-semibold text-white mb-1">{d.name}</p>
-      <p className="text-cyan-400">P-index (공공성): {d.y}</p>
-      <p className="text-orange-400">D-index (사업성): {d.x}</p>
+    <div style={{
+      background: '#ffffff',
+      border: '1px solid #d8d8d4',
+      borderRadius: '3px',
+      padding: '8px 12px',
+      fontSize: '11px',
+    }}>
+      <p style={{ fontWeight: 600, color: '#1a1a1a', marginBottom: 4 }}>{d.name}</p>
+      <p style={{ color: '#2563eb' }}>P-index (공공성): {d.y}</p>
+      <p style={{ color: '#ea580c' }}>D-index (사업성): {d.x}</p>
     </div>
   );
 };
 
-/**
- * P-index vs D-index 산점도 (논문 6단계 균형 분석)
- */
 export default function ScatterPlot({ params }) {
   const customScores = calculateScores(params);
 
@@ -43,29 +46,29 @@ export default function ScatterPlot({ params }) {
     return { x: s.dIndex, y: s.pIndex, name: rs.name, fill: rs.color };
   });
 
-  const customPoint = [{ x: customScores.dIndex, y: customScores.pIndex, name: '현재 설정값', fill: '#F59E0B' }];
+  const customPoint = [{ x: customScores.dIndex, y: customScores.pIndex, name: '현재 설정값', fill: '#1a1a1a' }];
 
   return (
-    <div className="bg-slate-900 rounded-xl p-4 h-full">
-      <h3 className="text-sm font-semibold text-slate-300 mb-1">
-        P-index vs D-index 균형 분석
+    <div className="bg-white border border-[#d8d8d4] rounded h-full p-4">
+      <h3 className="text-[10px] font-semibold text-[#888880] uppercase tracking-widest mb-0.5">
+        P-index vs D-index
       </h3>
-      <p className="text-xs text-slate-500 mb-3">
+      <p className="text-[10px] text-[#888880] mb-2 italic">
         공공성(↑)과 사업성(→) 균형 — 오른쪽 위가 이상적
       </p>
 
-      <ResponsiveContainer width="100%" height={280}>
-        <ScatterChart margin={{ top: 10, right: 20, bottom: 20, left: 10 }}>
-          <CartesianGrid stroke="#1e293b" />
+      <ResponsiveContainer width="100%" height={240}>
+        <ScatterChart margin={{ top: 8, right: 16, bottom: 20, left: 8 }}>
+          <CartesianGrid stroke="#e8e8e5" />
 
-          {/* 균형 영역 (점선 박스) */}
           <ReferenceArea
             x1={50} x2={80} y1={50} y2={80}
-            fill="#1d4ed8"
-            fillOpacity={0.08}
-            stroke="#3B82F6"
+            fill="#2563eb"
+            fillOpacity={0.05}
+            stroke="#2563eb"
             strokeDasharray="4 2"
-            label={{ value: '균형 영역', position: 'insideTopLeft', fill: '#60A5FA', fontSize: 10 }}
+            strokeOpacity={0.4}
+            label={{ value: '균형 영역', position: 'insideTopLeft', fill: '#2563eb', fontSize: 9 }}
           />
 
           <XAxis
@@ -73,21 +76,20 @@ export default function ScatterPlot({ params }) {
             dataKey="x"
             name="D-index"
             domain={[0, 100]}
-            label={{ value: 'D-index (사업성)', position: 'insideBottom', offset: -10, fill: '#94A3B8', fontSize: 11 }}
-            tick={{ fill: '#64748b', fontSize: 10 }}
+            label={{ value: 'D-index (사업성)', position: 'insideBottom', offset: -10, fill: '#888880', fontSize: 10 }}
+            tick={{ fill: '#888880', fontSize: 9 }}
           />
           <YAxis
             type="number"
             dataKey="y"
             name="P-index"
             domain={[0, 100]}
-            label={{ value: 'P-index (공공성)', angle: -90, position: 'insideLeft', fill: '#94A3B8', fontSize: 11 }}
-            tick={{ fill: '#64748b', fontSize: 10 }}
+            label={{ value: 'P-index (공공성)', angle: -90, position: 'insideLeft', fill: '#888880', fontSize: 10 }}
+            tick={{ fill: '#888880', fontSize: 9 }}
           />
 
           <Tooltip content={<CustomTooltip />} />
 
-          {/* 도시별 프리셋 점 */}
           {presetPoints.map((point) => (
             <Scatter
               key={point.name}
@@ -98,16 +100,15 @@ export default function ScatterPlot({ params }) {
             />
           ))}
 
-          {/* 현재 슬라이더 값 (별 모양) */}
           <Scatter
             name="현재 설정값"
             data={customPoint}
-            fill="#F59E0B"
+            fill="#1a1a1a"
             shape={<CustomDot name="현재 설정값" />}
           />
 
           <Legend
-            wrapperStyle={{ fontSize: '11px', color: '#94A3B8', paddingTop: '8px' }}
+            wrapperStyle={{ fontSize: '10px', color: '#888880', paddingTop: '6px' }}
           />
         </ScatterChart>
       </ResponsiveContainer>

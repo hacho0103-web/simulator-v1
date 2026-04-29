@@ -3,11 +3,9 @@ import { calculateMass } from '../utils/scoring';
 import { RULE_SETS, DEFAULT_LOT, PARAM_META } from '../data/rulesets';
 import { OBJExporter } from 'three/examples/jsm/exporters/OBJExporter.js';
 
-/** 3D 캔버스 스크린샷을 PNG로 저장 */
 export function exportScreenshot(canvasRef, cityName) {
   const canvas = canvasRef?.current?.querySelector('canvas');
   if (!canvas) { alert('3D 뷰어를 찾을 수 없습니다.'); return; }
-
   const dataUrl = canvas.toDataURL('image/png');
   const link = document.createElement('a');
   const now = new Date().toISOString().slice(0, 16).replace('T', '_').replace(':', '');
@@ -16,7 +14,6 @@ export function exportScreenshot(canvasRef, cityName) {
   link.click();
 }
 
-/** 파라미터 및 분석 점수를 CSV로 저장 */
 export function exportCSV(currentParams, activeRuleSet) {
   const allSets = {
     ...Object.fromEntries(Object.entries(RULE_SETS).map(([id, rs]) => [id, rs.params])),
@@ -45,8 +42,7 @@ export function exportCSV(currentParams, activeRuleSet) {
 
   const header = `항목,${Object.values(labels).join(',')}`;
   const csv = [header, ...paramRows, ...scoreRows].join('\n');
-
-  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8' });
+  const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8' });
   const link = document.createElement('a');
   const now = new Date().toISOString().slice(0, 10);
   link.download = `ground_floor_params_${now}.csv`;
@@ -54,14 +50,11 @@ export function exportCSV(currentParams, activeRuleSet) {
   link.click();
 }
 
-/** Three.js 씬을 OBJ 파일로 저장 (Rhino 임포트용) */
 export function exportOBJ(sceneRef, cityName) {
   const scene = sceneRef?.current;
   if (!scene) { alert('3D 씬을 찾을 수 없습니다. 잠시 후 다시 시도해주세요.'); return; }
-
   const exporter = new OBJExporter();
   const obj = exporter.parse(scene);
-
   const blob = new Blob([obj], { type: 'text/plain' });
   const link = document.createElement('a');
   const now = new Date().toISOString().slice(0, 16).replace('T', '_').replace(/:/g, '');
@@ -71,29 +64,30 @@ export function exportOBJ(sceneRef, cityName) {
   URL.revokeObjectURL(link.href);
 }
 
-/** 내보내기 버튼 그룹 컴포넌트 */
+const btnBase = 'flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium border transition-all cursor-pointer rounded';
+
 export default function ExportButtons({ canvasRef, sceneRef, params, activeRuleSet }) {
   const cityName = RULE_SETS[activeRuleSet]?.nameEn ?? 'custom';
 
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-1.5">
       <button
         onClick={() => exportScreenshot(canvasRef, cityName)}
-        className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-700 hover:bg-slate-600 rounded text-xs text-slate-200 transition-colors"
+        className={`${btnBase} bg-white text-[#555550] border-[#d8d8d4] hover:bg-[#f0f0ed]`}
       >
-        <span>📷</span> 스크린샷
+        PNG
       </button>
       <button
         onClick={() => exportCSV(params, activeRuleSet)}
-        className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-700 hover:bg-slate-600 rounded text-xs text-slate-200 transition-colors"
+        className={`${btnBase} bg-white text-[#555550] border-[#d8d8d4] hover:bg-[#f0f0ed]`}
       >
-        <span>📊</span> CSV 내보내기
+        CSV
       </button>
       <button
         onClick={() => exportOBJ(sceneRef, cityName)}
-        className="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-700 hover:bg-indigo-600 rounded text-xs text-slate-200 transition-colors"
+        className={`${btnBase} bg-[#1a1a1a] text-white border-[#1a1a1a] hover:bg-[#333]`}
       >
-        <span>🦏</span> OBJ (Rhino)
+        OBJ
       </button>
     </div>
   );

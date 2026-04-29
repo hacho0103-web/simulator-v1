@@ -24,15 +24,9 @@ function buildRadarData(scoresMap) {
   });
 }
 
-/**
- * 6개 분석 축 레이더 차트
- * @param {{ params: object, activeRuleSet: string, compareMode: boolean }}
- */
 export default function AnalysisRadar({ params, activeRuleSet, compareMode = false }) {
-  // 현재 커스텀 파라미터 점수
   const customScores = calculateScores(params);
 
-  // 3개 도시 프리셋 점수
   const presetScores = {};
   Object.values(RULE_SETS).forEach((rs) => {
     presetScores[rs.id] = calculateScores(rs.params);
@@ -45,28 +39,27 @@ export default function AnalysisRadar({ params, activeRuleSet, compareMode = fal
   const data = buildRadarData(scoresMap);
 
   return (
-    <div className="bg-slate-900 rounded-xl p-4 h-full">
-      <h3 className="text-sm font-semibold text-slate-300 mb-1">
-        6개 분석 축 레이더 차트
+    <div className="bg-white border border-[#d8d8d4] rounded h-full p-4">
+      <h3 className="text-[10px] font-semibold text-[#888880] uppercase tracking-widest mb-0.5">
+        6개 분석 축
       </h3>
-      <p className="text-xs text-slate-500 mb-3">점수: 0~100 (높을수록 해당 특성 강함)</p>
+      <p className="text-[10px] text-[#888880] mb-2 italic">점수: 0–100</p>
 
-      <ResponsiveContainer width="100%" height={280}>
-        <RadarChart data={data} cx="50%" cy="50%" outerRadius="75%">
-          <PolarGrid stroke="#334155" />
+      <ResponsiveContainer width="100%" height={240}>
+        <RadarChart data={data} cx="50%" cy="50%" outerRadius="72%">
+          <PolarGrid stroke="#d8d8d4" />
           <PolarAngleAxis
             dataKey="axis"
-            tick={{ fill: '#94A3B8', fontSize: 11 }}
+            tick={{ fill: '#555550', fontSize: 10 }}
           />
           <PolarRadiusAxis
             angle={90}
             domain={[0, 100]}
-            tick={{ fill: '#475569', fontSize: 9 }}
+            tick={{ fill: '#888880', fontSize: 9 }}
             tickCount={4}
           />
 
           {compareMode ? (
-            // 비교 모드: 4개 규칙 세트 + 커스텀
             Object.values(RULE_SETS).map((rs) => (
               <Radar
                 key={rs.id}
@@ -75,39 +68,43 @@ export default function AnalysisRadar({ params, activeRuleSet, compareMode = fal
                 stroke={rs.color}
                 fill={rs.color}
                 fillOpacity={0.08}
-                strokeWidth={2}
+                strokeWidth={1.5}
               />
             ))
           ) : (
-            // 단일 모드: 선택 도시
             <Radar
               name={RULE_SETS[activeRuleSet]?.name ?? '선택 도시'}
               dataKey={activeRuleSet}
-              stroke={RULE_SETS[activeRuleSet]?.color ?? '#3B82F6'}
-              fill={RULE_SETS[activeRuleSet]?.color ?? '#3B82F6'}
-              fillOpacity={0.15}
-              strokeWidth={2}
+              stroke={RULE_SETS[activeRuleSet]?.color ?? '#2563eb'}
+              fill={RULE_SETS[activeRuleSet]?.color ?? '#2563eb'}
+              fillOpacity={0.12}
+              strokeWidth={1.5}
             />
           )}
 
-          {/* 커스텀 (슬라이더 조정값) - 점선 */}
           <Radar
             name="현재 설정값"
             dataKey="custom"
-            stroke="#F59E0B"
-            fill="#F59E0B"
-            fillOpacity={0.05}
+            stroke="#1a1a1a"
+            fill="#1a1a1a"
+            fillOpacity={0.04}
             strokeWidth={1.5}
             strokeDasharray="5 3"
           />
 
           <Tooltip
-            contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '8px' }}
-            labelStyle={{ color: '#94A3B8' }}
-            itemStyle={{ color: '#e2e8f0' }}
+            contentStyle={{
+              backgroundColor: '#ffffff',
+              border: '1px solid #d8d8d4',
+              borderRadius: '3px',
+              fontSize: '11px',
+              color: '#1a1a1a',
+            }}
+            labelStyle={{ color: '#555550', fontWeight: 600 }}
+            itemStyle={{ color: '#555550' }}
           />
           <Legend
-            wrapperStyle={{ fontSize: '11px', color: '#94A3B8' }}
+            wrapperStyle={{ fontSize: '10px', color: '#888880' }}
           />
         </RadarChart>
       </ResponsiveContainer>
