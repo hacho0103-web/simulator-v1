@@ -124,6 +124,7 @@ export default function App() {
             {[
               { id: null,          label: '단일 건물' },
               { id: 'gwanghwamun', label: '광화문' },
+              { id: 'yongsan',     label: '용산정비창' },
             ].map(({ id, label }, i) => (
               <button
                 key={id ?? 'simple'}
