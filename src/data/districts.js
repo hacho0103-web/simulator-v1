@@ -32,4 +32,15 @@ export const DISTRICTS = {
     defaultRuleSet: 'hafencity',
     useVWorld: false,
   },
+  yongsan: {
+    id: 'yongsan',
+    name: '용산정비창',
+    nameEn: 'Yongsan',
+    country: 'KR',
+    geojson: '/yongsan.geojson',
+    center: { lon: 126.9635, lat: 37.5295 },
+    bbox: '37.522,126.957,37.534,126.972',
+    defaultRuleSet: 'seoul',
+    useVWorld: true,
+  },
 };

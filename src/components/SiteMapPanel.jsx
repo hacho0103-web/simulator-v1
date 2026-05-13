@@ -263,7 +263,7 @@ export default function SiteMapPanel({ onApply, onClose }) {
         <div className="flex-1 relative overflow-hidden">
           <MapContainer center={SEOUL} zoom={17} style={{ width: '100%', height: '100%' }} zoomControl>
             <TileLayer url={WMTS_BASE} maxZoom={19} attribution="© V-World (국토지리정보원)" />
-            {showCadastral && <TileLayer url={WMTS_CADAS} maxZoom={19} opacity={0.7} />}
+            {showCadastral && <TileLayer url={WMTS_CADAS} maxZoom={19} opacity={1} />}
             <FlyTo target={flyTarget} />
             <ClickHandler active onMapClick={handleMapClick} />
             {[...parcels.values()].map(p => (

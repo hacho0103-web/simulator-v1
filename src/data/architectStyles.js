@@ -24,7 +24,7 @@ export const ARCH_STYLES = {
     dirIntensity: 1.8,
 
     // 건물 재질 — 노출 콘크리트
-    groundFloorColor: '#4A5058',
+    groundFloorColor: '#2563EB',
     upperFloorColor:  '#4A5058',
     roughness: 0.95,
     metalness: 0.00,
@@ -60,6 +60,7 @@ export const ARCH_STYLES = {
     dirIntensity: 0.65,
 
     // 건물 재질 — 알루미늄 패널 / 화이트 스무스
+    groundFloorColor: '#2563EB',
     upperFloorColor:  '#EDEEF0',
     roughness: 0.08,
     metalness: 0.32,

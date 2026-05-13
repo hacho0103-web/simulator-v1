@@ -216,20 +216,25 @@ function AndoBuilding({ width, depth, totalHeight, posZ, style }) {
   const jointInterval = style.formworkInterval ?? 0.9;
   const jointH        = style.formworkJointH   ?? 0.10;
   const jointCount    = Math.floor(totalHeight / jointInterval);
-  // 전면 파사드는 +Z 방향 (카메라 쪽)
   const frontZ = posZ + depth / 2;
+  const lowerH = Math.min(12, totalHeight);
+  const upperH = totalHeight - lowerH;
+  const groundFloorColor = style.groundFloorColor ?? '#2563EB';
 
   return (
     <group>
-      {/* ── 콘크리트 모놀리식 매스 — 완전 불투명 ── */}
-      <mesh position={[0, totalHeight / 2, posZ]} castShadow receiveShadow>
-        <boxGeometry args={[width, totalHeight, depth]} />
-        <meshStandardMaterial
-          color={style.upperFloorColor}
-          roughness={style.roughness}
-          metalness={style.metalness}
-        />
+      {/* ── 저층부 (1-3F) ── */}
+      <mesh position={[0, lowerH / 2, posZ]} castShadow receiveShadow>
+        <boxGeometry args={[width, lowerH, depth]} />
+        <meshStandardMaterial color={groundFloorColor} roughness={style.roughness} metalness={style.metalness} />
       </mesh>
+      {/* ── 상층부 콘크리트 매스 ── */}
+      {upperH > 0 && (
+        <mesh position={[0, lowerH + upperH / 2, posZ]} castShadow receiveShadow>
+          <boxGeometry args={[width, upperH, depth]} />
+          <meshStandardMaterial color={style.upperFloorColor} roughness={style.roughness} metalness={style.metalness} />
+        </mesh>
+      )}
 
       {/* ── 거푸집 줄눈 (수평 그루브) ── */}
       {Array.from({ length: jointCount }).map((_, i) => (
@@ -270,6 +275,7 @@ function AndoBuilding({ width, depth, totalHeight, posZ, style }) {
 
 // ─── 자하 하디드: 파라메트릭 전단(shear) 매스 ──────────────────────────────
 function ZahaBuilding({ width, depth, totalHeight, posZ, style }) {
+  const LOWER_H  = 12;
   const SLICES   = 28;  // 부드러운 전단을 위한 슬라이스 수
   const sliceH   = totalHeight / SLICES;
   const maxShearX = width  * (style.shearRatio  ?? 0.40);
@@ -293,11 +299,13 @@ function ZahaBuilding({ width, depth, totalHeight, posZ, style }) {
         const xOff = shearX(t);
         const zOff = shearZ(t);
         const scaleX = 1 + t * 0.06; // 상부로 갈수록 약간 넓어짐
+        const sliceCenterY = sliceH * (i + 0.5);
+        const sliceColor = sliceCenterY < LOWER_H ? (style.groundFloorColor ?? '#2563EB') : style.upperFloorColor;
         return (
-          <mesh key={i} position={[xOff, sliceH * (i + 0.5), posZ + zOff]} castShadow receiveShadow>
+          <mesh key={i} position={[xOff, sliceCenterY, posZ + zOff]} castShadow receiveShadow>
             <boxGeometry args={[width * scaleX, sliceH + 0.02, depth]} />
             <meshStandardMaterial
-              color={style.upperFloorColor}
+              color={sliceColor}
               roughness={style.roughness}
               metalness={style.metalness}
             />
@@ -513,7 +521,7 @@ export function Scene({ params, activeRuleSet, showPedestrians, architectStyle =
   const s = architectStyle;
   const bgColor         = s?.bgColor         ?? '#EEF2F7';
   const groundColor     = s?.groundColor      ?? '#EAECEF';
-  const groundFloorColor = s?.groundFloorColor ?? ruleColor;
+  const groundFloorColor = s?.groundFloorColor ?? '#2563EB';
   const upperFloorColor  = s?.upperFloorColor  ?? '#A8B8C8';
   const roughness        = s?.roughness        ?? 0.4;
   const metalness        = s?.metalness        ?? 0.05;
@@ -645,27 +653,44 @@ export function Scene({ params, activeRuleSet, showPedestrians, architectStyle =
 // GeoJSON 실제 지도 모드 컴포넌트들
 // ─────────────────────────────────────────
 
-// 도로 두께 분류
+// 도로 두께 분류 (m)
 const ROAD_WIDTH = {
-  motorway: 14, trunk: 12, primary: 10, secondary: 8,
-  tertiary:  6, residential: 5, service: 3.5,
-  footway:   4, path: 3.5, cycleway: 4, steps: 3,
+  motorway: 18, trunk: 14, primary: 12, secondary: 10,
+  tertiary:  8, residential: 6, service: 4,
+  footway: 2.5, path: 2, cycleway: 3, steps: 2,
+  pedestrian: 8, living_street: 5, track: 4,
 };
 const ROAD_COLOR = {
-  // 차도 — 어두운 청회색 계열
-  motorway:    '#1A2B3C',
-  trunk:       '#2A3C50',
-  primary:     '#3A5062',
-  secondary:   '#526070',
-  tertiary:    '#6A7E8E',
-  residential: '#8A9BAC',
-  service:     '#9AAAB8',
-  // 보행로 — 어두운 앰버
-  footway:     '#B8883A',
-  path:        '#A87C28',
-  steps:       '#C45890',   // 계단 — 딥핑크
+  // 차도 — 아스팔트 계열
+  motorway:      '#3A3A3A',
+  trunk:         '#404040',
+  primary:       '#484848',
+  secondary:     '#525252',
+  tertiary:      '#5E5E5E',
+  residential:   '#6A6A6A',
+  service:       '#787878',
+  living_street: '#727272',
+  track:         '#8A7A60',
+  // 보행로 — 포장석/모래색
+  footway:       '#C8B890',
+  path:          '#BCA878',
+  pedestrian:    '#D4C8A8',
+  steps:         '#C87060',
   // 자전거도로 — 딥그린
-  cycleway:    '#2AA87A',
+  cycleway:      '#2A9468',
+};
+
+// landuse 유형별 색상
+const LANDUSE_COLOR = {
+  railway:      '#8C8278',  // 자갈·철도 부지 — 따뜻한 회갈색
+  industrial:   '#A09488',
+  brownfield:   '#B4A480',
+  construction: '#C8B468',
+  commercial:   '#D0C8B8',
+  retail:       '#D8CCBC',
+  parking:      '#909898',
+  vacant:       '#C0B49A',
+  landfill:     '#A8A07A',
 };
 
 
@@ -696,16 +721,18 @@ function useGeoJSONScene(district) {
   const [buildings, setBuildings] = useState([]);
   const [roads, setRoads] = useState([]);
   const [greenSpaces, setGreenSpaces] = useState([]);
+  const [landuse, setLanduse] = useState([]);
   const [sceneSize, setSceneSize] = useState(200);
   const [loading, setLoading] = useState(false);
   const [dataSource, setDataSource] = useState('');
 
   useEffect(() => {
-    if (!district) { setBuildings([]); setRoads([]); setGreenSpaces([]); return; }
+    if (!district) { setBuildings([]); setRoads([]); setGreenSpaces([]); setLanduse([]); return; }
     setLoading(true);
     setBuildings([]);
     setRoads([]);
     setGreenSpaces([]);
+    setLanduse([]);
 
     const { center, bbox, geojson: geojsonUrl, useVWorld } = district;
     const { lon: centerLon, lat: centerLat } = center;
@@ -766,26 +793,32 @@ function useGeoJSONScene(district) {
       return parseLocalBuildings(data);
     })();
 
-    // 도로 + 녹지 통합 쿼리
-    const query = `[out:json][timeout:30];(way["highway"](${bbox});way["landuse"~"grass|park|forest|recreation_ground|garden|meadow|village_green"](${bbox});way["leisure"~"park|garden|recreation_ground|pitch|playground"](${bbox}););out geom;`;
-    const CACHE_KEY = `roads_v3_${bbox}`;
+    // 도로 + 녹지 + landuse 통합 쿼리
+    const GREEN_LANDUSE = new Set(['grass','park','forest','recreation_ground','garden','meadow','village_green']);
+    const query = `[out:json][timeout:30];(way["highway"](${bbox});way["landuse"](${bbox});way["leisure"~"park|garden|recreation_ground|pitch|playground"](${bbox}););out geom;`;
+    const CACHE_KEY = `roads_v4_${bbox}`;
     const OVERPASS_SERVERS = [
       'https://overpass-api.de/api/interpreter',
       'https://overpass.kumi.systems/api/interpreter',
       'https://overpass.openstreetmap.ru/api/interpreter',
     ];
     const parseRoadsAndGreen = (data) => {
-      const roads = [], green = [];
+      const roads = [], green = [], lu = [];
       for (const el of data.elements) {
         if (el.type !== 'way' || !el.geometry) continue;
-        if (el.tags?.highway) {
-          const hw = el.tags.highway;
-          roads.push({ lines: [el.geometry.map(pt => toLocal([pt.lon, pt.lat]))], width: ROAD_WIDTH[hw] ?? 2, color: ROAD_COLOR[hw] ?? '#8A9BAC' });
-        } else if ((el.tags?.landuse || el.tags?.leisure) && el.geometry.length >= 3) {
-          green.push({ coords: el.geometry.map(pt => toLocal([pt.lon, pt.lat])) });
+        const tags = el.tags ?? {};
+        if (tags.highway) {
+          const hw = tags.highway;
+          roads.push({ lines: [el.geometry.map(pt => toLocal([pt.lon, pt.lat]))], width: ROAD_WIDTH[hw] ?? 3, color: ROAD_COLOR[hw] ?? '#686868' });
+        } else if (el.geometry.length >= 3) {
+          const luType = tags.landuse ?? tags.leisure;
+          if (!luType) continue;
+          const coords = el.geometry.map(pt => toLocal([pt.lon, pt.lat]));
+          if (GREEN_LANDUSE.has(luType)) green.push({ coords });
+          else lu.push({ coords, type: luType });
         }
       }
-      return { roads, green };
+      return { roads, green, landuse: lu };
     };
 
     const fetchWithTimeout = (url, ms = 8000) => {
@@ -806,21 +839,22 @@ function useGeoJSONScene(district) {
           return result;
         } catch (e) { continue; }
       }
-      return { roads: [], green: [] };
+      return { roads: [], green: [], landuse: [] };
     })();
 
     Promise.all([buildingPromise, roadPromise])
-      .then(([buildings, { roads, green }]) => {
+      .then(([buildings, { roads, green, landuse: lu }]) => {
         setBuildings(buildings);
         setRoads(roads);
         setGreenSpaces(green);
+        setLanduse(lu);
         setSceneSize(Math.max((e - w) * 111000 * cosLat, (n - s) * 111000, 200));
         setLoading(false);
       })
       .catch(err => { console.error('씬 로드 오류:', err); setLoading(false); });
   }, [district?.id]);
 
-  return { buildings, roads, greenSpaces, sceneSize, loading, dataSource };
+  return { buildings, roads, greenSpaces, landuse, sceneSize, loading, dataSource };
 }
 
 /** 2D 포인트-인-폴리곤 (ray casting) */
@@ -1214,7 +1248,7 @@ function GeoJSONBuilding({ lotCoords, params, color, actualFloors = null, actual
         >
           <meshStandardMaterial
             key={`ground_${architectStyle?.id ?? 'default'}`}
-            color={architectStyle ? (architectStyle.groundFloorColor ?? architectStyle.upperFloorColor) : (baselineMode ? '#94A3B8' : color)}
+            color={architectStyle ? (architectStyle.groundFloorColor ?? architectStyle.upperFloorColor) : (baselineMode ? '#94A3B8' : '#2563EB')}
             roughness={architectStyle?.roughness ?? 0.3}
             metalness={architectStyle?.metalness ?? 0.05}
             transparent={!architectStyle}
@@ -1282,35 +1316,65 @@ function GreenSpaceArea({ coords }) {
   useEffect(() => () => geo?.dispose(), [geo]);
   if (!geo) return null;
   return (
-    <mesh geometry={geo} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.04, 0]}>
-      <meshStandardMaterial color="#4ADE80" transparent opacity={0.6} side={THREE.DoubleSide} />
+    <mesh geometry={geo} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.04, 0]} renderOrder={1}>
+      <meshStandardMaterial color="#4ADE80" transparent opacity={0.6} side={THREE.DoubleSide} depthWrite={false} />
     </mesh>
   );
 }
 
-/** 도로 라인 — local_y → world -Z (건물과 동일 좌표계) */
-function GeoJSONRoad({ lines, color }) {
-  const positions = useMemo(() => {
-    const pts = [];
+/** 비녹지 landuse (철도부지·공업·주차 등) */
+function LanduseArea({ coords, type }) {
+  const color = LANDUSE_COLOR[type] ?? '#B0A898';
+  const geo = useMemo(() => {
+    if (coords.length < 3) return null;
+    return new THREE.ShapeGeometry(makeShape(coords));
+  }, [coords]);
+  useEffect(() => () => geo?.dispose(), [geo]);
+  if (!geo) return null;
+  return (
+    <mesh geometry={geo} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.03, 0]} renderOrder={1}>
+      <meshStandardMaterial color={color} transparent opacity={0.72} side={THREE.DoubleSide} roughness={0.95} depthWrite={false} />
+    </mesh>
+  );
+}
+
+/** 도로 — 폭 있는 flat plane (local_y → world -Z) */
+function GeoJSONRoad({ lines, color, width = 4 }) {
+  const geo = useMemo(() => {
+    const verts = [], idx = [];
+    let vi = 0;
     for (const line of lines) {
       for (let i = 0; i < line.length - 1; i++) {
         const [x1, y1] = line[i];
         const [x2, y2] = line[i + 1];
-        pts.push(x1, 0.1, -y1, x2, 0.1, -y2);
+        const dx = x2 - x1, dy = y2 - y1;
+        const len = Math.sqrt(dx * dx + dy * dy);
+        if (len < 0.05) continue;
+        const hw = Math.max(width, 1) / 2;
+        const nx = (-dy / len) * hw, ny = (dx / len) * hw;
+        verts.push(
+          x1 + nx, 0.06, -(y1 + ny),
+          x1 - nx, 0.06, -(y1 - ny),
+          x2 + nx, 0.06, -(y2 + ny),
+          x2 - nx, 0.06, -(y2 - ny),
+        );
+        idx.push(vi, vi + 1, vi + 2, vi + 1, vi + 3, vi + 2);
+        vi += 4;
       }
     }
-    return new Float32Array(pts);
-  }, [lines]);
-
-  if (positions.length === 0) return null;
-
+    if (!verts.length) return null;
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(verts), 3));
+    g.setIndex(idx);
+    g.computeVertexNormals();
+    return g;
+  }, [lines, width]);
+  useEffect(() => () => geo?.dispose(), [geo]);
+  if (!geo) return null;
   return (
-    <lineSegments>
-      <bufferGeometry>
-        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
-      </bufferGeometry>
-      <lineBasicMaterial color={color} />
-    </lineSegments>
+    <mesh geometry={geo} renderOrder={2}>
+      <meshStandardMaterial color={color} roughness={0.92} metalness={0} depthWrite={false} />
+    </mesh>
   );
 }
 
@@ -1381,6 +1445,9 @@ function TileGroundPlane({ centerLat, centerLon }) {
     const done = () => {
       if (cancelled) return;
       const tex = new THREE.CanvasTexture(canvas);
+      tex.generateMipmaps = false;
+      tex.minFilter = THREE.LinearFilter;
+      tex.magFilter = THREE.LinearFilter;
       tex.needsUpdate = true;
       createdTex = tex;
       setState({ tex, worldW, worldD, planeCX, planeCZ });
@@ -1392,7 +1459,7 @@ function TileGroundPlane({ centerLat, centerLon }) {
         img.crossOrigin = 'anonymous';
         const px = (tx - tileX0) * TILE_PX;
         const py = (ty - tileY0) * TILE_PX;
-        img.onload  = () => { ctx.drawImage(img, px, py); if (++loaded === total) done(); };
+        img.onload  = () => { ctx.filter = 'saturate(160%) contrast(120%)'; ctx.drawImage(img, px, py); ctx.filter = 'none'; if (++loaded === total) done(); };
         img.onerror = () => {                              if (++loaded === total) done(); };
         img.src = `/carto-tiles/rastertiles/voyager/${zoom}/${tx}/${ty}.png`;
       }
@@ -1411,15 +1478,15 @@ function TileGroundPlane({ centerLat, centerLon }) {
   return (
     <>
       <GroundPlane color="#EAECEF" />
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[planeCX, -0.1, planeCZ]} receiveShadow>
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[planeCX, -0.1, planeCZ]}>
         <planeGeometry args={[worldW, worldD]} />
-        <meshStandardMaterial map={tex} />
+        <meshBasicMaterial map={tex} />
       </mesh>
     </>
   );
 }
 
-function GeoJSONScene({ params, activeRuleSet, buildings, roads, greenSpaces = [], sceneSize, onParcelClick, districtCenter, baselineMode, architectStyle = null, showTiles = false }) {
+function GeoJSONScene({ params, activeRuleSet, buildings, roads, greenSpaces = [], landuse = [], sceneSize, onParcelClick, districtCenter, baselineMode, architectStyle = null, showTiles = false }) {
   const s = architectStyle;
   const color       = RULE_SETS[activeRuleSet]?.color ?? '#3B82F6';
   const bgColor     = s?.bgColor      ?? '#EEF2F7';
@@ -1449,6 +1516,11 @@ function GeoJSONScene({ params, activeRuleSet, buildings, roads, greenSpaces = [
         ? <TileGroundPlane centerLat={districtCenter.lat} centerLon={districtCenter.lon} />
         : <GroundPlane color={groundColor} />
       }
+
+      {/* landuse (철도부지·공업·주차 등) */}
+      {!showTiles && landuse.map((lu, i) => (
+        <LanduseArea key={`lu_${i}`} coords={lu.coords} type={lu.type} />
+      ))}
 
       {/* 녹지 */}
       {!showTiles && greenSpaces.map((g, i) => (
@@ -1517,7 +1589,7 @@ function CustomParcelBuilding({ lotCoords, params, color }) {
       <LotOutline coords={lotCoords} />
       {/* 저층부 */}
       <mesh geometry={groundGeo} rotation={[-Math.PI / 2, 0, 0]} castShadow>
-        <meshStandardMaterial color={color} transparent opacity={0.88} roughness={0.3} metalness={0.05} />
+        <meshStandardMaterial color="#2563EB" transparent opacity={0.88} roughness={0.3} metalness={0.05} />
       </mesh>
       {/* 상층부 */}
       {upperH > 0 && (
@@ -1627,7 +1699,7 @@ export default function BuildingMass({ params, activeRuleSet, canvasRef, activeD
   const district = activeDistrict ? DISTRICTS[activeDistrict] : null;
   const isCustomMode = customParcels.length > 0;
   const isMapMode = !!district && !isCustomMode;
-  const { buildings, roads, greenSpaces, sceneSize, loading, dataSource } = useGeoJSONScene(district);
+  const { buildings, roads, greenSpaces, landuse, sceneSize, loading, dataSource } = useGeoJSONScene(district);
   const { buildings: customBuildings, roads: customRoads, parcelOutlines, loading: customLoading, sceneSize: customSceneSize } = useCustomAreaScene(customParcels);
 
   const [zoningInfo, setZoningInfo] = useState(null);
@@ -1865,7 +1937,7 @@ export default function BuildingMass({ params, activeRuleSet, canvasRef, activeD
         {isCustomMode
           ? <CustomParcelScene params={params} activeRuleSet={activeRuleSet} buildings={customBuildings} roads={customRoads} parcelOutlines={parcelOutlines} sceneSize={customSceneSize} baselineMode={baselineMode} architectStyle={architectStyle} showTiles={showTiles} centerLat={customCenter?.lat} centerLon={customCenter?.lon} />
           : isMapMode
-          ? <GeoJSONScene params={params} activeRuleSet={activeRuleSet} buildings={buildings} roads={roads} greenSpaces={greenSpaces} sceneSize={sceneSize} onParcelClick={handleParcelClick} districtCenter={district?.center} baselineMode={baselineMode} architectStyle={architectStyle} showTiles={showTiles} />
+          ? <GeoJSONScene params={params} activeRuleSet={activeRuleSet} buildings={buildings} roads={roads} greenSpaces={greenSpaces} landuse={landuse} sceneSize={sceneSize} onParcelClick={handleParcelClick} districtCenter={district?.center} baselineMode={baselineMode} architectStyle={architectStyle} showTiles={showTiles} />
           : <Scene params={params} activeRuleSet={activeRuleSet} showPedestrians={showPedestrians} architectStyle={architectStyle} facadePreset={facadePreset} />
         }
         <SceneExporter sceneRef={sceneRef} />
