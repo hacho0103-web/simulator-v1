@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from 'react';
 import { Canvas, useThree } from '@react-three/fiber';
-import { OrbitControls, Grid, Text } from '@react-three/drei';
+import { OrbitControls, Grid, Text, Environment, ContactShadows } from '@react-three/drei';
 import * as THREE from 'three';
 import { calculateMass } from '../utils/scoring';
 import { DEFAULT_LOT, RULE_SETS } from '../data/rulesets';
@@ -24,7 +24,7 @@ function GroundPlane({ color = '#EAECEF' }) {
   return (
     <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.2, 0]} receiveShadow>
       <planeGeometry args={[50000, 50000]} />
-      <meshStandardMaterial color={color} />
+      <meshStandardMaterial color={color} roughness={0.65} metalness={0.08} envMapIntensity={0.4} />
     </mesh>
   );
 }
@@ -338,7 +338,157 @@ function ZahaBuilding({ width, depth, totalHeight, posZ, style }) {
   );
 }
 
-function Scene({ params, activeRuleSet, showPedestrians, architectStyle = null }) {
+// ─── 하펜시티 파사드 패널: 한 면의 창/필라스터 패턴 ──────────────────────────
+// 로컬 좌표계: X = 면 가로, Y = 높이 중심 기준, +Z = 바깥(돌출) 방향
+function HafenCityFacadePanel({ faceWidth, brickZoneH, showCanopy }) {
+  const BRICK = '#8B3318';
+  const GLASS = '#7EC8E3';
+  const STEEL = '#2A3830';
+  const CANOPY_C = '#1E2E1A';
+
+  const pilasterW       = 0.55;
+  const pilasterProtrude = 0.22;
+  const winGap          = 0.28;
+  const bayWidth = Math.max(3.5, faceWidth / Math.round(faceWidth / 5));
+  const numBays  = Math.round(faceWidth / bayWidth);
+  const winW     = Math.max(0.5, (bayWidth - pilasterW * 2 - winGap) / 2);
+  const winH     = brickZoneH * 0.72;
+  const winY     = brickZoneH * 0.02; // 높이 중심에서 살짝 위 (중심=0 기준)
+
+  return (
+    <group>
+      {/* 필라스터: 로컬 +Z 방향으로 돌출 */}
+      {Array.from({ length: numBays + 1 }).map((_, i) => {
+        const px  = -faceWidth / 2 + bayWidth * i;
+        const cpx = Math.max(-faceWidth / 2 + pilasterW / 2, Math.min(faceWidth / 2 - pilasterW / 2, px));
+        return (
+          <mesh key={`p${i}`} position={[cpx, 0, pilasterProtrude / 2]} castShadow>
+            <boxGeometry args={[pilasterW, brickZoneH, pilasterProtrude]} />
+            <meshStandardMaterial color={BRICK} roughness={0.85} metalness={0} />
+          </mesh>
+        );
+      })}
+
+      {/* 창 베이 */}
+      {Array.from({ length: numBays }).map((_, bi) => {
+        const bx  = -faceWidth / 2 + bayWidth * (bi + 0.5);
+        const isC = bi === Math.floor(numBays / 2) && showCanopy;
+
+        if (isC) {
+          const entW = winW * 2 + winGap + 0.4;
+          const entH = winH * 1.05;
+          return (
+            <group key={`w${bi}`}>
+              <mesh position={[bx, winY, 0.01]}>
+                <planeGeometry args={[entW, entH]} />
+                <meshStandardMaterial color={GLASS} transparent opacity={0.42} roughness={0.02} metalness={0.0} envMapIntensity={2.5} />
+              </mesh>
+              <mesh position={[bx, winY + entH / 2 + 0.045, 0.04]}><boxGeometry args={[entW + 0.09, 0.09, 0.07]} /><meshStandardMaterial color={STEEL} roughness={0.12} metalness={0.88} envMapIntensity={1.8} /></mesh>
+              <mesh position={[bx, winY - entH / 2 - 0.045, 0.04]}><boxGeometry args={[entW + 0.09, 0.09, 0.07]} /><meshStandardMaterial color={STEEL} roughness={0.12} metalness={0.88} envMapIntensity={1.8} /></mesh>
+              <mesh position={[bx - entW / 2 - 0.045, winY, 0.04]}><boxGeometry args={[0.09, entH + 0.09, 0.07]} /><meshStandardMaterial color={STEEL} roughness={0.12} metalness={0.88} envMapIntensity={1.8} /></mesh>
+              <mesh position={[bx + entW / 2 + 0.045, winY, 0.04]}><boxGeometry args={[0.09, entH + 0.09, 0.07]} /><meshStandardMaterial color={STEEL} roughness={0.12} metalness={0.88} envMapIntensity={1.8} /></mesh>
+              <mesh position={[bx, winY + entH / 2 + 0.22, pilasterProtrude + 1.5]} castShadow>
+                <boxGeometry args={[entW + 0.9, 0.18, 3.0]} />
+                <meshStandardMaterial color={CANOPY_C} roughness={0.3} metalness={0.5} />
+              </mesh>
+            </group>
+          );
+        }
+
+        return (
+          <group key={`w${bi}`}>
+            <mesh position={[bx - (winW / 2 + winGap / 2), winY, 0.01]}>
+              <planeGeometry args={[winW, winH]} />
+              <meshStandardMaterial color={GLASS} transparent opacity={0.42} roughness={0.02} metalness={0.0} envMapIntensity={2.5} />
+            </mesh>
+            <mesh position={[bx + (winW / 2 + winGap / 2), winY, 0.01]}>
+              <planeGeometry args={[winW, winH]} />
+              <meshStandardMaterial color={GLASS} transparent opacity={0.42} roughness={0.02} metalness={0.0} envMapIntensity={2.5} />
+            </mesh>
+            <mesh position={[bx, winY, 0.04]}><boxGeometry args={[0.08, winH, 0.07]} /><meshStandardMaterial color={STEEL} roughness={0.12} metalness={0.88} envMapIntensity={1.8} /></mesh>
+            <mesh position={[bx, winY + winH / 2 + 0.045, 0.04]}><boxGeometry args={[winW * 2 + winGap + 0.09, 0.09, 0.07]} /><meshStandardMaterial color={STEEL} roughness={0.12} metalness={0.88} envMapIntensity={1.8} /></mesh>
+            <mesh position={[bx, winY - winH / 2 - 0.055, 0.04]}><boxGeometry args={[winW * 2 + winGap + 0.09, 0.11, 0.12]} /><meshStandardMaterial color={STEEL} roughness={0.18} metalness={0.82} envMapIntensity={1.5} /></mesh>
+          </group>
+        );
+      })}
+    </group>
+  );
+}
+
+// ─── 하펜시티 건물: 4면 파사드 ──────────────────────────────────────────────
+function HafenCityBuilding({ width, depth, totalHeight, groundFloorHeight, posZ, towerWidth, towerDepth, podiumHeight }) {
+  const BRICK = '#8B3318';
+  const UPPER = '#9AAFC2';
+
+  const brickZoneH = podiumHeight ?? Math.min(groundFloorHeight * 2.2, totalHeight);
+  const remainH    = Math.max(0, totalHeight - brickZoneH);
+  const tw         = towerWidth ?? width;
+  const td         = towerDepth ?? depth;
+
+  // 4면 각 face center: group Y는 벽돌 존 중심, 패널 내부 Y=0이 해당 중심
+  const fY = brickZoneH / 2;
+
+  return (
+    <group>
+      {/* 벽돌 메인 매스 */}
+      <mesh position={[0, fY, posZ]} castShadow receiveShadow>
+        <boxGeometry args={[width, brickZoneH, depth]} />
+        <meshStandardMaterial color={BRICK} roughness={0.92} metalness={0} envMapIntensity={0.3} />
+      </mesh>
+
+      {/* 전면 (front, +Z, 캐노피 있음) */}
+      <group position={[0, fY, posZ + depth / 2]} rotation={[0, 0, 0]}>
+        <HafenCityFacadePanel faceWidth={width} brickZoneH={brickZoneH} showCanopy={true} />
+      </group>
+      {/* 후면 (back, -Z) */}
+      <group position={[0, fY, posZ - depth / 2]} rotation={[0, Math.PI, 0]}>
+        <HafenCityFacadePanel faceWidth={width} brickZoneH={brickZoneH} showCanopy={false} />
+      </group>
+      {/* 우면 (right, +X): local +Z → world +X */}
+      <group position={[width / 2, fY, posZ]} rotation={[0, Math.PI / 2, 0]}>
+        <HafenCityFacadePanel faceWidth={depth} brickZoneH={brickZoneH} showCanopy={false} />
+      </group>
+      {/* 좌면 (left, -X): local +Z → world -X */}
+      <group position={[-width / 2, fY, posZ]} rotation={[0, -Math.PI / 2, 0]}>
+        <HafenCityFacadePanel faceWidth={depth} brickZoneH={brickZoneH} showCanopy={false} />
+      </group>
+
+      {/* 상층부 타워 (셋백 적용) */}
+      {remainH > 0 && (
+        <mesh position={[0, brickZoneH + remainH / 2, posZ]} castShadow receiveShadow>
+          <boxGeometry args={[tw, remainH, td]} />
+          <meshStandardMaterial color={UPPER} roughness={0.25} metalness={0.35} envMapIntensity={1.4} />
+        </mesh>
+      )}
+
+      {/* 저층/상층 경계 몰딩 */}
+      {remainH > 0 && (
+        <mesh position={[0, brickZoneH, posZ]}>
+          <boxGeometry args={[width + 0.44, 0.14, depth + 0.44]} />
+          <meshStandardMaterial color="#6A2408" roughness={1} metalness={0} />
+        </mesh>
+      )}
+
+      {/* 포디움 층간 라인 */}
+      {Array.from({ length: Math.floor(brickZoneH / groundFloorHeight) - 1 }).map((_, i) => (
+        <mesh key={`pl${i}`} position={[0, groundFloorHeight * (i + 1), posZ]}>
+          <boxGeometry args={[width + 0.08, 0.06, depth + 0.08]} />
+          <meshStandardMaterial color="#5A2010" roughness={1} metalness={0} />
+        </mesh>
+      ))}
+
+      {/* 타워 층간 라인 */}
+      {remainH > 0 && Array.from({ length: Math.floor(remainH / 4) - 1 }).map((_, i) => (
+        <mesh key={`tl${i}`} position={[0, brickZoneH + 4 * (i + 1), posZ]}>
+          <boxGeometry args={[tw + 0.08, 0.05, td + 0.08]} />
+          <meshStandardMaterial color="#8A9AAA" roughness={0.6} metalness={0.1} />
+        </mesh>
+      ))}
+    </group>
+  );
+}
+
+export function Scene({ params, activeRuleSet, showPedestrians, architectStyle = null, facadePreset = null, mini = false }) {
   const lot = DEFAULT_LOT;
   const mass = calculateMass(params, lot);
   const ruleColor = RULE_SETS[activeRuleSet]?.color ?? '#3B82F6';
@@ -349,6 +499,15 @@ function Scene({ params, activeRuleSet, showPedestrians, architectStyle = null }
   const upperHeight = mass.totalHeight - mass.groundFloorHeight;
   const groundFloorPosY = mass.groundFloorHeight / 2;
   const upperFloorPosY = mass.groundFloorHeight + upperHeight / 2;
+
+  // ── 포디움 / 타워 셋백 (모든 렌더 분기에서 공유) ──
+  const podSetback = params.podium_setback ?? 0;
+  const podFloors  = params.podium_floors ?? 0;
+  const podFloorH  = params.podium_floor_height ?? 4;
+  const podH       = podFloors > 0 ? podFloors * podFloorH : mass.groundFloorHeight;
+  const towerW     = Math.max(mass.buildingWidth  - podSetback * 2, 5);
+  const towerD     = Math.max(mass.buildingDepth  - podSetback * 2, 5);
+  const towerH     = Math.max(mass.totalHeight - podH, 0);
 
   // 건축가 스타일 기반 재질/조명 파라미터
   const s = architectStyle;
@@ -369,23 +528,49 @@ function Scene({ params, activeRuleSet, showPedestrians, architectStyle = null }
     <>
       <color attach="background" args={[bgColor]} />
       <fog attach="fog" args={[bgColor, fogNear, fogFar]} />
-      <ambientLight intensity={ambientIntensity} />
-      {/* 안도: 강한 사광 (그림자 극대화) / 자하: 부드러운 균등 조명 */}
+
+      {/* IBL — 재질 반사/환경광 자동 처리 */}
+      <Environment preset={s?.id === 'ando' ? 'warehouse' : s?.id === 'zaha' ? 'city' : 'dawn'} />
+
+      <ambientLight intensity={ambientIntensity * 0.6} />
+      {/* 메인 태양광 */}
       <directionalLight
         position={s?.id === 'ando' ? [30, 180, 20] : [80, 140, 60]}
-        intensity={dirIntensity}
-        color={dirColor}
+        intensity={dirIntensity * 1.4}
+        color={s?.id === 'ando' ? '#FFF0DC' : '#FFF8F0'}
         castShadow
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
+        shadow-camera-far={500}
+        shadow-camera-left={-120}
+        shadow-camera-right={120}
+        shadow-camera-top={120}
+        shadow-camera-bottom={-120}
+        shadow-bias={-0.0003}
       />
-      {s?.id === 'zaha' && (
-        <directionalLight position={[-70, 90, -30]} intensity={0.55} color="#BCD8F0" />
-      )}
-      {!s && <directionalLight position={[-50, 80, -60]} intensity={0.4} color="#DBEAFE" />}
+      {/* 보조 채움광 */}
+      {s?.id === 'zaha'
+        ? <directionalLight position={[-70, 90, -30]} intensity={0.7} color="#BCD8F0" />
+        : <directionalLight position={[-60, 70, -80]} intensity={s ? 0.3 : 0.5} color="#C8DCF8" />
+      }
+      {/* 하단 반사광 (바닥 반사 시뮬레이션) */}
+      {!s && <pointLight position={[0, -5, buildingZ]} intensity={0.3} color="#F0F4FF" distance={150} />}
+
       <GroundPlane color={groundColor} />
+
+      {/* 소프트 컨택트 섀도우 — 건물 발치 */}
+      {!s && !mini && (
+        <ContactShadows
+          position={[0, 0.01, 0]}
+          opacity={0.55}
+          scale={180}
+          blur={3}
+          far={60}
+          color="#08101C"
+        />
+      )}
       <LotBoundary width={lot.width} depth={lot.depth} />
-      {!s && <OpenSpace width={lot.width} depth={mass.openSpaceDepth} posZ={openSpaceZ} />}
+      {!s && facadePreset !== 'hafencity' && <OpenSpace width={lot.width} depth={mass.openSpaceDepth} posZ={openSpaceZ} />}
 
       {/* ── 건물 매스: 스타일에 따라 전용 컴포넌트 ── */}
       {s?.id === 'ando' ? (
@@ -404,36 +589,51 @@ function Scene({ params, activeRuleSet, showPedestrians, architectStyle = null }
           posZ={buildingZ}
           style={s}
         />
-      ) : (
-        <>
-          <GroundFloor
-            width={mass.buildingWidth} depth={mass.buildingDepth}
-            height={mass.groundFloorHeight} posY={groundFloorPosY} posZ={buildingZ}
-            transparency={params.facade_transparency} retailContinuity={params.retail_continuity}
-            color={groundFloorColor}
-            canopyDepth={params.canopy_depth ?? 0}
-            canopyContinuity={params.canopy_continuity ?? 0}
-            pilotisRatio={params.pilotis_ratio ?? 0}
-            entranceFrequency={params.entrance_frequency ?? 3}
-            pilotisDepth={params.pilotis_depth ?? 0}
-            passageWidth={params.passage_width ?? 0}
-          />
-          {upperHeight > 0 && (
-            <UpperFloors
-              width={mass.buildingWidth} depth={mass.buildingDepth}
-              height={upperHeight} posY={upperFloorPosY} posZ={buildingZ}
-              floorCount={mass.floorCount}
-              color={upperFloorColor}
-              roughness={roughness}
-              metalness={metalness}
-              opacity={opacity}
-            />
-          )}
-        </>
+      ) : facadePreset === 'hafencity' ? (
+        <HafenCityBuilding
+          width={mass.buildingWidth}
+          depth={mass.buildingDepth}
+          totalHeight={mass.totalHeight}
+          groundFloorHeight={mass.groundFloorHeight}
+          posZ={buildingZ}
+          towerWidth={towerW}
+          towerDepth={towerD}
+          podiumHeight={podH}
+        />
+      ) : (() => {
+          const tW = towerW;
+          const tD = towerD;
+          const tH = towerH;
+
+          return (
+            <>
+              {/* 포디움: 전체 폭 */}
+              <mesh position={[0, podH / 2, buildingZ]} castShadow receiveShadow>
+                <boxGeometry args={[mass.buildingWidth, podH, mass.buildingDepth]} />
+                <meshStandardMaterial color={groundFloorColor} roughness={0.35} metalness={0.05} />
+              </mesh>
+              {/* 포디움 층간선 */}
+              {podFloors > 1 && Array.from({ length: podFloors - 1 }).map((_, i) => (
+                <mesh key={i} position={[0, podFloorH * (i + 1), buildingZ]}>
+                  <boxGeometry args={[mass.buildingWidth + 0.1, 0.08, mass.buildingDepth + 0.1]} />
+                  <meshStandardMaterial color="#475569" transparent opacity={0.6} />
+                </mesh>
+              ))}
+              {/* 타워: setback 적용 */}
+              {tH > 0 && (
+                <mesh position={[0, podH + tH / 2, buildingZ]} castShadow receiveShadow>
+                  <boxGeometry args={[tW, tH, tD]} />
+                  <meshStandardMaterial color={upperFloorColor} roughness={roughness} metalness={metalness} transparent opacity={opacity} />
+                </mesh>
+              )}
+            </>
+          );
+        })()}
+      {!mini && (
+        <Text position={[0, mass.totalHeight + 3, buildingZ]} fontSize={2} color="#1E293B" anchorX="center" anchorY="bottom">
+          {`${mass.floorCount}F / ${Math.round(mass.totalHeight)}m`}
+        </Text>
       )}
-      <Text position={[0, mass.totalHeight + 3, buildingZ]} fontSize={2} color="#1E293B" anchorX="center" anchorY="bottom">
-        {`${mass.floorCount}F / ${Math.round(mass.totalHeight)}m`}
-      </Text>
       {showPedestrians && (
         <PedestrianLayer params={params} mass={mass} lot={lot} />
       )}
@@ -544,6 +744,7 @@ function useGeoJSONScene(district) {
             name: f.properties?.name || '',
             floors: parseInt(f.properties?.['building:levels']) || null,
             heightM: parseFloat(f.properties?.height) || null,
+            buildingType: f.properties?.building || 'yes',
           };
         });
 
@@ -875,7 +1076,7 @@ function buildingVariance(coords) {
   return v - Math.floor(v);
 }
 
-function GeoJSONBuilding({ lotCoords, params, color, actualFloors = null, actualHeightM = null, onParcelClick, districtCenter, baselineMode = false, showLotFloor = true, architectStyle = null }) {
+function GeoJSONBuilding({ lotCoords, params, color, actualFloors = null, actualHeightM = null, onParcelClick, districtCenter, baselineMode = false, buildingType = null, showLotFloor = true, architectStyle = null }) {
   const s = architectStyle;
   const groundFloorH = params.ground_floor_height;
 
@@ -884,8 +1085,8 @@ function GeoJSONBuilding({ lotCoords, params, color, actualFloors = null, actual
 
   let floorCount, totalHeight, footprintScale;
 
-  if (baselineMode) {
-    // ── 현황 모드: 실제 데이터 그대로, 파라미터 미적용 ──
+  if (baselineMode || buildingType === 'roof') {
+    // ── 현황 모드 또는 철도 위 건물(roof): 실제 데이터 그대로, 파라미터 미적용 ──
     footprintScale = 1.0;
     if (actualHeightM) {
       totalHeight = actualHeightM;
@@ -1272,6 +1473,7 @@ function GeoJSONScene({ params, activeRuleSet, buildings, roads, greenSpaces = [
             onParcelClick={onParcelClick}
             districtCenter={districtCenter}
             baselineMode={baselineMode}
+            buildingType={building.buildingType}
             architectStyle={s}
           />
         ))
@@ -1420,7 +1622,7 @@ function SceneExporter({ sceneRef }) {
 // 메인 컴포넌트
 // ─────────────────────────────────────────
 
-export default function BuildingMass({ params, activeRuleSet, canvasRef, activeDistrict, sceneRef, showPedestrians, onZoneLoaded, baselineMode = false, customParcels = [], architectStyle = null }) {
+export default function BuildingMass({ params, activeRuleSet, canvasRef, activeDistrict, sceneRef, showPedestrians, onZoneLoaded, baselineMode = false, customParcels = [], architectStyle = null, facadePreset = null }) {
   const mass = calculateMass(params, DEFAULT_LOT);
   const district = activeDistrict ? DISTRICTS[activeDistrict] : null;
   const isCustomMode = customParcels.length > 0;
@@ -1658,13 +1860,13 @@ export default function BuildingMass({ params, activeRuleSet, canvasRef, activeD
         ref={canvasRef}
         camera={{ position: camPos, fov: camFov, near: 0.5, far: 20000 }}
         shadows
-        gl={{ preserveDrawingBuffer: true }}
+        gl={{ preserveDrawingBuffer: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.1 }}
       >
         {isCustomMode
           ? <CustomParcelScene params={params} activeRuleSet={activeRuleSet} buildings={customBuildings} roads={customRoads} parcelOutlines={parcelOutlines} sceneSize={customSceneSize} baselineMode={baselineMode} architectStyle={architectStyle} showTiles={showTiles} centerLat={customCenter?.lat} centerLon={customCenter?.lon} />
           : isMapMode
           ? <GeoJSONScene params={params} activeRuleSet={activeRuleSet} buildings={buildings} roads={roads} greenSpaces={greenSpaces} sceneSize={sceneSize} onParcelClick={handleParcelClick} districtCenter={district?.center} baselineMode={baselineMode} architectStyle={architectStyle} showTiles={showTiles} />
-          : <Scene params={params} activeRuleSet={activeRuleSet} showPedestrians={showPedestrians} architectStyle={architectStyle} />
+          : <Scene params={params} activeRuleSet={activeRuleSet} showPedestrians={showPedestrians} architectStyle={architectStyle} facadePreset={facadePreset} />
         }
         <SceneExporter sceneRef={sceneRef} />
         <OrbitControls enablePan={true} enableZoom={true} target={[0, 20, 0]} maxPolarAngle={Math.PI / 2.1} />

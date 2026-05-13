@@ -74,4 +74,25 @@ export const ARCH_STYLES = {
     shearRatio: 0.40,    // 전체 폭 대비 최대 기울기
     shearZRatio: 0.14,   // 앞뒤 방향 휨 비율
   },
+
+  marunouchi: {
+    id: 'marunouchi',
+    name: '마루노우치',
+    nameEn: 'Tokyo Marunouchi',
+    keywords: ['화강석 기단', '알루미늄 커튼월', '정형 그리드', '코포레이트 모더니즘'],
+    description: '도쿄 마루노우치 가이드라인: 어두운 석재 포디움 위에 알루미늄 커튼월 타워. 정형화된 창 그리드와 세련된 저층부.',
+
+    bgColor: '#EDF1F5',
+    fogNear: 250, fogFar: 700,
+    groundColor: '#D4D8E0',
+    ambientIntensity: 0.75,
+    dirColor: '#FFF8F0',
+    dirIntensity: 1.05,
+
+    groundFloorColor: '#1C2A38',  // 다크 화강석
+    upperFloorColor:  '#5A8099',  // 커튼월 블루그레이
+    roughness: 0.10,
+    metalness: 0.55,
+    opacity: 1.0,
+  },
 };

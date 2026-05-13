@@ -116,8 +116,19 @@ export function calculateMass(params, lot) {
     (totalHeight - params.ground_floor_height) / upperFloorHeight + 1
   );
 
+  // 포디움 계산
+  const podiumFloors    = params.podium_floors ?? 0;
+  const podiumFloorH    = params.podium_floor_height ?? 4;
+  // podium_floors=0이면 1층 천장이 포디움 상단 → setback은 항상 타워에 적용됨
+  const podiumHeight    = podiumFloors > 0 ? podiumFloors * podiumFloorH : params.ground_floor_height;
+  const podiumSetback   = params.podium_setback ?? 0;
+  const bw = Math.max(buildingWidth, 5);
+  const bd = Math.max(buildingDepth, 5);
+  const towerWidth      = Math.max(bw - podiumSetback * 2, 5);
+  const towerDepth      = Math.max(bd - podiumSetback * 2, 5);
+
   return {
-    buildingWidth: Math.max(buildingWidth, 5),
+    buildingWidth: bw,
     buildingDepth: Math.max(buildingDepth, 5),
     floorCount: Math.max(actualFloorCount, 2),
     totalHeight: Math.max(totalHeight, params.ground_floor_height + upperFloorHeight),
@@ -125,5 +136,11 @@ export function calculateMass(params, lot) {
     openSpaceDepth: Math.max(openSpaceDepth, 0),
     frontSetback: params.front_setback ?? 0,
     sideSetback,
+    podiumFloors,
+    podiumFloorHeight: podiumFloorH,
+    podiumHeight,
+    podiumSetback,
+    towerWidth,
+    towerDepth,
   };
 }

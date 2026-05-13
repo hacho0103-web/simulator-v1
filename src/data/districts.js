@@ -1,12 +1,12 @@
 export const DISTRICTS = {
-  gwanghwamun: {
-    id: 'gwanghwamun',
-    name: '광화문',
-    nameEn: 'Gwanghwamun',
+  yongsan: {
+    id: 'yongsan',
+    name: '용산정비창',
+    nameEn: 'Yongsan',
     country: 'KR',
-    geojson: '/gwanghwamun.geojson',
-    center: { lon: 126.9769, lat: 37.5740 },
-    bbox: '37.572,126.974,37.577,126.981',
+    geojson: '/yongsan.geojson',
+    center: { lon: 126.9645, lat: 37.5255 },
+    bbox: '37.520,126.957,37.531,126.972',
     defaultRuleSet: 'seoul',
     useVWorld: true,
   },

@@ -1,9 +1,9 @@
 import { useState, useRef } from 'react';
 import ParameterPanel from './components/ParameterPanel';
 import BuildingMass from './components/BuildingMass';
-import AnalysisRadar from './components/AnalysisRadar';
-import ScatterPlot from './components/ScatterPlot';
 import ExportButtons from './components/ExportButtons';
+import GeminiRender from './components/GeminiRender';
+import FacadeProposalPanel, { FACADE_PROPOSALS } from './components/FacadeProposalPanel';
 import SiteMapPanel from './components/SiteMapPanel';
 import { calculateScores } from './utils/scoring';
 import { RULE_SETS } from './data/rulesets';
@@ -21,10 +21,13 @@ export default function App() {
   const [showMapPanel, setShowMapPanel] = useState(false);
   const [customParcels, setCustomParcels] = useState([]);
   const [architectStyleId, setArchitectStyleId] = useState(null); // null = 기본
+  const [facadePreset, setFacadePreset] = useState(null);
+  const [selectedProposalId, setSelectedProposalId] = useState(null);
 
   const handleDistrictChange = (districtId) => {
     setActiveDistrict(districtId);
-    setCustomParcels([]); // 지구 모드로 전환 시 커스텀 필지 초기화
+    setCustomParcels([]);
+    if (districtId !== null) setFacadePreset(null); // 지구 모드에서는 프리셋 해제
     if (districtId && DISTRICTS[districtId]) {
       const rs = DISTRICTS[districtId].defaultRuleSet;
       setActiveRuleSet(rs);
@@ -46,6 +49,12 @@ export default function App() {
     setShowMapPanel(false);
     setBaselineMode(false);
   };
+  const handleProposalSelect = (proposal) => {
+    setSelectedProposalId(proposal.id);
+    setArchitectStyleId(proposal.architectStyleId);
+    setFacadePreset(proposal.facadePreset);
+  };
+
   const canvasRef = useRef(null);
   const sceneRef = useRef(null);
 
@@ -101,6 +110,21 @@ export default function App() {
             {showPedestrians ? '✓ 보행자 ON' : '보행자'}
           </button>
 
+          {/* 파사드 프리셋 — 단일 건물 모드에서만 표시 */}
+          {activeDistrict === null && (
+            <button
+              onClick={() => setFacadePreset(p => p === 'hafencity' ? null : 'hafencity')}
+              className={`px-3 py-1.5 rounded text-xs font-medium transition-all ${
+                facadePreset === 'hafencity'
+                  ? 'bg-red-800 text-white'
+                  : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
+              }`}
+              title="하펜시티 붉은 벽돌 + 수직 창 파사드 적용"
+            >
+              {facadePreset === 'hafencity' ? '✓ 하펜시티 파사드' : '하펜시티 파사드'}
+            </button>
+          )}
+
           {/* 건축가 스타일 탭 */}
           <div className="flex rounded overflow-hidden border border-slate-600 text-xs">
             {[
@@ -127,9 +151,7 @@ export default function App() {
           <div className="flex rounded overflow-hidden border border-slate-600 text-xs">
             {[
               { id: null,           label: '단일 건물' },
-              { id: 'gwanghwamun',  label: '광화문' },
-              { id: 'marunouchi',   label: '마루노우치' },
-              { id: 'hafencity',    label: '하펜시티' },
+              { id: 'yongsan',      label: '용산정비창' },
             ].map(({ id, label }) => (
               <button
                 key={id ?? 'simple'}
@@ -157,6 +179,7 @@ export default function App() {
             {compareMode ? '✓ 비교 모드 ON' : '비교 모드'}
           </button>
 
+          <GeminiRender canvasRef={canvasRef} />
           <ExportButtons canvasRef={canvasRef} sceneRef={sceneRef} params={params} activeRuleSet={activeRuleSet} />
         </div>
       </header>
@@ -173,7 +196,7 @@ export default function App() {
           />
         </div>
 
-        {/* 오른쪽: 3D 뷰어 + 분석 차트 */}
+        {/* 오른쪽: 3D 뷰어 + 파사드 제안 */}
         <div className="flex-1 flex flex-col overflow-hidden">
           {/* 3D 뷰어 */}
           <div className="flex-1 overflow-hidden" ref={canvasRef}>
@@ -188,48 +211,17 @@ export default function App() {
               baselineMode={baselineMode}
               customParcels={customParcels}
               architectStyle={architectStyleId ? ARCH_STYLES[architectStyleId] : null}
+              facadePreset={facadePreset}
             />
           </div>
 
-          {/* 하단 분석 차트 */}
-          <div className="h-80 shrink-0 flex gap-3 p-3 bg-slate-950 border-t border-slate-800">
-            <div className="flex-1 min-w-0">
-              <AnalysisRadar
-                params={params}
-                activeRuleSet={activeRuleSet}
-                compareMode={compareMode}
-              />
-            </div>
-            <div className="flex-1 min-w-0">
-              <ScatterPlot params={params} />
-            </div>
-
-            {/* 파라미터 점수 요약 */}
-            <div className="w-52 shrink-0 bg-slate-900 rounded-xl p-4">
-              <h3 className="text-sm font-semibold text-slate-300 mb-3">점수 요약</h3>
-              {[
-                { key: 'publicness',     label: '공개성',    color: 'bg-blue-500' },
-                { key: 'walkability',    label: '보행성',    color: 'bg-teal-500' },
-                { key: 'setback',        label: '전면공간',  color: 'bg-violet-500' },
-                { key: 'dwellability',   label: '체류성',    color: 'bg-pink-500' },
-                { key: 'facadeOpenness', label: '입면개방성',color: 'bg-amber-500' },
-                { key: 'developability', label: '사업성',    color: 'bg-orange-500' },
-              ].map(({ key, label, color }) => (
-                <div key={key} className="mb-2">
-                  <div className="flex justify-between text-xs mb-0.5">
-                    <span className="text-slate-400">{label}</span>
-                    <span className="text-slate-200 font-mono">{scores[key]}</span>
-                  </div>
-                  <div className="h-1.5 bg-slate-800 rounded-full overflow-hidden">
-                    <div
-                      className={`h-full rounded-full ${color} transition-all duration-300`}
-                      style={{ width: `${scores[key]}%` }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+          {/* 파사드 제안 패널 */}
+          <FacadeProposalPanel
+            params={params}
+            activeRuleSet={activeRuleSet}
+            selectedId={selectedProposalId}
+            onSelect={handleProposalSelect}
+          />
         </div>
       </div>
 
