@@ -15,16 +15,16 @@ export const ARCH_STYLES = {
       '단일 직교 매스에 좁은 슬릿으로 빛을 유입시켜 극적 공간감을 창출한다.',
 
     // 씬 환경
-    bgColor: '#EEF2F7',
+    bgColor: '#C8DCF2',
     fogNear: 180,
     fogFar: 480,
-    groundColor: '#EAECEF',
+    groundColor: '#383838',
     ambientIntensity: 0.28,
-    dirColor: '#FFE8C0',
+    dirColor: '#FFF5E0',
     dirIntensity: 1.8,
 
     // 건물 재질 — 노출 콘크리트
-    groundFloorColor: '#2563EB',
+    groundFloorColor: '#5C6168',
     upperFloorColor:  '#4A5058',
     roughness: 0.95,
     metalness: 0.00,
@@ -33,7 +33,7 @@ export const ARCH_STYLES = {
     // 거푸집 줄눈
     formworkInterval: 0.9,
     formworkColor: '#2C3035',
-    formworkJointH: 0.10,
+    formworkJointH: 0.18,
 
     // 빛의 십자 슬릿
     lightSlitColor: '#C8E4FF',
@@ -51,17 +51,17 @@ export const ARCH_STYLES = {
       '캔틸레버로 연장되고 예각과 곡면이 역동적으로 교차한다.',
 
     // 씬 환경
-    bgColor: '#EEF2F7',
+    bgColor: '#C8DCF2',
     fogNear: 320,
     fogFar: 750,
-    groundColor: '#EAECEF',
-    ambientIntensity: 0.95,
-    dirColor: '#D8EEFF',
-    dirIntensity: 0.65,
+    groundColor: '#383838',
+    ambientIntensity: 0.42,
+    dirColor: '#FFF5E0',
+    dirIntensity: 1.45,
 
     // 건물 재질 — 알루미늄 패널 / 화이트 스무스
-    groundFloorColor: '#2563EB',
-    upperFloorColor:  '#EDEEF0',
+    groundFloorColor: '#B8B4AE',
+    upperFloorColor:  '#F8F6F2',
     roughness: 0.08,
     metalness: 0.32,
     opacity: 1.00,
@@ -83,15 +83,15 @@ export const ARCH_STYLES = {
     keywords: ['화강석 기단', '알루미늄 커튼월', '정형 그리드', '코포레이트 모더니즘'],
     description: '도쿄 마루노우치 가이드라인: 어두운 석재 포디움 위에 알루미늄 커튼월 타워. 정형화된 창 그리드와 세련된 저층부.',
 
-    bgColor: '#EDF1F5',
+    bgColor: '#C8DCF2',
     fogNear: 250, fogFar: 700,
-    groundColor: '#D4D8E0',
+    groundColor: '#383838',
     ambientIntensity: 0.75,
-    dirColor: '#FFF8F0',
-    dirIntensity: 1.05,
+    dirColor: '#FFF5E0',
+    dirIntensity: 1.15,
 
     groundFloorColor: '#1C2A38',  // 다크 화강석
-    upperFloorColor:  '#5A8099',  // 커튼월 블루그레이
+    upperFloorColor:  '#8EC8EC',  // 커튼월 하늘색 유리
     roughness: 0.10,
     metalness: 0.55,
     opacity: 1.0,
